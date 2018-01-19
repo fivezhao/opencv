@@ -134,3 +134,37 @@ RTP build setup
      - add the following compilation flags -DDO_ITT_NOTIFY=0 -DTBB_NO_LEGACY=1 -DTBB_USE_DEBUG=0 -DTBB_USE_ICC_BUILTINS=1 -DUSE_PTHREAD -D__TBB_BUILD=1 -D__TBB_DYNAMIC_LOAD_ENABLED=0 -D__TBB_ICC_BUILTIN_ATOMICS_PRESENT=1 -D__TBB_SURVIVE_THREAD_SWITCH=0 -D__TBB_WEAK_SYMBOLS_PRESENT=0 -Dtbb_EXPORTS
        (replace TBB_USE_ICC_BUILTINS and TBB_ICC_BUILTIN_ATOMICS_PRESENT to TBB_USE_GCC_BUILTINS TBB_GCC_BUILTIN_ATOMICS_PRESENT depending on the compiler)
     - the resulting lib will need to be linked with opencv
+
+OpenCV 3.3.1 / Clang update
+--------------------------------
+
+The recent switch to a CLANG/LLVM-based compiler and to a unified kernel and user space libc++ allowed including additional modules in the VxWorks port of OpenCV and enabling support for advanced CPU features like AVX2.
+
+It is now possible to compile and run OpenCV applications on VxWorks with support for the Deep Neural Networks module, both as kernel applications or RTPs.
+
+Baseline vxWorks tree: branch vx7-i1032-dev, commit 7a091abcbbeb28005061c2b8d330c7a096aa5c9a
+H/w platform: Intel NUC with Core i7 Skylake CPU
+Compiler: LLVM version 5
+
+When building the opencv static library the filters need to be updated to enable protobuf and dnn.
+
+Note: Only the differences from the build configurations previously mentioned are described in the following sections.
+
+OpenCV static library filters:
+- opencv-3.3.1 sources: exclude all, files and folders, all children (recursive), name matches regular expression
+ - (cmake)|(apps)|(samples)|(cud.*)|(viz)|(superres)|(java)|(python)|(.*winrt.*)|(vxworks.*)|(platforms)|(data)|(doc)
+- 3rdparty: include only, files and folders, not recursive, name matches regular expression
+ - libjpeg|protobuf
+
+- modules: include only, files and folders, not recursive, name matches regular expression
+    - (calib3d)|(core)|(features2d)|(flann)|(highgui)|(imgcodecs)|(imgproc)|(java)|(ml)|(objdetect)|(photo)|(shape)|(stitching)|(ts)|(video)|(videoio)|(videostab)|(world)|(dnn)
+
+Compilation flags:
+- C++-Compiler
+ - -D__OPENCV_BUILD -DONVXWORKS -UHAVE_OPENGL -UHAVE_CUDA -UHAVE_OPENCL -UOPENCV_NOSTL -UOPENCV_NOSTL_TRANSITIONAL -msse -msse2 -msse3 -mssse3 -msse4.1 -mpopcnt -msse4.2 -mf16c -mfma -mavx -mavx2  -DCV_ENABLE_INTRINSICS=1 -DGOOGLE_PROTOBUF_HAS_CXX11_HASH -DHAVE_PROTOBUF -DHAVE_PTHREAD
+
+Depending on your target platform, adjust the -msse -> -mavx2 section in the C++-Compiler tool flags and the CPU features enabled in opencv-vx/include/cv_cpu_config.h
+
+TBB and IPP are still supported, assuming the compilation variables are updated to include them (see above).
+
+Sample code from opencv-vx/samples/dnn can be used as basis for OpenCV validation apps. Object detection applications using Yolo v2 and MobileNET SSD models are known to work.
