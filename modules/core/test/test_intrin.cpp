@@ -1,3 +1,4 @@
+#ifndef __VXWORKS__
 #include "test_precomp.hpp"
 #include <climits>
 
@@ -234,3 +235,4 @@ TEST(hal_intrin,float16x4)
 }
 
 }}
+#endif /* __VXWORKS__ */

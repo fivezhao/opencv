@@ -1048,19 +1048,31 @@ TEST(Core_InputOutput, filestorage_utf8_bom)
     EXPECT_NO_THROW(
     {
         String content ="\xEF\xBB\xBF<?xml version=\"1.0\"?>\n<opencv_storage>\n</opencv_storage>\n";
+#ifndef ONVXWORKS
         cv::FileStorage fs(content, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+        cv::FileStorage fs(content, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
         fs.release();
     });
     EXPECT_NO_THROW(
     {
         String content ="\xEF\xBB\xBF%YAML:1.0\n";
+#ifndef ONVXWORKS
         cv::FileStorage fs(content, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+        cv::FileStorage fs(content, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
         fs.release();
     });
     EXPECT_NO_THROW(
     {
         String content ="\xEF\xBB\xBF{\n}\n";
+#ifndef ONVXWORKS
         cv::FileStorage fs(content, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+        cv::FileStorage fs(content, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
         fs.release();
     });
 }
@@ -1086,11 +1098,19 @@ TEST(Core_InputOutput, filestorage_vec_vec_io)
 
     for(size_t i = 0; i < formats.size(); i++)
     {
+#ifndef ONVXWORKS
         FileStorage writer(fileName + formats[i], FileStorage::WRITE);
+#else
+        FileStorage writer(fileName + formats[i], FileStorage::CVWRITE);
+#endif
         writer << "vecVecMat" << outputMats;
         writer.release();
 
+#ifndef ONVXWORKS
         FileStorage reader(fileName + formats[i], FileStorage::READ);
+#else
+        FileStorage reader(fileName + formats[i], FileStorage::CVREAD);
+#endif
         std::vector<std::vector<Mat> > testMats;
         reader["vecVecMat"] >> testMats;
 
@@ -1119,7 +1139,11 @@ TEST(Core_InputOutput, filestorage_yaml_advanvced_type_heading)
             "   dt: d\n"
             "   data: [ 1. ]";
 
+#ifndef ONVXWORKS
     cv::FileStorage fs(content, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs(content, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::Mat inputMatrix;
     cv::Mat actualMatrix = cv::Mat::eye(1, 1, CV_64F);
@@ -1139,11 +1163,19 @@ TEST(Core_InputOutput, filestorage_keypoints_vec_vec_io)
     kpts.push_back(KeyPoint(0, 0, 1.1f, 10.1f, 34.5f, 10, 11));
     kptsVec.push_back(kpts);
 
+#ifndef ONVXWORKS
     FileStorage writer("", FileStorage::WRITE + FileStorage::MEMORY + FileStorage::FORMAT_XML);
+#else
+    FileStorage writer("", FileStorage::CVWRITE + FileStorage::CVMEMORY + FileStorage::FORMAT_XML);
+#endif
     writer << "keypoints" << kptsVec;
     String content = writer.releaseAndGetString();
 
+#ifndef ONVXWORKS
     FileStorage reader(content, FileStorage::READ + FileStorage::MEMORY);
+#else
+    FileStorage reader(content, FileStorage::CVREAD + FileStorage::CVMEMORY);
+#endif
     vector<vector<KeyPoint> > readKptsVec;
     reader["keypoints"] >> readKptsVec;
 
@@ -1167,7 +1199,11 @@ TEST(Core_InputOutput, filestorage_keypoints_vec_vec_io)
 
 TEST(Core_InputOutput, FileStorage_DMatch)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("dmatch.yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("dmatch.yml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::DMatch d(1, 2, 3, -1.5f);
 
@@ -1179,7 +1215,11 @@ TEST(Core_InputOutput, FileStorage_DMatch)
     EXPECT_STREQ(fs_result.c_str(), "%YAML:1.0\n---\nd: [ 1, 2, 3, -1.5000000000000000e+00 ]\n");
 #endif
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::DMatch d_read;
     ASSERT_NO_THROW(fs_read["d"] >> d_read);
@@ -1192,7 +1232,11 @@ TEST(Core_InputOutput, FileStorage_DMatch)
 
 TEST(Core_InputOutput, FileStorage_DMatch_vector)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("dmatch.yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("dmatch.yml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::DMatch d1(1, 2, 3, -1.5f);
     cv::DMatch d2(2, 3, 4, 1.5f);
@@ -1224,7 +1268,11 @@ TEST(Core_InputOutput, FileStorage_DMatch_vector)
 );
 #endif
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector<cv::DMatch> dv_read;
     ASSERT_NO_THROW(fs_read["dv"] >> dv_read);
@@ -1241,7 +1289,11 @@ TEST(Core_InputOutput, FileStorage_DMatch_vector)
 
 TEST(Core_InputOutput, FileStorage_DMatch_vector_vector)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("dmatch.yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("dmatch.yml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::DMatch d1(1, 2, 3, -1.5f);
     cv::DMatch d2(2, 3, 4, 1.5f);
@@ -1289,7 +1341,11 @@ TEST(Core_InputOutput, FileStorage_DMatch_vector_vector)
 );
 #endif
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector< std::vector<cv::DMatch> > dvv_read;
     ASSERT_NO_THROW(fs_read["dvv"] >> dvv_read);
@@ -1313,7 +1369,11 @@ TEST(Core_InputOutput, FileStorage_DMatch_vector_vector)
 
 TEST(Core_InputOutput, FileStorage_KeyPoint)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("keypoint.xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("keypoint.xml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::KeyPoint k(Point2f(1, 2), 16, 0, 100, 1, -1);
 
@@ -1327,7 +1387,11 @@ TEST(Core_InputOutput, FileStorage_KeyPoint)
 "</opencv_storage>\n"
 );
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::KeyPoint k_read;
     ASSERT_NO_THROW(fs_read["k"] >> k_read);
@@ -1342,7 +1406,11 @@ TEST(Core_InputOutput, FileStorage_KeyPoint)
 
 TEST(Core_InputOutput, FileStorage_KeyPoint_vector)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("keypoint.xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("keypoint.xml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::KeyPoint k1(Point2f(1, 2), 16, 0, 100, 1, -1);
     cv::KeyPoint k2(Point2f(2, 3), 16, 45, 100, 1, -1);
@@ -1367,7 +1435,11 @@ TEST(Core_InputOutput, FileStorage_KeyPoint_vector)
 "</opencv_storage>\n"
 );
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector<cv::KeyPoint> kv_read;
     ASSERT_NO_THROW(fs_read["kv"] >> kv_read);
@@ -1386,7 +1458,11 @@ TEST(Core_InputOutput, FileStorage_KeyPoint_vector)
 
 TEST(Core_InputOutput, FileStorage_KeyPoint_vector_vector)
 {
+#ifndef ONVXWORKS
     cv::FileStorage fs("keypoint.xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs("keypoint.xml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
 
     cv::KeyPoint k1(Point2f(1, 2), 16, 0, 100, 1, -1);
     cv::KeyPoint k2(Point2f(2, 3), 16, 45, 100, 1, -1);
@@ -1425,7 +1501,11 @@ TEST(Core_InputOutput, FileStorage_KeyPoint_vector_vector)
 "</opencv_storage>\n"
 );
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector< std::vector<cv::KeyPoint> > kvv_read;
     ASSERT_NO_THROW(fs_read["kvv"] >> kvv_read);
@@ -1469,7 +1549,11 @@ TEST(Core_InputOutput, FileStorage_LEGACY_DMatch_vector)
 "</opencv_storage>\n"
     ;
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector<cv::DMatch> dv_read;
     ASSERT_NO_THROW(fs_read["dv"] >> dv_read);
@@ -1505,7 +1589,11 @@ TEST(Core_InputOutput, FileStorage_LEGACY_KeyPoint_vector)
 "</opencv_storage>\n"
     ;
 
+#ifndef ONVXWORKS
     cv::FileStorage fs_read(fs_result, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage fs_read(fs_result, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
 
     std::vector<cv::KeyPoint> kv_read;
     ASSERT_NO_THROW(fs_read["kv"] >> kv_read);
@@ -1526,56 +1614,88 @@ TEST(Core_InputOutput, FileStorage_LEGACY_KeyPoint_vector)
 TEST(Core_InputOutput, FileStorage_format_xml)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.xml", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.xml", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_XML, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_xml_gz)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.xml.gz", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.xml.gz", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_XML, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_json)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.json", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.json", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_JSON, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_json_gz)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.json.gz", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.json.gz", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_JSON, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_yaml)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.yaml", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.yaml", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_YAML, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_yaml_gz)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.yaml.gz", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.yaml.gz", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_YAML, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_yml)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.yml", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.yml", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_YAML, fs.getFormat());
 }
 
 TEST(Core_InputOutput, FileStorage_format_yml_gz)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open("opencv_storage.yml.gz", FileStorage::WRITE | FileStorage::MEMORY);
+#else
+    fs.open("opencv_storage.yml.gz", FileStorage::CVWRITE | FileStorage::CVMEMORY);
+#endif
     EXPECT_EQ(FileStorage::FORMAT_YAML, fs.getFormat());
 }
 
@@ -1589,7 +1709,11 @@ TEST(Core_InputOutput, FileStorage_json_named_nodes)
             "},"
             "\"array\": [0.2, 0.1]"
         "}";
+#ifndef ONVXWORKS
     FileStorage fs(test, FileStorage::READ | FileStorage::MEMORY);
+#else
+    FileStorage fs(test, FileStorage::CVREAD | FileStorage::CVMEMORY);
+#endif
 
     ASSERT_TRUE(fs["int_value"].isNamed());
     ASSERT_TRUE(fs["map_value"].isNamed());
@@ -1618,7 +1742,11 @@ TEST(Core_InputOutput, FileStorage_json_bool)
             "\"bool_false\": false, \n"
             "\"array\": [0.1, 0.2]"
         "}";
+#ifndef ONVXWORKS
     FileStorage fs(test, FileStorage::READ | FileStorage::MEMORY);
+#else
+    FileStorage fs(test, FileStorage::CVREAD | FileStorage::CVMEMORY);
+#endif
 
     ASSERT_TRUE(fs["str_true"].isString());
     ASSERT_TRUE(fs["map_value"]["bool_true"].isInt());
@@ -1645,7 +1773,11 @@ TEST(Core_InputOutput, FileStorage_free_file_after_exception)
 
     try
     {
+#ifndef ONVXWORKS
         FileStorage fs(fileName, FileStorage::READ + FileStorage::FORMAT_YAML);
+#else
+        FileStorage fs(fileName, FileStorage::CVREAD + FileStorage::FORMAT_YAML);
+#endif
         FAIL();
     }
     catch (const std::exception&)

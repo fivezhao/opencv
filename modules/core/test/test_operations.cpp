@@ -40,6 +40,8 @@
 //
 //M*/
 
+#ifndef __VXWORKS__
+
 #include "test_precomp.hpp"
 #include "opencv2/ts/ocl_test.hpp" // T-API like tests
 
@@ -1389,3 +1391,5 @@ TEST(Core_sortIdx, regression_8941)
 }
 
 }} // namespace
+
+#endif /* __VXWORKS__ */

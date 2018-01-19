@@ -2,6 +2,8 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html
 
+#ifndef __VXWORKS__
+
 #include "cap_mfx_reader.hpp"
 #include "opencv2/core/base.hpp"
 #include "cap_mfx_common.hpp"
@@ -269,3 +271,5 @@ int VideoCapture_IntelMFX::getCaptureDomain()
 }
 
 //==================================================================================================
+
+#endif /* __VXWORKS__ */

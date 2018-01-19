@@ -72,6 +72,7 @@
 #endif
 
 #if __VXWORKS__
+#include <vxWorks.h>
 #include <vxCpuLib.h>
 #endif
 

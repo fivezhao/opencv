@@ -504,6 +504,12 @@ accessed by index. Type of the file node can be determined using FileNode::type 
 Note that file nodes are only used for navigating file storages opened for reading. When a file
 storage is opened for writing, no data is stored in memory after it is written.
  */
+
+#ifdef __VXWORKS__
+#undef NONE
+#undef MAP
+#endif
+
 class CV_EXPORTS_W_SIMPLE FileNode
 {
 public:

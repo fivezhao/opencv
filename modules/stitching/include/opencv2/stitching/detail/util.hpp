@@ -72,6 +72,9 @@ private:
 struct CV_EXPORTS GraphEdge
 {
     GraphEdge(int from, int to, float weight);
+#ifdef __VXWORKS__
+    inline GraphEdge() {}
+#endif
     bool operator <(const GraphEdge& other) const { return weight < other.weight; }
     bool operator >(const GraphEdge& other) const { return weight > other.weight; }
 

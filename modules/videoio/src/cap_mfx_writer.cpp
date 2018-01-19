@@ -2,6 +2,8 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html
 
+#ifndef __VXWORKS__
+
 #include "cap_mfx_writer.hpp"
 #include "opencv2/core/base.hpp"
 #include "cap_mfx_common.hpp"
@@ -275,3 +277,5 @@ Ptr<VideoWriter_IntelMFX> VideoWriter_IntelMFX::create(const String &filename, i
     }
     return Ptr<VideoWriter_IntelMFX>();
 }
+
+#endif /* __VXWORKS__ */

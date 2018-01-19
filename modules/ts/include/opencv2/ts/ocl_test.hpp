@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-#ifndef ONVXWORKS
+
 #ifndef OPENCV_TS_OCL_TEST_HPP
 #define OPENCV_TS_OCL_TEST_HPP
 
@@ -56,6 +56,11 @@ namespace ocl {
 
 using namespace cv;
 using namespace testing;
+
+#ifdef ONVXWORKS
+#define OCL_TEST(name, ...) TEST(OCL_##name, __VA_ARGS__)
+
+#else
 
 inline std::vector<UMat> ToUMat(const std::vector<Mat>& src)
 {
@@ -362,7 +367,9 @@ CV_ENUM(BorderType, BORDER_CONSTANT, BORDER_REPLICATE, BORDER_REFLECT, BORDER_WR
 #define OCL_INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
     INSTANTIATE_TEST_CASE_P(OCL_ ## prefix, test_case_name, generator)
 
+#endif /* ONVXWORKS */
+
 } } // namespace cvtest::ocl
 
 #endif // OPENCV_TS_OCL_TEST_HPP
-#endif
+

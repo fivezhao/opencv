@@ -55,6 +55,17 @@
 #include <ostream>
 #include <vector>
 
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <unistd.h>
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 // Copyright 2005, Google Inc.
 // All rights reserved.
 //
@@ -3749,10 +3760,18 @@ inline FILE* FDOpen(int fd, const char* mode) { return fdopen(fd, mode); }
 inline int FClose(FILE* fp) { return fclose(fp); }
 #if !GTEST_OS_WINDOWS_MOBILE
 inline int Read(int fd, void* buf, unsigned int count) {
+#if defined(__VXWORKS__) && defined(__cplusplus)
+  return static_cast<int>(::read(fd, (char *)buf, count));
+#else
   return static_cast<int>(read(fd, buf, count));
+#endif
 }
 inline int Write(int fd, const void* buf, unsigned int count) {
-  return static_cast<int>(write(fd, buf, count));
+#if defined(__VXWORKS__) && defined(__cplusplus)
+  return static_cast<int>(::write(fd, (char *)buf, count));
+#else
+  return static_cast<int>(write(fd, (char *)buf, count));
+#endif
 }
 inline int Close(int fd) { return close(fd); }
 inline const char* StrError(int errnum) { return strerror(errnum); }
@@ -8346,7 +8365,9 @@ typedef void (*TearDownTestCaseFunc)();
 
 struct CodeLocation {
   CodeLocation(const string& a_file, int a_line) : file(a_file), line(a_line) {}
-
+#ifdef __VXWORKS__
+  CodeLocation() : file(""), line(0) {}
+#endif
   string file;
   int line;
 };

@@ -47,6 +47,17 @@
 #include <opencv2/core/utils/configuration.private.hpp>
 #include <opencv2/core/utils/trace.private.hpp>
 
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <unistd.h>
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 namespace cv {
 
 static Mutex* __initialization_mutex = NULL;

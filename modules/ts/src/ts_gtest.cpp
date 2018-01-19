@@ -132,7 +132,11 @@ char *(mktemp)(char *name)
 }
 int mkstemp (char *tmplate)
 {
-    return open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL);
+#ifdef __VXWORKS__
+	return ::open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL, S_IRWXU);
+#else
+	return open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL);
+#endif
 }
 #endif
 
@@ -5046,6 +5050,9 @@ std::string FormatTimeInMillisAsSeconds(TimeInMillis ms) {
   return ss.str();
 }
 
+#ifdef __VXWORKS__
+extern "C" struct tm * localtime_r (const time_t *_tod, struct tm *_result);
+#endif
 static bool PortableLocaltime(time_t seconds, struct tm* out) {
 #if defined(_MSC_VER)
   return localtime_s(out, &seconds) == 0;
@@ -8558,7 +8565,11 @@ bool FilePath::CreateFolder() const {
 #elif GTEST_OS_WINDOWS
   int result = _mkdir(pathname_.c_str());
 #else
+#ifdef _WRS_KERNEL
+  int result = ::mkdir(pathname_.c_str());
+#else
   int result = mkdir(pathname_.c_str(), 0777);
+#endif
 #endif  // GTEST_OS_WINDOWS_MOBILE
 
   if (result == -1) {
@@ -8688,7 +8699,7 @@ void FilePath::Normalize() {
 namespace testing {
 namespace internal {
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__VXWORKS__)
 // MSVC and C++Builder do not provide a definition of STDERR_FILENO.
 const int kStdOutFileno = 1;
 const int kStdErrFileno = 2;
@@ -9536,7 +9547,16 @@ GTestLog::~GTestLog() {
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4996)
 
 #if GTEST_HAS_STREAM_REDIRECTION
-
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <ioLib.h>
+#ifdef __cplusplus
+}
+#endif
+#endif /* __VXWORKS__ */
 // Object that captures an output stream (stdout/stderr).
 class CapturedStream {
  public:

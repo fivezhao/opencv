@@ -81,6 +81,12 @@ static double perf_stability_criteria = 0.03; // 3%
 
 
 #ifdef ONVXWORKS
+
+#ifdef __VXWORKS__
+#include "clockLib.h"
+#include <timerLib.h>
+#endif
+
 static int usleep 
         (
         unsigned long useconds

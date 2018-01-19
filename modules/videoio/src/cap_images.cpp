@@ -49,6 +49,10 @@
 // video%04d.png or the first frame of the sequence i.e. video0001.png
 //
 
+#ifdef _WRS_KERNEL
+#include <vxWorks.h>
+#endif
+
 #include "precomp.hpp"
 #include <sys/stat.h>
 

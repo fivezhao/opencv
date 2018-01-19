@@ -1,6 +1,8 @@
 #include "test_precomp.hpp"
 #include "test_intrin_utils.hpp"
 
+#ifndef __VXWORKS__
+
 namespace cvtest { namespace hal {
 CV_CPU_OPTIMIZATION_NAMESPACE_BEGIN
 
@@ -14,3 +16,5 @@ void test_hal_intrin_float16x4()
 
 CV_CPU_OPTIMIZATION_NAMESPACE_END
 }} // namespace
+
+#endif /* __VXWORKS__ */

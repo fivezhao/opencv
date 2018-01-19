@@ -481,6 +481,9 @@ void cv::evaluateFeatureDetector( const Mat& img1, const Mat& img2, const Mat& H
 struct DMatchForEvaluation : public DMatch
 {
     uchar isCorrect;
+#ifdef __VXWORKS__
+    DMatchForEvaluation() : DMatch() {}
+#endif
     DMatchForEvaluation( const DMatch &dm ) : DMatch( dm ), isCorrect(0) {}
 };
 

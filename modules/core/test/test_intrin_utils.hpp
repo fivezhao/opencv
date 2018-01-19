@@ -1,3 +1,4 @@
+#ifndef __VXWORKS__
 #include "opencv2/core/hal/intrin.hpp"
 
 namespace cvtest { namespace hal {
@@ -965,3 +966,5 @@ template<typename R> struct TheTest
 
 CV_CPU_OPTIMIZATION_NAMESPACE_END
 }} // namespace
+
+#endif /* __VXWORKS__ */
