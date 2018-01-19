@@ -47,8 +47,15 @@
 //
 // */
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX2
+#endif
+
 #include "precomp.hpp"
 #include "imgwarp.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX2
 
 namespace cv
 {
@@ -95,4 +102,5 @@ int warpAffineBlockline(int *adelta, int *bdelta, short* xy, short* alpha, int X
 
 }
 }
+#endif /* CV_CPU_COMPILE_AVX2 */
 /* End of file. */

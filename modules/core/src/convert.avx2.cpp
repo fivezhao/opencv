@@ -41,8 +41,15 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX2
+#endif
+
 #include "precomp.hpp"
 #include "convert.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX2
 
 namespace cv
 {
@@ -75,4 +82,5 @@ void cvtScale_s16s32f32Line_AVX2(const short* src, int* dst, float scale, float 
 
 }
 }
+#endif /* CV_CPU_COMPILE_AVX2 */
 /* End of file. */

@@ -40,8 +40,15 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX2
+#endif
+
 #include "precomp.hpp"
 #include "filter.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX2
 
 namespace cv
 {
@@ -196,5 +203,5 @@ int SymmColumnVec_32f_Unsymm_AVX(const float** src, const float* ky, float* dst,
 }
 
 }
-
+#endif /* CV_CPU_COMPILE_AVX2 */
 /* End of file. */

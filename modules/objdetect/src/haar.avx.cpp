@@ -41,9 +41,15 @@
 
 /* Haar features calculation */
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX
+#endif
+
 #include "precomp.hpp"
 #include "haar.hpp"
 
+#ifdef CV_CPU_COMPILE_AVX
 namespace cv_haar_avx
 {
 
@@ -365,5 +371,5 @@ double icvEvalHidHaarStumpClassifierTwoRectAVX(CvHidHaarClassifier* classifier,
 #endif //CV_HAAR_USE_AVX
 
 }
-
+#endif /* CV_CPU_COMPILE_AVX */
 /* End of file. */

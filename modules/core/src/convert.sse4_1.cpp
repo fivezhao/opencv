@@ -41,9 +41,15 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE SSE4_1
+#endif
+
 #include "precomp.hpp"
 #include "convert.hpp"
 
+#ifdef CV_CPU_COMPILE_SSE4_1
 namespace cv
 {
 namespace opt_SSE4_1
@@ -237,5 +243,5 @@ int Cvt_SIMD_f64u16_SSE41(const double * src, ushort * dst, int width)
 
 }
 }
-
+#endif /* CV_CPU_COMPILE_SSE4_1 */
 /* End of file. */

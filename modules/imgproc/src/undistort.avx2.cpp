@@ -40,8 +40,15 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX2
+#endif
+
 #include "precomp.hpp"
 #include "undistort.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX2
 
 namespace cv
 {
@@ -190,5 +197,5 @@ int initUndistortRectifyMapLine_AVX(float* m1f, float* m2f, short* m1, ushort* m
 }
 
 }
-
+#endif /* CV_CPU_COMPILE_AVX2 */
 /*  End of file  */

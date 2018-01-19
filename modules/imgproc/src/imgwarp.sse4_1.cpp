@@ -47,9 +47,15 @@
 //
 // */
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE SSE4_1
+#endif
+
 #include "precomp.hpp"
 #include "imgwarp.hpp"
 
+#ifdef CV_CPU_COMPILE_SSE4_1
 namespace cv
 {
 namespace opt_SSE4_1
@@ -502,4 +508,5 @@ Ptr<WarpPerspectiveLine_SSE4> WarpPerspectiveLine_SSE4::getImpl(const double *M)
 
 }
 }
+#endif /* CV_CPU_COMPILE_SSE4_1 */
 /* End of file. */

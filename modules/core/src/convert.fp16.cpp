@@ -41,10 +41,16 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE FP16
+#endif
+
 #include "precomp.hpp"
 
 #include "convert.hpp"
 
+#ifdef CV_CPU_COMPILE_FP16
 
 namespace cv
 {
@@ -164,4 +170,5 @@ void cvtScaleHalf_SIMD16f32f( const short* src, size_t sstep, float* dst, size_t
 #endif
 }
 }
+#endif /* CV_CPU_COMPILE_FP16 */
 /* End of file. */

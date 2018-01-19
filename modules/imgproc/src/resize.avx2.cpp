@@ -47,8 +47,15 @@
 //
 // */
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX2
+#endif
+
 #include "precomp.hpp"
 #include "resize.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX2
 
 namespace cv
 {
@@ -258,4 +265,5 @@ void resizeNN4_AVX2(const Range& range, const Mat& src, Mat &dst, int *x_ofs, in
 
 }
 }
+#endif /* CV_CPU_COMPILE_AVX2 */
 /* End of file. */

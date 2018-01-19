@@ -41,9 +41,16 @@
 //
 //M*/
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE AVX
+#endif
+
 #include "precomp.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include "corner.hpp"
+
+#ifdef CV_CPU_COMPILE_AVX
 
 namespace cv
 {
@@ -178,4 +185,5 @@ int cornerEigenValsVecsLine_AVX(const float* dxdata, const float* dydata, float*
 }
 
 }
+#endif /* CV_CPU_COMPILE_AVX */
 /* End of file */

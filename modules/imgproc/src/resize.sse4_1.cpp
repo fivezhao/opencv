@@ -47,8 +47,15 @@
 //
 // */
 
+#ifdef __VXWORKS__
+#undef CV_CPU_DISPATCH_MODE
+#define CV_CPU_DISPATCH_MODE SSE4_1
+#endif
+
 #include "precomp.hpp"
 #include "resize.hpp"
+
+#ifdef CV_CPU_COMPILE_SSE4_1
 
 namespace cv
 {
@@ -230,4 +237,5 @@ int VResizeLanczos4Vec_32f16u_SSE41(const uchar** _src, uchar* _dst, const uchar
 
 }
 }
+#endif /* CV_CPU_COMPILE_SSE4_1 */
 /* End of file. */
