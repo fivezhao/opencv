@@ -32,6 +32,8 @@
 //  Based on original Protocol Buffers design by
 //  Sanjay Ghemawat, Jeff Dean, and others.
 
+#ifndef __VXWORKS__
+
 #ifdef _WIN32
 // Verify that #including windows.h does not break anything (e.g. because
 // windows.h #defines GetMessage() as a macro).
@@ -3348,3 +3350,5 @@ void TestUtil::ReflectionTester::ExpectMessagesReleasedViaReflection(
 
 }  // namespace protobuf
 }  // namespace google
+
+#endif /* __VXWORKS__ */

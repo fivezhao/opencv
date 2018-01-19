@@ -249,6 +249,9 @@ class LIBPROTOBUF_EXPORT ProtoStreamObjectWriter : public ProtoWriter {
     // Indicates the type of item.
     enum ItemType {
       MESSAGE,  // Simple message
+#ifdef __VXWORKS__
+#undef MAP
+#endif
       MAP,      // Proto3 map type
       ANY,      // Proto3 Any type
     };

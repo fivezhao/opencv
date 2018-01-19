@@ -131,7 +131,10 @@ class LIBPROTOBUF_EXPORT DefaultValueObjectWriter : public ObjectWriter {
     PRIMITIVE = 0,
     OBJECT = 1,
     LIST = 2,
-    MAP = 3,
+#ifdef __VXWORKS__
+#undef MAP
+#endif
+	MAP = 3,
   };
 
   // "Node" represents a node in the tree that holds the input of

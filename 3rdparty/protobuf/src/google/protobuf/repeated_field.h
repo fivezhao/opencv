@@ -46,7 +46,7 @@
 #ifndef GOOGLE_PROTOBUF_REPEATED_FIELD_H__
 #define GOOGLE_PROTOBUF_REPEATED_FIELD_H__
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__VXWORKS__)
 // This is required for min/max on VS2013 only.
 #include <algorithm>
 #endif

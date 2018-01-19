@@ -59,12 +59,22 @@
     #pragma runtime_checks("c", off)
   #endif
 #else
+#ifdef __VXWORKS__
+#include <types/vxCpu.h>
+#include <types/vxArch.h>
+#ifndef BYTE_ORDER
+# if _BYTE_ORDER == _LITTLE_ENDIAN
+#  define PROTOBUF_LITTLE_ENDIAN 1
+# endif
+#endif /* BYTE_ORDER */
+#else
   #include <sys/param.h>   // __BYTE_ORDER
   #if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || \
          (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) && \
       !defined(PROTOBUF_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
     #define PROTOBUF_LITTLE_ENDIAN 1
   #endif
+#endif /* __VXWORKS__ */
 #endif
 #if defined(_MSC_VER) && defined(PROTOBUF_USE_DLLS)
   #ifdef LIBPROTOBUF_EXPORTS

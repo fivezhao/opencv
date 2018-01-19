@@ -40,6 +40,10 @@
 #include <stdio.h>
 #include <iterator>
 
+#ifdef __VXWORKS__
+#undef ERROR
+#endif
+
 #include <google/protobuf/stubs/stl_util.h>
 
 #ifdef _WIN32

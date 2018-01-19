@@ -42,6 +42,9 @@ namespace util {
 namespace error {
 // These values must match error codes defined in google/rpc/code.proto.
 enum Code {
+#ifdef __VXWORKS__
+#undef OK
+#endif
   OK = 0,
   CANCELLED = 1,
   UNKNOWN = 2,

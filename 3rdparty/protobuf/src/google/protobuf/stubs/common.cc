@@ -407,12 +407,20 @@ uint32 ghtonl(uint32 x) {
 namespace internal {
 
 typedef void OnShutdownFunc();
+#ifdef __VXWORKS__
+vector<intptr_t>* shutdown_functions = NULL;
+#else
 vector<void (*)()>* shutdown_functions = NULL;
+#endif
 Mutex* shutdown_functions_mutex = NULL;
 GOOGLE_PROTOBUF_DECLARE_ONCE(shutdown_functions_init);
 
 void InitShutdownFunctions() {
+#ifdef __VXWORKS__
+  shutdown_functions = new vector<intptr_t>;
+#else
   shutdown_functions = new vector<void (*)()>;
+#endif
   shutdown_functions_mutex = new Mutex;
 }
 
@@ -423,11 +431,18 @@ inline void InitShutdownFunctionsOnce() {
 void OnShutdown(void (*func)()) {
   InitShutdownFunctionsOnce();
   MutexLock lock(shutdown_functions_mutex);
+#ifdef __VXWORKS__
+  shutdown_functions->push_back((intptr_t)func);
+#else
   shutdown_functions->push_back(func);
+#endif
 }
 
 }  // namespace internal
 
+#ifdef __VXWORKS__
+typedef void (*PB_FUNC)();
+#endif
 void ShutdownProtobufLibrary() {
   internal::InitShutdownFunctionsOnce();
 
@@ -439,7 +454,12 @@ void ShutdownProtobufLibrary() {
   if (internal::shutdown_functions == NULL) return;
 
   for (int i = 0; i < internal::shutdown_functions->size(); i++) {
+#ifdef __VXWORKS__
+	  PB_FUNC func = (PB_FUNC)internal::shutdown_functions->at(i);
+	  func();
+#else
     internal::shutdown_functions->at(i)();
+#endif
   }
   delete internal::shutdown_functions;
   internal::shutdown_functions = NULL;

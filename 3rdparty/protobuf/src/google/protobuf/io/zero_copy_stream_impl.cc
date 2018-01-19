@@ -140,7 +140,7 @@ int FileInputStream::CopyingFileInputStream::Read(void* buffer, int size) {
 
   int result;
   do {
-    result = read(file_, buffer, size);
+    result = read(file_, (char *)buffer, size);
   } while (result < 0 && errno == EINTR);
 
   if (result < 0) {
@@ -243,7 +243,7 @@ bool FileOutputStream::CopyingFileOutputStream::Write(
   while (total_written < size) {
     int bytes;
     do {
-      bytes = write(file_, buffer_base + total_written, size - total_written);
+      bytes = write(file_, (char *)(buffer_base + total_written), size - total_written);
     } while (bytes < 0 && errno == EINTR);
 
     if (bytes <= 0) {

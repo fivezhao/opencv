@@ -32,6 +32,8 @@
 //  Based on original Protocol Buffers design by
 //  Sanjay Ghemawat, Jeff Dean, and others.
 
+#ifndef __VXWORKS__
+
 #include <google/protobuf/test_util_lite.h>
 #include <google/protobuf/stubs/logging.h>
 #include <google/protobuf/stubs/common.h>
@@ -1584,3 +1586,5 @@ void TestUtilLite::ExpectPackedExtensionsModified(
 
 }  // namespace protobuf
 }  // namespace google
+
+#endif /* __VXWORKS__ */
