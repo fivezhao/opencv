@@ -49,8 +49,8 @@
 #include "opencv2/imgproc/imgproc_c.h"
 #include "opencv2/photo/photo_c.h"
 
-#undef CV_MAT_ELEM_PTR_FAST
-#define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )  \
+#undef CV_MAT_ELEM_PTR_FASTVX
+#define CV_MAT_ELEM_PTR_FASTVX( mat, row, col, pix_size )  \
      ((mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
 
 inline float

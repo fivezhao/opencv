@@ -23,8 +23,8 @@
 typedef struct {
   struct jpeg_entropy_decoder pub; /* public fields */
 
-  INT32 c;       /* C register, base of coding interval + input bit buffer */
-  INT32 a;               /* A register, normalized size of coding interval */
+  CVINT32 c;       /* C register, base of coding interval + input bit buffer */
+  CVINT32 a;               /* A register, normalized size of coding interval */
   int ct;     /* bit shift counter, # of bits left in bit buffer part of C */
                                                          /* init: ct = -16 */
                                                          /* run: ct = 0..7 */
@@ -61,7 +61,7 @@ typedef arith_entropy_decoder * arith_entropy_ptr;
 #define AC_STAT_BINS 256
 
 
-LOCAL(int)
+LOCALVX(int)
 get_byte (j_decompress_ptr cinfo)
 /* Read next input byte; we do not support suspension in this module. */
 {
@@ -102,12 +102,12 @@ get_byte (j_decompress_ptr cinfo)
  * derived from Markus Kuhn's JBIG implementation.
  */
 
-LOCAL(int)
+LOCALVX(int)
 arith_decode (j_decompress_ptr cinfo, unsigned char *st)
 {
   register arith_entropy_ptr e = (arith_entropy_ptr) cinfo->entropy;
   register unsigned char nl, nm;
-  register INT32 qe, temp;
+  register CVINT32 qe, temp;
   register int sv, data;
 
   /* Renormalization & data input per section D.2.6 */
@@ -186,7 +186,7 @@ arith_decode (j_decompress_ptr cinfo, unsigned char *st)
  * Check for a restart marker & resynchronize decoder.
  */
 
-LOCAL(void)
+LOCALVX(void)
 process_restart (j_decompress_ptr cinfo)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;

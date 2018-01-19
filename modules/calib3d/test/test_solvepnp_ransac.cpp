@@ -154,7 +154,7 @@ protected:
 
     virtual void run(int)
     {
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
 
         vector<Point3f> points, points_dls;
         points.resize(pointsCount);
@@ -322,7 +322,7 @@ class CV_solveP3P_Test : public CV_solvePnPRansac_Test
 
   virtual void run(int)
   {
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 
     vector<Point3f> points, points_dls;
     points.resize(pointsCount);

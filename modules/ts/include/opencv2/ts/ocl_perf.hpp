@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #ifndef OPENCV_TS_OCL_PERF_HPP
 #define OPENCV_TS_OCL_PERF_HPP
 
@@ -138,3 +138,4 @@ using namespace perf;
 } // namespace cvtest
 
 #endif // OPENCV_TS_OCL_PERF_HPP
+#endif

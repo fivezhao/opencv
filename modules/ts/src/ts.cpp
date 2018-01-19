@@ -49,7 +49,7 @@
 #include <time.h>
 #if defined _WIN32
 #include <io.h>
-
+#include "ImathLine.h"
 #include <windows.h>
 #undef small
 #undef min
@@ -443,7 +443,7 @@ string TS::str_from_code( const TS::FailureCode code )
 {
     switch( code )
     {
-    case OK:                           return "Ok";
+    case OKVX:                           return "Ok";
     case FAIL_GENERIC:                 return "Generic/Unknown";
     case FAIL_MISSING_TEST_DATA:       return "No test data";
     case FAIL_INVALID_TEST_DATA:       return "Invalid test data";

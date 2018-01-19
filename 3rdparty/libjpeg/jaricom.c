@@ -18,7 +18,7 @@
 #include "jpeglib.h"
 
 /* The following #define specifies the packing of the four components
- * into the compact INT32 representation.
+ * into the compact CVINT32 representation.
  * Note that this formula must match the actual arithmetic encoder
  * and decoder implementation.  The implementation has to be changed
  * if this formula is changed.
@@ -26,9 +26,9 @@
  * implementation (jbig_tab.c).
  */
 
-#define V(i,a,b,c,d) (((INT32)a << 16) | ((INT32)c << 8) | ((INT32)d << 7) | b)
+#define V(i,a,b,c,d) (((CVINT32)a << 16) | ((CVINT32)c << 8) | ((CVINT32)d << 7) | b)
 
-const INT32 jpeg_aritab[113+1] = {
+const CVINT32 jpeg_aritab[113+1] = {
 /*
  * Index, Qe_Value, Next_Index_LPS, Next_Index_MPS, Switch_MPS
  */

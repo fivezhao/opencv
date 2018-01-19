@@ -104,10 +104,13 @@ protected:
             cvClearMemStorage(storage);
 
             bool mem = (idx % test_case_count) >= (test_case_count >> 1);
-            string filename = tempfile(suffixs[idx % (test_case_count >> 1)]);
+            cv::String filename = tempfile(suffixs[idx % (test_case_count >> 1)]);
 
+#ifndef ONVXWORKS
             FileStorage fs(filename, FileStorage::WRITE + (mem ? FileStorage::MEMORY : 0));
-
+#else
+            FileStorage fs(filename, FileStorage::CVWRITE + (mem ? FileStorage::CVMEMORY : 0));
+#endif
             int test_int = (int)cvtest::randInt(rng);
             double test_real = (cvtest::randInt(rng)%2?1:-1)*exp(cvtest::randReal(rng)*18-9);
             string test_string = "vw wv23424rt\"&amp;&lt;&gt;&amp;&apos;@#$@$%$%&%IJUKYILFD@#$@%$&*&() ";
@@ -189,9 +192,13 @@ protected:
             fs.writeObj("test_graph",graph);
             CvGraph* graph2 = (CvGraph*)cvClone(graph);
 
-            string content = fs.releaseAndGetString();
+            cv::String content = fs.releaseAndGetString();
 
+#ifndef ONVXWORKS
             if(!fs.open(mem ? content : filename, FileStorage::READ + (mem ? FileStorage::MEMORY : 0)))
+#else
+            if(!fs.open(mem ? content : filename, FileStorage::CVREAD + (mem ? FileStorage::CVMEMORY : 0)))
+#endif
             {
                 ts->printf( cvtest::TS::LOG, "filename %s can not be read\n", !mem ? filename.c_str() : content.c_str());
                 ts->set_failed_test_info( cvtest::TS::FAIL_MISSING_TEST_DATA );
@@ -200,7 +207,7 @@ protected:
 
             int real_int = (int)fs["test_int"];
             double real_real = (double)fs["test_real"];
-            String real_string = (String)fs["test_string"];
+            cv::String real_string = (String)fs["test_string"];
 
             if( real_int != test_int ||
                fabs(real_real - test_real) > DBL_EPSILON*(fabs(test_real)+1) ||
@@ -441,7 +448,7 @@ protected:
         {
             try
             {
-                string fname = cv::tempfile(suffix[i]);
+                cv::String fname = cv::tempfile(suffix[i]);
                 vector<int> mi, mi2, mi3, mi4;
                 vector<Mat> mv, mv2, mv3, mv4;
                 vector<UserDefinedType> vudt, vudt2, vudt3, vudt4;
@@ -461,7 +468,11 @@ protected:
                 Scalar sc1(20.0, 21.1, 22.2, 23.3), osc1;
                 Range g1(7, 8), og1;
 
+#ifndef ONVXWORKS
                 FileStorage fs(fname, FileStorage::WRITE);
+#else
+                FileStorage fs(fname, FileStorage::CVWRITE);
+#endif
                 fs << "mi" << mi;
                 fs << "mv" << mv;
                 fs << "mi3" << mi3;
@@ -478,8 +489,11 @@ protected:
                 fs << "sc1" << sc1;
                 fs << "g1" << g1;
                 fs.release();
-
+#ifndef ONVXWORKS
                 fs.open(fname, FileStorage::READ);
+#else
+                fs.open(fname, FileStorage::CVREAD);
+#endif
                 fs["mi"] >> mi2;
                 fs["mv"] >> mv2;
                 fs["mi3"] >> mi4;
@@ -569,9 +583,12 @@ TEST(Core_globbing, accuracy)
 
 TEST(Core_InputOutput, FileStorage)
 {
-    std::string file = cv::tempfile(".xml");
+    cv::String file = cv::tempfile(".xml");
+#ifndef ONVXWORKS
     cv::FileStorage f(file, cv::FileStorage::WRITE);
-
+#else
+    cv::FileStorage f(file, cv::FileStorage::CVWRITE);
+#endif
     char arr[66];
     sprintf(arr, "sprintf is hell %d", 666);
     EXPECT_NO_THROW(f << arr);
@@ -579,8 +596,11 @@ TEST(Core_InputOutput, FileStorage)
 
 TEST(Core_InputOutput, FileStorageKey)
 {
-    cv::FileStorage f("dummy.yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
-
+#ifndef ONVXWORKS
+    cv::FileStorage f("dummy.yml", cv::FileStorage::WRITEVX | cv::FileStorage::MEMORYVX);
+#else
+    cv::FileStorage f("dummy.yml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
     EXPECT_NO_THROW(f << "key1" << "value1");
     EXPECT_NO_THROW(f << "_key2" << "value2");
     EXPECT_NO_THROW(f << "key_3" << "value3");
@@ -590,13 +610,21 @@ TEST(Core_InputOutput, FileStorageKey)
 
 TEST(Core_InputOutput, FileStorageSpaces)
 {
+#ifndef ONVXWORKS
     cv::FileStorage f("dummy.yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage f("dummy.yml", cv::FileStorage::CVWRITE | cv::FileStorage::CVMEMORY);
+#endif
     const int valueCount = 5;
     std::string values[5] = { "", " ", " ", "  a", " some string" };
     for (size_t i = 0; i < valueCount; i++) {
         EXPECT_NO_THROW(f << cv::format("key%d", i) << values[i]);
     }
+#ifndef ONVXWORKS
     cv::FileStorage f2(f.releaseAndGetString(), cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    cv::FileStorage f2(f.releaseAndGetString(), cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
     std::string valuesRead[valueCount];
     for (size_t i = 0; i < valueCount; i++) {
         EXPECT_NO_THROW(f2[cv::format("key%d", i)] >> valuesRead[i]);
@@ -725,8 +753,11 @@ TEST(Core_InputOutput, filestorage_base64_basic)
         }
 
         {   /* read */
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::READ);
-
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVREAD);
+#endif
             /* mat */
             fs["empty_2d_mat"]  >> _em_in;
             fs["normal_2d_mat"] >> _2d_in;
@@ -857,7 +888,11 @@ TEST(Core_InputOutput, filestorage_base64_valid_call)
         });
 
         {
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::READ);
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVREAD);
+#endif
             std::vector<int> data_in(rawdata.size());
             fs["manydata"][0].readRaw("i", (uchar *)data_in.data(), data_in.size());
             EXPECT_TRUE(fs["manydata"][0].isSeq());
@@ -871,8 +906,11 @@ TEST(Core_InputOutput, filestorage_base64_valid_call)
 
         EXPECT_NO_THROW(
         {
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::WRITE);
-
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVWRITE);
+#endif
             cvStartWriteStruct(*fs, "manydata", CV_NODE_SEQ);
             cvWriteString(*fs, 0, str_out.c_str(), 1);
             cvStartWriteStruct(*fs, 0, CV_NODE_SEQ | CV_NODE_FLOW, "binary");
@@ -885,7 +923,11 @@ TEST(Core_InputOutput, filestorage_base64_valid_call)
         });
 
         {
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::READ);
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVREAD);
+#endif
             cv::String str_in;
             fs["manydata"][0] >> str_in;
             EXPECT_TRUE(fs["manydata"][0].isString());
@@ -915,13 +957,21 @@ TEST(Core_InputOutput, filestorage_base64_invalid_call)
         char const * name = *ptr;
 
         EXPECT_ANY_THROW({
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::WRITE);
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVWRITE);
+#endif
             cvStartWriteStruct(*fs, "rawdata", CV_NODE_SEQ, "binary");
             cvStartWriteStruct(*fs, 0, CV_NODE_SEQ | CV_NODE_FLOW);
         });
 
         EXPECT_ANY_THROW({
+#ifndef ONVXWORKS
             cv::FileStorage fs(name, cv::FileStorage::WRITE);
+#else
+            cv::FileStorage fs(name, cv::FileStorage::CVWRITE);
+#endif
             cvStartWriteStruct(*fs, "rawdata", CV_NODE_SEQ);
             cvStartWriteStruct(*fs, 0, CV_NODE_SEQ | CV_NODE_FLOW);
             cvWriteRawDataBase64(*fs, name, 1, "u");
@@ -933,19 +983,27 @@ TEST(Core_InputOutput, filestorage_base64_invalid_call)
 
 TEST(Core_InputOutput, filestorage_yml_vec2i)
 {
-    const std::string file_name = "vec2i.yml";
+    const cv::String file_name = "vec2i.yml";
     cv::Vec2i vec(2, 1), ovec;
 
     /* write */
     {
-        cv::FileStorage fs(file_name, cv::FileStorage::WRITE);
+#ifndef ONVXWORKS
+    	cv::FileStorage fs(file_name, cv::FileStorage::WRITE);
+#else
+    	cv::FileStorage fs(file_name, cv::FileStorage::CVWRITE);
+#endif
         fs << "prms0" << "{" << "vec0" << vec << "}";
         fs.release();
     }
 
     /* read */
     {
-        cv::FileStorage fs(file_name, cv::FileStorage::READ);
+#ifndef ONVXWORKS
+    	cv::FileStorage fs(file_name, cv::FileStorage::READ);
+#else
+    	cv::FileStorage fs(file_name, cv::FileStorage::CVREAD);
+#endif
         fs["prms0"]["vec0"] >> ovec;
         fs.release();
     }
@@ -973,7 +1031,11 @@ TEST(Core_InputOutput, filestorage_json_comment)
 
     EXPECT_NO_THROW(
     {
-        cv::FileStorage fs(mem_str, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#ifndef ONVXWORKS
+    	cv::FileStorage fs(mem_str, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+#else
+    	cv::FileStorage fs(mem_str, cv::FileStorage::CVREAD | cv::FileStorage::CVMEMORY);
+#endif
         fs["key"] >> str;
         fs.release();
     });

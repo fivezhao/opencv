@@ -61,7 +61,7 @@ protected:
 
     void run(int)
     {
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
         int progress = 0;
         int caseId = 0;
 

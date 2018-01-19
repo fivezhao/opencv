@@ -42,8 +42,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_FAST_MATH_HPP
-#define OPENCV_CORE_FAST_MATH_HPP
+#ifndef OPENCV_CORE_FASTVX_MATH_HPP
+#define OPENCV_CORE_FASTVX_MATH_HPP
 
 #include "opencv2/core/cvdef.h"
 
@@ -119,7 +119,11 @@ cvRound( double value )
 # if defined ARM_ROUND_DBL
     ARM_ROUND_DBL(value);
 # else
-    return (int)lrint(value);
+#    ifdef ONVXWORKS
+        return (int)(value + (value >= 0 ? 0.5f : -0.5f));
+#     else
+        return (int)lrintf(value);
+#     endif
 # endif
 #else
     /* it's ok if round does not comply with IEEE754 standard;
@@ -207,7 +211,11 @@ CV_INLINE int cvRound(float value)
 # if defined ARM_ROUND_FLT
     ARM_ROUND_FLT(value);
 # else
-    return (int)lrintf(value);
+#    ifdef ONVXWORKS
+        return (int)(value + (value >= 0 ? 0.5f : -0.5f));
+#     else
+        return (int)lrintf(value);
+#     endif
 # endif
 #else
     /* it's ok if round does not comply with IEEE754 standard;

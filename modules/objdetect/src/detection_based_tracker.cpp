@@ -48,7 +48,7 @@
 #define USE_STD_THREADS
 #endif
 
-#if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) || defined(USE_STD_THREADS)
+#if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) || defined(USE_STD_THREADS) || defined(ONVXWORKS)
 
 #include "opencv2/core/utility.hpp"
 

@@ -695,7 +695,7 @@ struct Type< Scalar_<_Tp> > { enum { value = CV_MAKETYPE(Depth<_Tp>::value, 4) }
 /** @brief Data structure for salient point detectors.
 
 The class instance stores a keypoint, i.e. a point feature found by one of many available keypoint
-detectors, such as Harris corner detector, cv::FAST, cv::StarDetector, cv::SURF, cv::SIFT,
+detectors, such as Harris corner detector, cv::FASTVX, cv::StarDetector, cv::SURF, cv::SIFT,
 cv::LDetector etc.
 
 The keypoint is characterized by the 2D position, scale (proportional to the diameter of the

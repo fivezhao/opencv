@@ -1,4 +1,4 @@
-/* This is FAST corner detector, contributed to OpenCV by the author, Edward Rosten.
+/* This is FASTVX corner detector, contributed to OpenCV by the author, Edward Rosten.
    Below is the original copyright and the references */
 
 /*
@@ -55,7 +55,7 @@ namespace cv
 {
 
 template<int patternSize>
-void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression)
+void FASTVX_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression)
 {
     Mat img = _img.getMat();
     const int K = patternSize/2, N = patternSize + K + 1;
@@ -264,7 +264,7 @@ struct cmp_pt
     bool operator ()(const pt& a, const pt& b) const { return a.y < b.y || (a.y == b.y && a.x < b.x); }
 };
 
-static bool ocl_FAST( InputArray _img, std::vector<KeyPoint>& keypoints,
+static bool ocl_FASTVX( InputArray _img, std::vector<KeyPoint>& keypoints,
                      int threshold, bool nonmax_suppression, int maxKeypoints )
 {
     UMat img = _img.getUMat();
@@ -272,7 +272,7 @@ static bool ocl_FAST( InputArray _img, std::vector<KeyPoint>& keypoints,
         return false;
     size_t globalsize[] = { (size_t)img.cols-6, (size_t)img.rows-6 };
 
-    ocl::Kernel fastKptKernel("FAST_findKeypoints", ocl::features2d::fast_oclsrc);
+    ocl::Kernel fastKptKernel("FASTVX_findKeypoints", ocl::features2d::fast_oclsrc);
     if (fastKptKernel.empty())
         return false;
 
@@ -310,7 +310,7 @@ static bool ocl_FAST( InputArray _img, std::vector<KeyPoint>& keypoints,
         UMat ucounter2 = kp2(Rect(0,0,1,1));
         ucounter2.setTo(Scalar::all(0));
 
-        ocl::Kernel fastNMSKernel("FAST_nonmaxSupression", ocl::features2d::fast_oclsrc);
+        ocl::Kernel fastNMSKernel("FASTVX_nonmaxSupression", ocl::features2d::fast_oclsrc);
         if (fastNMSKernel.empty())
             return false;
 
@@ -403,13 +403,13 @@ static bool openvx_FAST(InputArray _img, std::vector<KeyPoint>& keypoints,
 #endif
 
 
-void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression, int type)
+void FASTVX(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression, int type)
 {
     CV_INSTRUMENT_REGION()
 
 #ifdef HAVE_OPENCL
   if( ocl::useOpenCL() && _img.isUMat() && type == FastFeatureDetector::TYPE_9_16 &&
-      ocl_FAST(_img, keypoints, threshold, nonmax_suppression, 10000))
+      ocl_FASTVX(_img, keypoints, threshold, nonmax_suppression, 10000))
   {
     CV_IMPL_ADD(CV_IMPL_OCL);
     return;
@@ -421,27 +421,27 @@ void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool
 
   switch(type) {
     case FastFeatureDetector::TYPE_5_8:
-      FAST_t<8>(_img, keypoints, threshold, nonmax_suppression);
+      FASTVX_t<8>(_img, keypoints, threshold, nonmax_suppression);
       break;
     case FastFeatureDetector::TYPE_7_12:
-      FAST_t<12>(_img, keypoints, threshold, nonmax_suppression);
+      FASTVX_t<12>(_img, keypoints, threshold, nonmax_suppression);
       break;
     case FastFeatureDetector::TYPE_9_16:
 #ifdef HAVE_TEGRA_OPTIMIZATION
-      if(tegra::useTegra() && tegra::FAST(_img, keypoints, threshold, nonmax_suppression))
+      if(tegra::useTegra() && tegra::FASTVX(_img, keypoints, threshold, nonmax_suppression))
         break;
 #endif
-      FAST_t<16>(_img, keypoints, threshold, nonmax_suppression);
+      FASTVX_t<16>(_img, keypoints, threshold, nonmax_suppression);
       break;
   }
 }
 
 
-void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression)
+void FASTVX(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression)
 {
     CV_INSTRUMENT_REGION()
 
-    FAST(_img, keypoints, threshold, nonmax_suppression, FastFeatureDetector::TYPE_9_16);
+    FASTVX(_img, keypoints, threshold, nonmax_suppression, FastFeatureDetector::TYPE_9_16);
 }
 
 
@@ -465,7 +465,7 @@ public:
             cvtColor( _image, ogray, COLOR_BGR2GRAY );
             gray = ogray;
         }
-        FAST( gray, keypoints, threshold, nonmaxSuppression, type );
+        FASTVX( gray, keypoints, threshold, nonmaxSuppression, type );
         KeyPointsFilter::runByPixelsMask( keypoints, mask );
     }
 
@@ -475,7 +475,7 @@ public:
             threshold = cvRound(value);
         else if(prop == NONMAX_SUPPRESSION)
             nonmaxSuppression = value != 0;
-        else if(prop == FAST_N)
+        else if(prop == FASTVX_N)
             type = cvRound(value);
         else
             CV_Error(Error::StsBadArg, "");
@@ -487,7 +487,7 @@ public:
             return threshold;
         if(prop == NONMAX_SUPPRESSION)
             return nonmaxSuppression;
-        if(prop == FAST_N)
+        if(prop == FASTVX_N)
             return type;
         CV_Error(Error::StsBadArg, "");
         return 0;

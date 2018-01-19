@@ -61,7 +61,7 @@ ExifEntry_t::ExifEntry_t() :
 /**
  * @brief ExifReader constructor
  */
-ExifReader::ExifReader(std::istream& stream) : m_stream(stream), m_format(NONE)
+ExifReader::ExifReader(std::istream& stream) : m_stream(stream), m_format(NONEVX)
 {
 }
 
@@ -245,16 +245,16 @@ void ExifReader::parseExif()
  * @brief Get endianness of exif information
  *          This is internal function and is not exposed to client
  *
- * @return INTEL, MOTO or NONE
+ * @return INTEL, MOTO or NONEVX
  */
 Endianess_t ExifReader::getFormat() const
 {
     if (m_data.size() < 1)
-        return NONE;
+        return NONEVX;
 
     if( m_data.size() > 1 && m_data[0] != m_data[1] )
     {
-        return NONE;
+        return NONEVX;
     }
 
     if( m_data[0] == 'I' )
@@ -267,7 +267,7 @@ Endianess_t ExifReader::getFormat() const
         return MOTO;
     }
 
-    return NONE;
+    return NONEVX;
 }
 
 /**

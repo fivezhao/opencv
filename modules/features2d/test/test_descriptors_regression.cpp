@@ -222,13 +222,21 @@ protected:
                 (detector.empty()
                         ? (FEATURES2D_DIR + "/" + std::string("keypoints.xml.gz"))
                         : (DESCRIPTOR_DIR + "/" + name + "_keypoints.xml.gz"));
+#ifndef ONVXWORKS
         FileStorage fs(keypoints_filename, FileStorage::READ);
+#else
+        FileStorage fs(keypoints_filename, FileStorage::CVREAD);
+#endif
 
         vector<KeyPoint> keypoints;
         EXPECT_TRUE(fs.isOpened()) << "Keypoint testdata is missing. Re-computing and re-writing keypoints testdata...";
         if (!fs.isOpened())
         {
+#ifndef ONVXWORKS
             fs.open(keypoints_filename, FileStorage::WRITE);
+#else
+            fs.open(keypoints_filename, FileStorage::CVWRITE);
+#endif
             ASSERT_TRUE(fs.isOpened()) << "File for writting keypoints can not be opened.";
             if (detector.empty())
             {
@@ -315,7 +323,7 @@ protected:
         emptyDataTest();
         regressionTest();
 
-        ts->set_failed_test_info( cvtest::TS::OK );
+        ts->set_failed_test_info( cvtest::TS::OKVX);
     }
 
     virtual Mat readDescriptors()

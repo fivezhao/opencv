@@ -487,7 +487,7 @@ int CV_GoodFeatureToTTest::validate_test_results( int test_case_idx )
         TEST_MESSAGEL (" TestCorners = ", corners.size())
         TEST_MESSAGE ("\n")
 
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
     }
 
     return BaseTest::validate_test_results(test_case_idx);

@@ -98,10 +98,10 @@ int Core_RotatedRectConstructorTest::validate_test_results( int )
         else if( norm(vertices[i] - c) <= 0.001 ) count_match++;
     }
     if( count_match == 3 )
-        return cvtest::TS::OK;
+        return cvtest::TS::OKVX;
     ts->printf( cvtest::TS::LOG, "RotatedRect end points don't match those supplied in constructor");
     ts->set_failed_test_info( cvtest::TS::FAIL_INVALID_OUTPUT );
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 TEST(Core_RotatedRect, three_point_constructor) { Core_RotatedRectConstructorTest test; test.safe_run(); }

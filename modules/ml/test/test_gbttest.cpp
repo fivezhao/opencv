@@ -77,7 +77,7 @@ CV_GBTreesTest::~CV_GBTreesTest()
 
 int CV_GBTreesTest::TestTrainPredict(int test_num)
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     int weak_count = 200;
     float shrinkage = 0.1f;
@@ -170,7 +170,7 @@ int CV_GBTreesTest::checkPredictError(int test_num)
         return cvtest::TS::FAIL_BAD_ACCURACY;
     }
 
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 
 }
 
@@ -197,7 +197,7 @@ int CV_GBTreesTest::TestSaveLoad()
 
 int CV_GBTreesTest::checkLoadSave()
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     // 1. compare files
     ifstream f1( model_file_name1.c_str() ), f2( model_file_name2.c_str() );
@@ -251,13 +251,13 @@ void CV_GBTreesTest::run(int)
     datasets[0] = dataPath + string("spambase.data"); /*string("dataset_classification.csv");*/
     datasets[1] = dataPath + string("housing_.data");  /*string("dataset_regression.csv");*/
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     for (int i = 0; i < 4; i++)
     {
 
         int temp_code = TestTrainPredict(i);
-        if (temp_code != cvtest::TS::OK)
+        if (temp_code != cvtest::TS::OKVX)
         {
             code = temp_code;
             break;
@@ -266,7 +266,7 @@ void CV_GBTreesTest::run(int)
         else if (i==0)
         {
             temp_code = TestSaveLoad();
-            if (temp_code != cvtest::TS::OK)
+            if (temp_code != cvtest::TS::OKVX)
                 code = temp_code;
             delete data;
             data = 0;

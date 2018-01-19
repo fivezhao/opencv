@@ -59,8 +59,8 @@ typedef my_idct_controller * my_idct_ptr;
 
 typedef union {
   ISLOW_MULT_TYPE islow_array[DCTSIZE2];
-#ifdef DCT_IFAST_SUPPORTED
-  IFAST_MULT_TYPE ifast_array[DCTSIZE2];
+#ifdef DCT_IFASTVX_SUPPORTED
+  IFASTVX_MULT_TYPE ifast_array[DCTSIZE2];
 #endif
 #ifdef DCT_FLOAT_SUPPORTED
   FLOAT_MULT_TYPE float_array[DCTSIZE2];
@@ -234,10 +234,10 @@ start_pass (j_decompress_ptr cinfo)
         method = JDCT_ISLOW;
         break;
 #endif
-#ifdef DCT_IFAST_SUPPORTED
-      case JDCT_IFAST:
+#ifdef DCT_IFASTVX_SUPPORTED
+      case JDCT_IFASTVX:
         method_ptr = jpeg_idct_ifast;
-        method = JDCT_IFAST;
+        method = JDCT_IFASTVX;
         break;
 #endif
 #ifdef DCT_FLOAT_SUPPORTED
@@ -284,17 +284,17 @@ start_pass (j_decompress_ptr cinfo)
       }
       break;
 #endif
-#ifdef DCT_IFAST_SUPPORTED
-    case JDCT_IFAST:
+#ifdef DCT_IFASTVX_SUPPORTED
+    case JDCT_IFASTVX:
       {
         /* For AA&N IDCT method, multipliers are equal to quantization
          * coefficients scaled by scalefactor[row]*scalefactor[col], where
          *   scalefactor[0] = 1
          *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
          * For integer operation, the multiplier table is to be scaled by
-         * IFAST_SCALE_BITS.
+         * IFASTVX_SCALE_BITS.
          */
-        IFAST_MULT_TYPE * ifmtbl = (IFAST_MULT_TYPE *) compptr->dct_table;
+        IFASTVX_MULT_TYPE * ifmtbl = (IFASTVX_MULT_TYPE *) compptr->dct_table;
 #define CONST_BITS 14
         static const INT16 aanscales[DCTSIZE2] = {
           /* precomputed values scaled up by 14 bits */
@@ -310,10 +310,10 @@ start_pass (j_decompress_ptr cinfo)
         SHIFT_TEMPS
 
         for (i = 0; i < DCTSIZE2; i++) {
-          ifmtbl[i] = (IFAST_MULT_TYPE)
-            DESCALE(MULTIPLY16V16((INT32) qtbl->quantval[i],
-                                  (INT32) aanscales[i]),
-                    CONST_BITS-IFAST_SCALE_BITS);
+          ifmtbl[i] = (IFASTVX_MULT_TYPE)
+            DESCALE(MULTIPLY16V16((CVINT32) qtbl->quantval[i],
+                                  (CVINT32) aanscales[i]),
+                    CONST_BITS-IFASTVX_SCALE_BITS);
         }
       }
       break;

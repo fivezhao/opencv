@@ -194,14 +194,22 @@ void HOGDescriptor::write(FileStorage& fs, const String& objName) const
 
 bool HOGDescriptor::load(const String& filename, const String& objname)
 {
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::READ);
+#else
+    FileStorage fs(filename, FileStorage::CVREAD);
+#endif
     FileNode obj = !objname.empty() ? fs[objname] : fs.getFirstTopLevelNode();
     return read(obj);
 }
 
 void HOGDescriptor::save(const String& filename, const String& objName) const
 {
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::WRITE);
+#else
+    FileStorage fs(filename, FileStorage::CVWRITE);
+#endif
     write(fs, !objName.empty() ? objName : FileStorage::getDefaultObjectName(filename));
 }
 

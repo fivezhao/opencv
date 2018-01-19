@@ -154,7 +154,7 @@ METHODDEF(void) process_data_crank_post
 #endif
 
 
-LOCAL(void)
+LOCALVX(void)
 alloc_funny_pointers (j_decompress_ptr cinfo)
 /* Allocate space for the funny pointer lists.
  * This is done only once, not once per pass.
@@ -192,7 +192,7 @@ alloc_funny_pointers (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 make_funny_pointers (j_decompress_ptr cinfo)
 /* Create the funny pointer lists discussed in the comments above.
  * The actual workspace is already allocated (in main->buffer),
@@ -235,7 +235,7 @@ make_funny_pointers (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 set_wraparound_pointers (j_decompress_ptr cinfo)
 /* Set up the "wraparound" pointers at top and bottom of the pointer lists.
  * This changes the pointer list state from top-of-image to the normal state.
@@ -263,7 +263,7 @@ set_wraparound_pointers (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 set_bottom_pointers (j_decompress_ptr cinfo)
 /* Change the pointer lists to duplicate the last sample row at the bottom
  * of the image.  whichptr indicates which xbuffer holds the final iMCU row.

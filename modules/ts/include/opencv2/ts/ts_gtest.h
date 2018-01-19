@@ -762,10 +762,13 @@
 // won't compile otherwise.  We can #include it here as we already
 // included <stdlib.h>, which is guaranteed to define size_t through
 // <stddef.h>.
-# include <regex.h>  // NOLINT
 
 # define GTEST_USES_POSIX_RE 1
 # define GTEST_USES_SIMPLE_RE 0
+
+#ifdef ONVXWORKS
+#undef GTEST_USES_POSIX_RE
+#endif
 
 #elif GTEST_OS_WINDOWS
 

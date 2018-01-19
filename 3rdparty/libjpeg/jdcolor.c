@@ -22,11 +22,11 @@ typedef struct {
   /* Private state for YCC->RGB conversion */
   int * Cr_r_tab;		/* => table for Cr to R conversion */
   int * Cb_b_tab;		/* => table for Cb to B conversion */
-  INT32 * Cr_g_tab;		/* => table for Cr to G conversion */
-  INT32 * Cb_g_tab;		/* => table for Cb to G conversion */
+  CVINT32 * Cr_g_tab;		/* => table for Cr to G conversion */
+  CVINT32 * Cb_g_tab;		/* => table for Cb to G conversion */
 
   /* Private state for RGB->Y conversion */
-  INT32 * rgb_y_tab;		/* => table for RGB to Y conversion */
+  CVINT32 * rgb_y_tab;		/* => table for RGB to Y conversion */
 } my_color_deconverter;
 
 typedef my_color_deconverter * my_cconvert_ptr;
@@ -67,8 +67,8 @@ typedef my_color_deconverter * my_cconvert_ptr;
  */
 
 #define SCALEBITS	16	/* speediest right-shift on some machines */
-#define ONE_HALF	((INT32) 1 << (SCALEBITS-1))
-#define FIX(x)		((INT32) ((x) * (1L<<SCALEBITS) + 0.5))
+#define ONE_HALF	((CVINT32) 1 << (SCALEBITS-1))
+#define FIX(x)		((CVINT32) ((x) * (1L<<SCALEBITS) + 0.5))
 
 /* We allocate one big table for RGB->Y conversion and divide it up into
  * three parts, instead of doing three alloc_small requests.  This lets us
@@ -87,12 +87,12 @@ typedef my_color_deconverter * my_cconvert_ptr;
  * Initialize tables for YCC->RGB colorspace conversion.
  */
 
-LOCAL(void)
+LOCALVX(void)
 build_ycc_rgb_table (j_decompress_ptr cinfo)
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
   int i;
-  INT32 x;
+  CVINT32 x;
   SHIFT_TEMPS
 
   cconvert->Cr_r_tab = (int *)
@@ -101,12 +101,12 @@ build_ycc_rgb_table (j_decompress_ptr cinfo)
   cconvert->Cb_b_tab = (int *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
                                 (MAXJSAMPLE+1) * SIZEOF(int));
-  cconvert->Cr_g_tab = (INT32 *)
+  cconvert->Cr_g_tab = (CVINT32 *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-                                (MAXJSAMPLE+1) * SIZEOF(INT32));
-  cconvert->Cb_g_tab = (INT32 *)
+                                (MAXJSAMPLE+1) * SIZEOF(CVINT32));
+  cconvert->Cb_g_tab = (CVINT32 *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-                                (MAXJSAMPLE+1) * SIZEOF(INT32));
+                                (MAXJSAMPLE+1) * SIZEOF(CVINT32));
 
   for (i = 0, x = -CENTERJSAMPLE; i <= MAXJSAMPLE; i++, x++) {
     /* i is the actual input pixel value, in the range 0..MAXJSAMPLE */
@@ -152,8 +152,8 @@ ycc_rgb_convert (j_decompress_ptr cinfo,
   register JSAMPLE * range_limit = cinfo->sample_range_limit;
   register int * Crrtab = cconvert->Cr_r_tab;
   register int * Cbbtab = cconvert->Cb_b_tab;
-  register INT32 * Crgtab = cconvert->Cr_g_tab;
-  register INT32 * Cbgtab = cconvert->Cb_g_tab;
+  register CVINT32 * Crgtab = cconvert->Cr_g_tab;
+  register CVINT32 * Cbgtab = cconvert->Cb_g_tab;
   SHIFT_TEMPS
 
   while (--num_rows >= 0) {
@@ -185,17 +185,17 @@ ycc_rgb_convert (j_decompress_ptr cinfo,
  * Initialize for RGB->grayscale colorspace conversion.
  */
 
-LOCAL(void)
+LOCALVX(void)
 build_rgb_y_table (j_decompress_ptr cinfo)
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
-  INT32 * rgb_y_tab;
-  INT32 i;
+  CVINT32 * rgb_y_tab;
+  CVINT32 i;
 
   /* Allocate and fill in the conversion tables. */
-  cconvert->rgb_y_tab = rgb_y_tab = (INT32 *)
+  cconvert->rgb_y_tab = rgb_y_tab = (CVINT32 *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-                                (TABLE_SIZE * SIZEOF(INT32)));
+                                (TABLE_SIZE * SIZEOF(CVINT32)));
 
   for (i = 0; i <= MAXJSAMPLE; i++) {
     rgb_y_tab[i+R_Y_OFF] = FIX(0.29900) * i;
@@ -215,7 +215,7 @@ rgb_gray_convert (j_decompress_ptr cinfo,
                   JSAMPARRAY output_buf, int num_rows)
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
-  register INT32 * ctab = cconvert->rgb_y_tab;
+  register CVINT32 * ctab = cconvert->rgb_y_tab;
   register int r, g, b;
   register JSAMPROW outptr;
   register JSAMPROW inptr0, inptr1, inptr2;
@@ -290,7 +290,7 @@ rgb1_gray_convert (j_decompress_ptr cinfo,
                    JSAMPARRAY output_buf, int num_rows)
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
-  register INT32 * ctab = cconvert->rgb_y_tab;
+  register CVINT32 * ctab = cconvert->rgb_y_tab;
   register int r, g, b;
   register JSAMPROW outptr;
   register JSAMPROW inptr0, inptr1, inptr2;
@@ -451,8 +451,8 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
   register JSAMPLE * range_limit = cinfo->sample_range_limit;
   register int * Crrtab = cconvert->Cr_r_tab;
   register int * Cbbtab = cconvert->Cb_b_tab;
-  register INT32 * Crgtab = cconvert->Cr_g_tab;
-  register INT32 * Cbgtab = cconvert->Cb_g_tab;
+  register CVINT32 * Crgtab = cconvert->Cr_g_tab;
+  register CVINT32 * Cbgtab = cconvert->Cb_g_tab;
   SHIFT_TEMPS
 
   while (--num_rows >= 0) {

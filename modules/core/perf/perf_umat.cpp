@@ -1,7 +1,7 @@
 // This file is part of OpenCV project.
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
-
+#ifndef ONVXWORKS
 #include "perf_precomp.hpp"
 #include "opencv2/ts/ocl_perf.hpp"
 
@@ -63,3 +63,4 @@ OCL_PERF_TEST_P(UMatTest, CustomPtr, Combine(Values(sz1080p, sz2160p), Bool(), :
 
     SANITY_CHECK_NOTHING();
 }
+#endif

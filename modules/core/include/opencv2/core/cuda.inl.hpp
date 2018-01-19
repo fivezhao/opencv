@@ -40,7 +40,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #ifndef OPENCV_CORE_CUDAINL_HPP
 #define OPENCV_CORE_CUDAINL_HPP
 
@@ -629,3 +629,4 @@ Mat::Mat(const cuda::GpuMat& m)
 //! @endcond
 
 #endif // OPENCV_CORE_CUDAINL_HPP
+#endif

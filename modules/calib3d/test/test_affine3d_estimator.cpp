@@ -191,7 +191,7 @@ void CV_Affine3D_EstTest::run( int /* start_from */)
     if (!testNPoints())
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Calib3d_EstimateAffine3D, accuracy) { CV_Affine3D_EstTest test; test.safe_run(); }

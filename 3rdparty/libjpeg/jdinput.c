@@ -204,7 +204,7 @@ jpeg_core_output_dimensions (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 initial_setup (j_decompress_ptr cinfo)
 /* Called once, when first SOS marker is reached */
 {
@@ -384,7 +384,7 @@ initial_setup (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 per_scan_setup (j_decompress_ptr cinfo)
 /* Do computations that are needed before processing a JPEG scan */
 /* cinfo->comps_in_scan and cinfo->cur_comp_info[] were set from SOS marker */
@@ -483,7 +483,7 @@ per_scan_setup (j_decompress_ptr cinfo)
  * not at the current Q-table slots.
  */
 
-LOCAL(void)
+LOCALVX(void)
 latch_quant_tables (j_decompress_ptr cinfo)
 {
   int ci, qtblno;

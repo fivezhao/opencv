@@ -2692,13 +2692,13 @@ static bool ocl_resize( InputArray _src, OutputArray _dst, Size dsize,
         if (is_area_fast)
         {
             int wdepth2 = std::max(CV_32F, depth), wtype2 = CV_MAKE_TYPE(wdepth2, cn);
-            buildOption = buildOption + format(" -D convertToT=%s -D WT2V=%s -D convertToWT2V=%s -D INTER_AREA_FAST"
+            buildOption = buildOption + format(" -D convertToT=%s -D WT2V=%s -D convertToWT2V=%s -D INTER_AREA_FASTVX"
                                                 " -D XSCALE=%d -D YSCALE=%d -D SCALE=%ff",
                                                 ocl::convertTypeStr(wdepth2, depth, cn, cvt[0]),
                                                 ocl::typeToStr(wtype2), ocl::convertTypeStr(wdepth, wdepth2, cn, cvt[1]),
                                     iscale_x, iscale_y, 1.0f / (iscale_x * iscale_y));
 
-            k.create("resizeAREA_FAST", ocl::imgproc::resize_oclsrc, buildOption);
+            k.create("resizeAREA_FASTVX", ocl::imgproc::resize_oclsrc, buildOption);
             if (k.empty())
                 return false;
         }
@@ -2960,7 +2960,7 @@ void resize(int src_type,
                         saturate_cast<int>(src_height*inv_scale_y));
     CV_Assert( dsize.area() > 0 );
 
-    CV_IPP_RUN_FAST(ipp_resize(src_data, src_step, src_width, src_height, dst_data, dst_step, dsize.width, dsize.height, inv_scale_x, inv_scale_y, depth, cn, interpolation))
+    CV_IPP_RUN_FASTVX(ipp_resize(src_data, src_step, src_width, src_height, dst_data, dst_step, dsize.width, dsize.height, inv_scale_x, inv_scale_y, depth, cn, interpolation))
 
     static ResizeFunc linear_tab[] =
     {

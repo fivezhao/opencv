@@ -71,6 +71,10 @@
     #define HAVE_GCD
 #endif
 
+#if __VXWORKS__
+#include <vxCpuLib.h>
+#endif
+
 #if defined _MSC_VER && _MSC_VER >= 1600
     #define HAVE_CONCURRENCY
 #endif
@@ -674,6 +678,8 @@ int cv::getNumberOfCPUs(void)
     return ncpus;
 #elif defined __linux__
     return (int)sysconf( _SC_NPROCESSORS_ONLN );
+#elif defined __VXWORKS__
+    return vxCpuConfiguredGet( );
 #elif defined __APPLE__
     int numCPU=0;
     int mib[4];

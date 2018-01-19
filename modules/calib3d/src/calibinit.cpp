@@ -262,7 +262,7 @@ static int icvSmoothHistogram( const std::vector<int>& piHist, std::vector<int>&
     return 0;
 }
 /***************************************************************************************************/
-//COMPUTE FAST HISTOGRAM GRADIENT
+//COMPUTE FASTVX HISTOGRAM GRADIENT
 static int icvGradientOfHistogram( const std::vector<int>& piHist, std::vector<int>& piHistGrad )
 {
     piHistGrad[0] = 0;
@@ -461,7 +461,7 @@ int cvFindChessboardCorners( const void* arr, CvSize pattern_size,
     icvBinarizationHistogramBased( thresh_img_new ); // process image in-place
     SHOW("New binarization", thresh_img_new);
 
-    if( flags & CV_CALIB_CB_FAST_CHECK)
+    if( flags & CV_CALIB_CB_FASTVX_CHECK)
     {
         //perform new method for checking chessboard using a binary image.
         //image is binarised using a threshold dependent on the image histogram

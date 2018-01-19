@@ -47,6 +47,7 @@
  *
  * \brief Use GStreamer to read/write video
  */
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 #ifndef _MSC_VER
 #include <unistd.h>
@@ -1905,3 +1906,4 @@ void handleMessage(GstElement * pipeline)
 
     __END__
 }
+#endif

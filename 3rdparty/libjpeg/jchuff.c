@@ -53,7 +53,7 @@ typedef struct {
  */
 
 typedef struct {
-  INT32 put_buffer;		/* current bit-accumulation buffer */
+  CVINT32 put_buffer;		/* current bit-accumulation buffer */
   int put_bits;			/* # of bits now in it */
   int last_dc_val[MAX_COMPS_IN_SCAN]; /* last DC coef for each component */
 } savable_state;
@@ -135,8 +135,8 @@ typedef struct {
 
 #define MAX_CORR_BITS  1000	/* Max # of correction bits I can buffer */
 
-/* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than INT32.
- * We assume that int right shift is unsigned if INT32 right shift is,
+/* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than CVINT32.
+ * We assume that int right shift is unsigned if CVINT32 right shift is,
  * which should be safe.
  */
 
@@ -157,7 +157,7 @@ typedef struct {
  * This routine also performs some validation checks on the table.
  */
 
-LOCAL(void)
+LOCALVX(void)
 jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
                          c_derived_tbl ** pdtbl)
 {
@@ -214,7 +214,7 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
     /* code is now 1 more than the last code used for codelength si; but
      * it must still fit in si bits, since no code is allowed to be all ones.
      */
-    if (((INT32) code) >= (((INT32) 1) << si))
+    if (((CVINT32) code) >= (((CVINT32) 1) << si))
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     code <<= 1;
     si++;
@@ -265,7 +265,7 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
             dump_buffer_e(entropy); }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 dump_buffer_s (working_state * state)
 /* Empty the output buffer; return TRUE if successful, FALSE if must suspend */
 {
@@ -280,7 +280,7 @@ dump_buffer_s (working_state * state)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 dump_buffer_e (huff_entropy_ptr entropy)
 /* Empty the output buffer; we do not support suspension in this case. */
 {
@@ -303,19 +303,19 @@ dump_buffer_e (huff_entropy_ptr entropy)
  */
 
 INLINE
-LOCAL(boolean)
+LOCALVX(boolean)
 emit_bits_s (working_state * state, unsigned int code, int size)
 /* Emit some bits; return TRUE if successful, FALSE if must suspend */
 {
   /* This routine is heavily used, so it's worth coding tightly. */
-  register INT32 put_buffer = (INT32) code;
+  register CVINT32 put_buffer = (CVINT32) code;
   register int put_bits = state->cur.put_bits;
 
   /* if size is 0, caller used an invalid Huffman table entry */
   if (size == 0)
     ERREXIT(state->cinfo, JERR_HUFF_MISSING_CODE);
 
-  put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
+  put_buffer &= (((CVINT32) 1)<<size) - 1; /* mask off any extra bits in code */
 
   put_bits += size;		/* new number of bits in buffer */
 
@@ -342,12 +342,12 @@ emit_bits_s (working_state * state, unsigned int code, int size)
 
 
 INLINE
-LOCAL(void)
+LOCALVX(void)
 emit_bits_e (huff_entropy_ptr entropy, unsigned int code, int size)
 /* Emit some bits, unless we are in gather mode */
 {
   /* This routine is heavily used, so it's worth coding tightly. */
-  register INT32 put_buffer = (INT32) code;
+  register CVINT32 put_buffer = (CVINT32) code;
   register int put_bits = entropy->saved.put_bits;
 
   /* if size is 0, caller used an invalid Huffman table entry */
@@ -357,7 +357,7 @@ emit_bits_e (huff_entropy_ptr entropy, unsigned int code, int size)
   if (entropy->gather_statistics)
     return;			/* do nothing if we're only getting stats */
 
-  put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
+  put_buffer &= (((CVINT32) 1)<<size) - 1; /* mask off any extra bits in code */
 
   put_bits += size;		/* new number of bits in buffer */
 
@@ -382,7 +382,7 @@ emit_bits_e (huff_entropy_ptr entropy, unsigned int code, int size)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 flush_bits_s (working_state * state)
 {
   if (! emit_bits_s(state, 0x7F, 7)) /* fill any partial byte with ones */
@@ -393,7 +393,7 @@ flush_bits_s (working_state * state)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 flush_bits_e (huff_entropy_ptr entropy)
 {
   emit_bits_e(entropy, 0x7F, 7); /* fill any partial byte with ones */
@@ -407,7 +407,7 @@ flush_bits_e (huff_entropy_ptr entropy)
  */
 
 INLINE
-LOCAL(void)
+LOCALVX(void)
 emit_dc_symbol (huff_entropy_ptr entropy, int tbl_no, int symbol)
 {
   if (entropy->gather_statistics)
@@ -420,7 +420,7 @@ emit_dc_symbol (huff_entropy_ptr entropy, int tbl_no, int symbol)
 
 
 INLINE
-LOCAL(void)
+LOCALVX(void)
 emit_ac_symbol (huff_entropy_ptr entropy, int tbl_no, int symbol)
 {
   if (entropy->gather_statistics)
@@ -436,7 +436,7 @@ emit_ac_symbol (huff_entropy_ptr entropy, int tbl_no, int symbol)
  * Emit bits from a correction bit buffer.
  */
 
-LOCAL(void)
+LOCALVX(void)
 emit_buffered_bits (huff_entropy_ptr entropy, char * bufstart,
                     unsigned int nbits)
 {
@@ -455,7 +455,7 @@ emit_buffered_bits (huff_entropy_ptr entropy, char * bufstart,
  * Emit any pending EOBRUN symbol.
  */
 
-LOCAL(void)
+LOCALVX(void)
 emit_eobrun (huff_entropy_ptr entropy)
 {
   register int temp, nbits;
@@ -486,7 +486,7 @@ emit_eobrun (huff_entropy_ptr entropy)
  * Emit a restart marker & resynchronize predictions.
  */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 emit_restart_s (working_state * state, int restart_num)
 {
   int ci;
@@ -507,7 +507,7 @@ emit_restart_s (working_state * state, int restart_num)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_restart_e (huff_entropy_ptr entropy, int restart_num)
 {
   int ci;
@@ -912,7 +912,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 
 /* Encode a single block's worth of coefficients */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
                   c_derived_tbl *dctbl, c_derived_tbl *actbl)
 {
@@ -1118,7 +1118,7 @@ finish_pass_huff (j_compress_ptr cinfo)
 
 /* Process a single block's worth of coefficients */
 
-LOCAL(void)
+LOCALVX(void)
 htest_one_block (j_compress_ptr cinfo, JCOEFPTR block, int last_dc_val,
                  long dc_counts[], long ac_counts[])
 {
@@ -1252,7 +1252,7 @@ encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * So the extra complexity of an optimal algorithm doesn't seem worthwhile.
  */
 
-LOCAL(void)
+LOCALVX(void)
 jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
 {
 #define MAX_CLEN 32		/* assumed maximum initial code length */

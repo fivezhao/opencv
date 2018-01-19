@@ -48,7 +48,11 @@
 #include <string>
 #include <iterator>
 
-#define USE_ZLIB 1
+#ifdef  ONVXWORKS
+#    define USE_ZLIB 0
+#else
+#    define USE_ZLIB 1
+#endif
 
 #if USE_ZLIB
 #  ifndef _LFS64_LARGEFILE
@@ -254,7 +258,9 @@ typedef struct CvFileStorage
     int space;
     char* filename;
     FILE* file;
+#if USE_ZLIB
     gzFile gzfile;
+#endif
     char* buffer;
     char* buffer_start;
     char* buffer_end;
@@ -455,9 +461,9 @@ static void icvCloseFile( CvFileStorage* fs )
 #if USE_ZLIB
     else if( fs->gzfile )
         gzclose( fs->gzfile );
+    fs->gzfile = 0;
 #endif
     fs->file = 0;
-    fs->gzfile = 0;
     fs->strbuf = 0;
     fs->strbufpos = 0;
     fs->is_opened = false;
@@ -668,7 +674,11 @@ icvClose( CvFileStorage* fs, cv::String* out )
 
     if( fs->is_opened )
     {
+#if USE_ZLIB
         if( fs->write_mode && (fs->file || fs->gzfile || fs->outbuf) )
+#else
+        if( fs->write_mode && (fs->file || fs->outbuf) )
+#endif
         {
             if( fs->write_stack )
             {
@@ -4540,7 +4550,11 @@ cvOpenFileStorage( const char* query, CvMemStorage* dststorage, int flags, const
 _exit_:
     if( fs )
     {
+#if USE_ZLIB
         if( cvGetErrStatus() < 0 || (!fs->file && !fs->gzfile && !fs->outbuf && !fs->strbuf) )
+#else
+        if( cvGetErrStatus() < 0 || (!fs->file && !fs->outbuf && !fs->strbuf) )
+#endif
         {
             cvReleaseFileStorage( &fs );
         }

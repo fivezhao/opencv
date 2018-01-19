@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 #include <vfw.h>
@@ -865,3 +865,4 @@ CvVideoWriter* cvCreateVideoWriter_VFW( const char* filename, int fourcc,
     delete writer;
     return 0;
 }
+#endif

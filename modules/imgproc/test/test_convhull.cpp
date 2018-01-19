@@ -1897,7 +1897,7 @@ void CV_PerimeterAreaSliceTest::run( int )
             return;
         }
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 

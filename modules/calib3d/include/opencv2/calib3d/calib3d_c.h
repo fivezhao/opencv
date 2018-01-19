@@ -208,7 +208,7 @@ CVAPI(void) cvInitIntrinsicParams2D( const CvMat* object_points,
 #define CV_CALIB_CB_ADAPTIVE_THRESH  1
 #define CV_CALIB_CB_NORMALIZE_IMAGE  2
 #define CV_CALIB_CB_FILTER_QUADS     4
-#define CV_CALIB_CB_FAST_CHECK       8
+#define CV_CALIB_CB_FASTVX_CHECK       8
 
 // Performs a fast check if a chessboard is in the input image. This is a workaround to
 // a problem of cvFindChessboardCorners being slow on images with no chessboard

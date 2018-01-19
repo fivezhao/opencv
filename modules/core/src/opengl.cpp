@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 #ifdef HAVE_OPENGL
@@ -1900,3 +1900,4 @@ void unmapGLBuffer(UMat& u)
 }
 
 }} // namespace cv::ogl
+#endif

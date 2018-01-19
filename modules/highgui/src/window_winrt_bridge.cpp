@@ -1,5 +1,5 @@
 // highgui to XAML bridge for OpenCV
-
+#ifndef ONVXWORKS
 // Copyright (c) Microsoft Open Technologies, Inc.
 // All rights reserved.
 //
@@ -362,3 +362,4 @@ void CvWindow::createButton(cv::String name)
 }
 
 // end
+#endif

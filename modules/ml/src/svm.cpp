@@ -2340,7 +2340,11 @@ Ptr<SVM> SVM::create()
 Ptr<SVM> SVM::load(const String& filepath)
 {
     FileStorage fs;
+#ifndef ONVXWORKS
     fs.open(filepath, FileStorage::READ);
+#else
+    fs.open(filepath, FileStorage::CVREAD);
+#endif
 
     Ptr<SVM> svm = makePtr<SVMImpl>();
 

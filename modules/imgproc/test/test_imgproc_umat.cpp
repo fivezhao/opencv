@@ -75,7 +75,7 @@ protected:
         destroyWindow("small");
         destroyWindow("equalized gray");
 #endif
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
 
         (void)uresult.getMat(ACCESS_READ);
     }

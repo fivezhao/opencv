@@ -118,7 +118,7 @@ int Core_ReduceTest::checkOp( const Mat& src, int dstType, int opType, const Mat
             support = true;
     }
     if( !support )
-        return cvtest::TS::OK;
+        return cvtest::TS::OKVX;
 
     double eps = 0.0;
     if ( opType == CV_REDUCE_SUM || opType == CV_REDUCE_AVG )
@@ -159,12 +159,12 @@ int Core_ReduceTest::checkOp( const Mat& src, int dstType, int opType, const Mat
         ts->printf( cvtest::TS::LOG, msg );
         return cvtest::TS::FAIL_BAD_ACCURACY;
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 int Core_ReduceTest::checkCase( int srcType, int dstType, int dim, Size sz )
 {
-    int code = cvtest::TS::OK, tempCode;
+    int code = cvtest::TS::OKVX, tempCode;
     Mat src, sum, avg, max, min;
 
     src.create( sz, srcType );
@@ -189,96 +189,96 @@ int Core_ReduceTest::checkCase( int srcType, int dstType, int dim, Size sz )
 
     // 1. sum
     tempCode = checkOp( src, dstType, CV_REDUCE_SUM, sum, dim );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // 2. avg
     tempCode = checkOp( src, dstType, CV_REDUCE_AVG, avg, dim );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // 3. max
     tempCode = checkOp( src, dstType, CV_REDUCE_MAX, max, dim );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // 4. min
     tempCode = checkOp( src, dstType, CV_REDUCE_MIN, min, dim );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     return code;
 }
 
 int Core_ReduceTest::checkDim( int dim, Size sz )
 {
-    int code = cvtest::TS::OK, tempCode;
+    int code = cvtest::TS::OKVX, tempCode;
 
     // CV_8UC1
     tempCode = checkCase( CV_8UC1, CV_8UC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_8UC1, CV_32SC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_8UC1, CV_32FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_8UC1, CV_64FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // CV_16UC1
     tempCode = checkCase( CV_16UC1, CV_32FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_16UC1, CV_64FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // CV_16SC1
     tempCode = checkCase( CV_16SC1, CV_32FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_16SC1, CV_64FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // CV_32FC1
     tempCode = checkCase( CV_32FC1, CV_32FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkCase( CV_32FC1, CV_64FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     // CV_64FC1
     tempCode = checkCase( CV_64FC1, CV_64FC1, dim, sz );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     return code;
 }
 
 int Core_ReduceTest::checkSize( Size sz )
 {
-    int code = cvtest::TS::OK, tempCode;
+    int code = cvtest::TS::OKVX, tempCode;
 
     tempCode = checkDim( 0, sz ); // rows
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkDim( 1, sz ); // cols
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     return code;
 }
 
 void Core_ReduceTest::run( int )
 {
-    int code = cvtest::TS::OK, tempCode;
+    int code = cvtest::TS::OKVX, tempCode;
 
     tempCode = checkSize( Size(1,1) );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkSize( Size(1,100) );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkSize( Size(100,1) );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     tempCode = checkSize( Size(1000,500) );
-    code = tempCode != cvtest::TS::OK ? tempCode : code;
+    code = tempCode != cvtest::TS::OKVX ? tempCode : code;
 
     ts->set_failed_test_info( code );
 }
@@ -511,12 +511,20 @@ protected:
         }
     #endif
         // Test read and write
+#ifndef ONVXWORKS
         FileStorage fs( "PCA_store.yml", FileStorage::WRITE );
+#else
+        FileStorage fs( "PCA_store.yml", FileStorage::CVWRITE );
+#endif
         rPCA.write( fs );
         fs.release();
 
         PCA lPCA;
+#ifndef ONVXWORKS
         fs.open( "PCA_store.yml", FileStorage::READ );
+#else
+        fs.open( "PCA_store.yml", FileStorage::CVREAD );
+#endif
         lPCA.read( fs.root() );
         err = cvtest::norm( rPCA.eigenvectors, lPCA.eigenvectors, CV_RELATIVE_L2 );
         if( err > 0 )
@@ -1013,7 +1021,7 @@ void Core_ArrayOpTest::run( int /* start_from */)
         }
     }
 
-    ts->set_failed_test_info(errcount == 0 ? cvtest::TS::OK : cvtest::TS::FAIL_INVALID_OUTPUT);
+    ts->set_failed_test_info(errcount == 0 ? cvtest::TS::OKVX : cvtest::TS::FAIL_INVALID_OUTPUT);
 }
 
 
@@ -1085,27 +1093,27 @@ protected:
         Size mSize(rng.uniform(minMSize, maxMSize), rng.uniform(minMSize, maxMSize));
         size_t mvSize = rng.uniform(1, maxMvSize);
 
-        int res = cvtest::TS::OK, curRes = res;
+        int res = cvtest::TS::OKVX, curRes = res;
         curRes = run_case(CV_8U, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_8S, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_16U, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_16S, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_32S, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_32F, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         curRes = run_case(CV_64F, mvSize, mSize, rng);
-        res = curRes != cvtest::TS::OK ? curRes : res;
+        res = curRes != cvtest::TS::OKVX ? curRes : res;
 
         ts->set_failed_test_info(res);
     }
@@ -1165,7 +1173,7 @@ protected:
             return cvtest::TS::FAIL_INVALID_OUTPUT;
         }
 
-        return cvtest::TS::OK;
+        return cvtest::TS::OKVX;
     }
 };
 
@@ -1223,7 +1231,7 @@ protected:
             return cvtest::TS::FAIL_INVALID_OUTPUT;
         }
 
-        return cvtest::TS::OK;
+        return cvtest::TS::OKVX;
     }
 };
 

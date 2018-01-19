@@ -113,7 +113,7 @@ void CV_InpaintTest::run( int )
         return;
     }
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Photo_Inpaint, regression) { CV_InpaintTest test; test.safe_run(); }

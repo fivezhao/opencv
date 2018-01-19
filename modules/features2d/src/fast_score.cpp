@@ -1,4 +1,4 @@
-/* This is FAST corner detector, contributed to OpenCV by the author, Edward Rosten.
+/* This is FASTVX corner detector, contributed to OpenCV by the author, Edward Rosten.
    Below is the original copyright and the references */
 
 /*

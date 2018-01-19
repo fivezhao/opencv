@@ -183,7 +183,7 @@ struct jvirt_barray_control {
 
 #ifdef MEM_STATS		/* optional extra stuff for statistics */
 
-LOCAL(void)
+LOCALVX(void)
 print_mem_stats (j_common_ptr cinfo, int pool_id)
 {
   my_mem_ptr mem = (my_mem_ptr) cinfo->mem;
@@ -214,7 +214,7 @@ print_mem_stats (j_common_ptr cinfo, int pool_id)
 #endif /* MEM_STATS */
 
 
-LOCAL(noreturn_t)
+LOCALVX(noreturn_t)
 out_of_memory (j_common_ptr cinfo, int which)
 /* Report an out-of-memory error and stop execution */
 /* If we compiled MEM_STATS support, report alloc requests before dying */
@@ -687,7 +687,7 @@ realize_virt_arrays (j_common_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 do_sarray_io (j_common_ptr cinfo, jvirt_sarray_ptr ptr, boolean writing)
 /* Do backing store read or write of a virtual sample array */
 {
@@ -720,7 +720,7 @@ do_sarray_io (j_common_ptr cinfo, jvirt_sarray_ptr ptr, boolean writing)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 do_barray_io (j_common_ptr cinfo, jvirt_barray_ptr ptr, boolean writing)
 /* Do backing store read or write of a virtual coefficient-block array */
 {

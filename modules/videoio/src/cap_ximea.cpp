@@ -1,4 +1,4 @@
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 #ifdef _WIN32
@@ -1790,5 +1790,5 @@ void CvCaptureCAM_XIMEA::errMsg(const char* msg, int errNum) const
     fprintf(stderr, "%s : %d, %s\n", msg, errNum, error_message.c_str());
     #endif
 }
-
+#endif
 /**********************************************************************************/

@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS 
 #include "precomp.hpp"
 
 #include "opencv2/ts/ocl_perf.hpp"
@@ -81,3 +81,4 @@ void randu(InputOutputArray dst)
 } // namespace perf
 
 } } // namespace cvtest::ocl
+#endif

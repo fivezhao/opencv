@@ -102,7 +102,7 @@ CV_ImageWarpBaseTest::CV_ImageWarpBaseTest() :
     src(), dst(), reference_dst()
 {
     test_case_count = 40;
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 CV_ImageWarpBaseTest::~CV_ImageWarpBaseTest()
@@ -126,7 +126,7 @@ String CV_ImageWarpBaseTest::interpolation_to_string(int inter) const
     else if (inter == INTER_LANCZOS4)
         str = "INTER_LANCZOS4";
     else if (inter == INTER_LANCZOS4 + 1)
-        str = "INTER_AREA_FAST";
+        str = "INTER_AREA_FASTVX";
 
     if (inverse)
         str += " | WARP_INVERSE_MAP";

@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 #include <Carbon/Carbon.h>
@@ -1116,3 +1116,4 @@ CV_IMPL int cvWaitKey (int maxWait)
 }
 
 /* End of file. */
+#endif

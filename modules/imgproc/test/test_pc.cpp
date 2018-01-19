@@ -61,7 +61,7 @@ CV_PhaseCorrelatorTest::CV_PhaseCorrelatorTest() {}
 
 void CV_PhaseCorrelatorTest::run( int )
 {
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 
     Mat r1 = Mat::ones(Size(129, 128), CV_64F);
     Mat r2 = Mat::ones(Size(129, 128), CV_64F);

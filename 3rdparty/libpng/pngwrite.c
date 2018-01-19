@@ -2089,7 +2089,7 @@ png_image_write_main(png_voidp argument)
    }
 
    /* Apply 'fast' options if the flag is set. */
-   if ((image->flags & PNG_IMAGE_FLAG_FAST) != 0)
+   if ((image->flags & PNG_IMAGE_FLAG_FASTVX) != 0)
    {
       png_set_filter(png_ptr, PNG_FILTER_TYPE_BASE, PNG_NO_FILTERS);
       /* NOTE: determined by experiment using pngstest, this reflects some

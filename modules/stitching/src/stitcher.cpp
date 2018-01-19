@@ -136,13 +136,13 @@ Stitcher::Status Stitcher::estimateTransform(InputArrayOfArrays images, const st
 
     Status status;
 
-    if ((status = matchImages()) != OK)
+    if ((status = matchImages()) != OKVX)
         return status;
 
-    if ((status = estimateCameraParams()) != OK)
+    if ((status = estimateCameraParams()) != OKVX)
         return status;
 
-    return OK;
+    return OKVX;
 }
 
 
@@ -401,7 +401,7 @@ Stitcher::Status Stitcher::composePanorama(InputArrayOfArrays images, OutputArra
     // so convert it to avoid user confusing
     result.convertTo(pano, CV_8U);
 
-    return OK;
+    return OKVX;
 }
 
 
@@ -410,7 +410,7 @@ Stitcher::Status Stitcher::stitch(InputArrayOfArrays images, OutputArray pano)
     CV_INSTRUMENT_REGION()
 
     Status status = estimateTransform(images);
-    if (status != OK)
+    if (status != OKVX)
         return status;
     return composePanorama(pano);
 }
@@ -421,7 +421,7 @@ Stitcher::Status Stitcher::stitch(InputArrayOfArrays images, const std::vector<s
     CV_INSTRUMENT_REGION()
 
     Status status = estimateTransform(images, rois);
-    if (status != OK)
+    if (status != OKVX)
         return status;
     return composePanorama(pano);
 }
@@ -544,7 +544,7 @@ Stitcher::Status Stitcher::matchImages()
         return ERR_NEED_MORE_IMGS;
     }
 
-    return OK;
+    return OKVX;
 }
 
 
@@ -598,7 +598,7 @@ Stitcher::Status Stitcher::estimateCameraParams()
             cameras_[i].R = rmats[i];
     }
 
-    return OK;
+    return OKVX;
 }
 
 

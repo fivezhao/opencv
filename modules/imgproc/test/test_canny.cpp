@@ -295,7 +295,7 @@ void CV_CannyTest::prepare_to_validation( int )
 
 int CV_CannyTest::validate_test_results( int test_case_idx )
 {
-    int code = cvtest::TS::OK, nz0;
+    int code = cvtest::TS::OKVX, nz0;
     prepare_to_validation(test_case_idx);
 
     double err = cvtest::norm(test_mat[OUTPUT][0], test_mat[REF_OUTPUT][0], CV_L1);

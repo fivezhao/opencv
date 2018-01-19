@@ -1368,7 +1368,7 @@ int cv::countNonZero( InputArray _src )
 #endif
 
     Mat src = _src.getMat();
-    CV_IPP_RUN_FAST(ipp_countNonZero(src, res), res);
+    CV_IPP_RUN_FASTVX(ipp_countNonZero(src, res), res);
 
     CountNonZeroFunc func = getCountNonZeroTab(src.depth());
     CV_Assert( func != 0 );
@@ -2716,7 +2716,7 @@ void cv::minMaxIdx(InputArray _src, double* minVal,
     CV_OVX_RUN(!ovx::skipSmallImages<VX_KERNEL_MINMAXLOC>(src.cols, src.rows),
                openvx_minMaxIdx(src, minVal, maxVal, minIdx, maxIdx, mask))
 
-    CV_IPP_RUN_FAST(ipp_minMaxIdx(src, minVal, maxVal, minIdx, maxIdx, mask))
+    CV_IPP_RUN_FASTVX(ipp_minMaxIdx(src, minVal, maxVal, minIdx, maxIdx, mask))
 
     MinMaxIdxFunc func = getMinmaxTab(depth);
     CV_Assert( func != 0 );

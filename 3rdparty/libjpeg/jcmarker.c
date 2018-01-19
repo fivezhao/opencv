@@ -106,7 +106,7 @@ typedef my_marker_writer * my_marker_ptr;
  * points where markers will be written.
  */
 
-LOCAL(void)
+LOCALVX(void)
 emit_byte (j_compress_ptr cinfo, int val)
 /* Emit a byte */
 {
@@ -120,7 +120,7 @@ emit_byte (j_compress_ptr cinfo, int val)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_marker (j_compress_ptr cinfo, JPEG_MARKER mark)
 /* Emit a marker code */
 {
@@ -129,7 +129,7 @@ emit_marker (j_compress_ptr cinfo, JPEG_MARKER mark)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_2bytes (j_compress_ptr cinfo, int value)
 /* Emit a 2-byte integer; these are always MSB first in JPEG files */
 {
@@ -142,7 +142,7 @@ emit_2bytes (j_compress_ptr cinfo, int value)
  * Routines to write specific marker types.
  */
 
-LOCAL(int)
+LOCALVX(int)
 emit_dqt (j_compress_ptr cinfo, int index)
 /* Emit a DQT marker */
 /* Returns the precision used (0 = 8bits, 1 = 16bits) for baseline checking */
@@ -183,7 +183,7 @@ emit_dqt (j_compress_ptr cinfo, int index)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_dht (j_compress_ptr cinfo, int index, boolean is_ac)
 /* Emit a DHT marker */
 {
@@ -221,7 +221,7 @@ emit_dht (j_compress_ptr cinfo, int index, boolean is_ac)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_dac (j_compress_ptr cinfo)
 /* Emit a DAC marker */
 /* Since the useful info is so small, we want to emit all the tables in */
@@ -270,7 +270,7 @@ emit_dac (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_dri (j_compress_ptr cinfo)
 /* Emit a DRI marker */
 {
@@ -282,7 +282,7 @@ emit_dri (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_lse_ict (j_compress_ptr cinfo)
 /* Emit an LSE inverse color transform specification marker */
 {
@@ -313,7 +313,7 @@ emit_lse_ict (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_sof (j_compress_ptr cinfo, JPEG_MARKER code)
 /* Emit a SOF marker */
 {
@@ -344,7 +344,7 @@ emit_sof (j_compress_ptr cinfo, JPEG_MARKER code)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_sos (j_compress_ptr cinfo)
 /* Emit a SOS marker */
 {
@@ -379,7 +379,7 @@ emit_sos (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_pseudo_sos (j_compress_ptr cinfo)
 /* Emit a pseudo SOS marker */
 {
@@ -395,7 +395,7 @@ emit_pseudo_sos (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_jfif_app0 (j_compress_ptr cinfo)
 /* Emit a JFIF-compliant APP0 marker */
 {
@@ -430,7 +430,7 @@ emit_jfif_app0 (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_adobe_app14 (j_compress_ptr cinfo)
 /* Emit an Adobe APP14 marker */
 {

@@ -54,14 +54,14 @@ CV_SLMLTest::CV_SLMLTest( const char* _modelName ) : CV_MLBaseTest( _modelName )
 
 int CV_SLMLTest::run_test_case( int testCaseIdx )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     code = prepare_test_case( testCaseIdx );
 
-    if( code == cvtest::TS::OK )
+    if( code == cvtest::TS::OKVX)
     {
         data->setTrainTestSplit(data->getNTrainSamples(), true);
         code = train( testCaseIdx );
-        if( code == cvtest::TS::OK )
+        if( code == cvtest::TS::OKVX)
         {
             get_test_error( testCaseIdx, &test_resps1 );
             fname1 = tempfile(".json.gz");
@@ -79,7 +79,7 @@ int CV_SLMLTest::run_test_case( int testCaseIdx )
 
 int CV_SLMLTest::validate_test_results( int testCaseIdx )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     // 1. compare files
     FILE *fs1 = fopen(fname1.c_str(), "rb"), *fs2 = fopen(fname2.c_str(), "rb");
@@ -186,7 +186,7 @@ protected:
     {
         using namespace cv::ml;
 
-        int code = cvtest::TS::OK;
+        int code = cvtest::TS::OKVX;
         string filename = ts->get_data_path() + "legacy/" + modelName + suffix;
         bool isTree = modelName == CV_BOOST || modelName == CV_DTREE || modelName == CV_RTREES;
         Ptr<StatModel> model;
@@ -227,8 +227,11 @@ protected:
         Mat catMap;
         Mat catCount;
         std::vector<uchar> varTypes;
-
+#ifndef ONVXWORKS
         FileStorage fs(filename, FileStorage::READ);
+#else
+        FileStorage fs(filename, FileStorage::CVREAD);
+#endif
         FileNode root = fs.getFirstTopLevelNode();
         root["cat_map"] >> catMap;
         root["cat_count"] >> catCount;

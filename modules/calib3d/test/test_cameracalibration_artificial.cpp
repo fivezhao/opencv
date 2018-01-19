@@ -369,7 +369,7 @@ protected:
     void run(int)
     {
 
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
         RNG& rng = theRNG();
 
         int progress = 0;

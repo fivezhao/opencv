@@ -155,7 +155,7 @@ void cv::split(const Mat& src, Mat* mv)
         mv[k].create(src.dims, src.size, depth);
     }
 
-    CV_IPP_RUN_FAST(ipp_split(src, mv, cn));
+    CV_IPP_RUN_FASTVX(ipp_split(src, mv, cn));
 
     SplitFunc func = getSplitFunc(depth);
     CV_Assert( func != 0 );
@@ -348,7 +348,7 @@ void cv::merge(const Mat* mv, size_t n, OutputArray _dst)
         return;
     }
 
-    CV_IPP_RUN_FAST(ipp_merge(mv, dst, (int)n));
+    CV_IPP_RUN_FASTVX(ipp_merge(mv, dst, (int)n));
 
     if( !allch1 )
     {
@@ -910,7 +910,7 @@ void cv::extractChannel(InputArray _src, OutputArray _dst, int coi)
     _dst.create(src.dims, &src.size[0], depth);
     Mat dst = _dst.getMat();
 
-    CV_IPP_RUN_FAST(ipp_extractChannel(src, dst, coi))
+    CV_IPP_RUN_FASTVX(ipp_extractChannel(src, dst, coi))
 
     mixChannels(&src, 1, &dst, 1, ch, 1);
 }
@@ -934,7 +934,7 @@ void cv::insertChannel(InputArray _src, InputOutputArray _dst, int coi)
 
     Mat src = _src.getMat(), dst = _dst.getMat();
 
-    CV_IPP_RUN_FAST(ipp_insertChannel(src, dst, coi))
+    CV_IPP_RUN_FASTVX(ipp_insertChannel(src, dst, coi))
 
     mixChannels(&src, 1, &dst, 1, ch, 1);
 }
@@ -5227,7 +5227,7 @@ void cv::Mat::convertTo(OutputArray _dst, int _type, double alpha, double beta) 
         _dst.create( dims, size, _type );
     Mat dst = _dst.getMat();
 
-    CV_IPP_RUN_FAST(ipp_convertTo(src, dst, alpha, beta ));
+    CV_IPP_RUN_FASTVX(ipp_convertTo(src, dst, alpha, beta ));
 
     BinaryFunc func = noScale ? getConvertFunc(sdepth, ddepth) : getConvertScaleFunc(sdepth, ddepth);
     double scale[] = {alpha, beta};

@@ -408,29 +408,45 @@ void CV_StereoMatchingTest::run(int)
         return;
     }
 
+#ifndef ONVXWORKS
     FileStorage datasetsFS( dataPath + DATASETS_DIR + DATASETS_FILE, FileStorage::READ );
+#else
+    FileStorage datasetsFS( dataPath + DATASETS_DIR + DATASETS_FILE, FileStorage::CVREAD );
+#endif
     int code = readDatasetsParams( datasetsFS );
-    if( code != cvtest::TS::OK )
+    if( code != cvtest::TS::OKVX)
     {
         ts->set_failed_test_info( code );
         return;
     }
+#ifndef ONVXWORKS
     FileStorage runParamsFS( dataPath + ALGORITHMS_DIR + algorithmName + RUN_PARAMS_FILE, FileStorage::READ );
+#else
+    FileStorage runParamsFS( dataPath + ALGORITHMS_DIR + algorithmName + RUN_PARAMS_FILE, FileStorage::CVREAD );
+#endif
     code = readRunParams( runParamsFS );
-    if( code != cvtest::TS::OK )
+    if( code != cvtest::TS::OKVX)
     {
         ts->set_failed_test_info( code );
         return;
     }
 
     string fullResultFilename = dataPath + ALGORITHMS_DIR + algorithmName + RESULT_FILE;
+#ifndef ONVXWORKS
     FileStorage resFS( fullResultFilename, FileStorage::READ );
+#else
+    FileStorage resFS( fullResultFilename, FileStorage::CVREAD );
+#endif
     bool isWrite = true; // write or compare results
     if( resFS.isOpened() )
         isWrite = false;
     else
     {
+#ifndef ONVXWORKS
         resFS.open( fullResultFilename, FileStorage::WRITE );
+#else
+        resFS.open( fullResultFilename, FileStorage::CVWRITE );
+#endif
         if( !resFS.isOpened() )
         {
             ts->printf( cvtest::TS::LOG, "file %s can not be read or written\n", fullResultFilename.c_str() );
@@ -486,7 +502,7 @@ void CV_StereoMatchingTest::run(int)
 
         int tempCode = processStereoMatchingResults( resFS, ci, isWrite,
                    leftImg, rightImg, trueLeftDisp, trueRightDisp, leftDisp, rightDisp, QualityEvalParams(ignBorder));
-        code = tempCode==cvtest::TS::OK ? code : tempCode;
+        code = tempCode==cvtest::TS::OKVX ? code : tempCode;
     }
 
     if( isWrite )
@@ -544,7 +560,7 @@ int CV_StereoMatchingTest::processStereoMatchingResults( FileStorage& fs, int ca
               const QualityEvalParams& qualityEvalParams )
 {
     // rightDisp is not used in current test virsion
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     assert( fs.isOpened() );
     assert( trueLeftDisp.type() == CV_32FC1 );
     assert( trueRightDisp.empty() || trueRightDisp.type() == CV_32FC1 );
@@ -591,9 +607,9 @@ int CV_StereoMatchingTest::processStereoMatchingResults( FileStorage& fs, int ca
         readErrors( fn, RMS_STR, validRmss );
         readErrors( fn, BAD_PXLS_FRACTION_STR, validBadPxlsFractions );
         int tempCode = compareErrors( rmss, validRmss, rmsEps, RMS_STR );
-        code = tempCode==cvtest::TS::OK ? code : tempCode;
+        code = tempCode==cvtest::TS::OKVX ? code : tempCode;
         tempCode = compareErrors( badPxlsFractions, validBadPxlsFractions, fracEps, BAD_PXLS_FRACTION_STR );
-        code = tempCode==cvtest::TS::OK ? code : tempCode;
+        code = tempCode==cvtest::TS::OKVX ? code : tempCode;
     }
     return code;
 }
@@ -616,7 +632,7 @@ int CV_StereoMatchingTest::readDatasetsParams( FileStorage& fs )
         String uv = fn[i+2]; params.dispUnknVal = atoi(uv.c_str());
         datasetsParams[_name] = params;
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 int CV_StereoMatchingTest::readRunParams( FileStorage& fs )
@@ -628,7 +644,7 @@ int CV_StereoMatchingTest::readRunParams( FileStorage& fs )
     }
     caseNames.clear();;
     caseDatasets.clear();
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 void CV_StereoMatchingTest::writeErrors( const string& errName, const vector<float>& errors, FileStorage* fs )
@@ -667,7 +683,7 @@ int CV_StereoMatchingTest::compareErrors( const vector<float>& calcErrors, const
             ts->printf( cvtest::TS::LOG, "bad accuracy of %s (valid=%f; calc=%f)\n", string(ERROR_PREFIXES[i]+errName).c_str(), *validIt, *calcIt );
             ok = false;
         }
-    return ok ? cvtest::TS::OK : cvtest::TS::FAIL_BAD_ACCURACY;
+    return ok ? cvtest::TS::OKVX : cvtest::TS::FAIL_BAD_ACCURACY;
 }
 
 //----------------------------------- StereoBM test -----------------------------------------------------

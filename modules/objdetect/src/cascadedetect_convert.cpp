@@ -113,7 +113,11 @@ struct HaarStageClassifier
 
 static bool convert(const String& oldcascade, const String& newcascade)
 {
+#ifndef ONVXWORKS
     FileStorage oldfs(oldcascade, FileStorage::READ);
+#else
+    FileStorage oldfs(oldcascade, FileStorage::CVREAD);
+#endif
     if( !oldfs.isOpened() )
         return false;
     FileNode oldroot = oldfs.getFirstTopLevelNode();
@@ -193,8 +197,11 @@ static bool convert(const String& oldcascade, const String& newcascade)
             }
         }
     }
-
+#ifndef ONVXWORKS
     FileStorage newfs(newcascade, FileStorage::WRITE);
+#else
+    FileStorage newfs(newcascade, FileStorage::CVWRITE);
+#endif
     if( !newfs.isOpened() )
         return false;
 

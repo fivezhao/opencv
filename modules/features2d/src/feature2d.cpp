@@ -156,13 +156,21 @@ void Feature2D::detectAndCompute( InputArray, InputArray,
 
 void Feature2D::write( const String& fileName ) const
 {
+#ifndef ONVXWORKS
     FileStorage fs(fileName, FileStorage::WRITE);
+#else
+    FileStorage fs(fileName, FileStorage::CVWRITE);
+#endif
     write(fs);
 }
 
 void Feature2D::read( const String& fileName )
 {
+#ifndef ONVXWORKS
     FileStorage fs(fileName, FileStorage::READ);
+#else
+    FileStorage fs(fileName, FileStorage::CVREAD);
+#endif
     read(fs.root());
 }
 

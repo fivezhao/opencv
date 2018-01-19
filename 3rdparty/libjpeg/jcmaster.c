@@ -205,7 +205,7 @@ jpeg_calc_jpeg_dimensions (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 jpeg_calc_trans_dimensions (j_compress_ptr cinfo)
 {
   if (cinfo->min_DCT_h_scaled_size != cinfo->min_DCT_v_scaled_size)
@@ -216,7 +216,7 @@ jpeg_calc_trans_dimensions (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 initial_setup (j_compress_ptr cinfo, boolean transcode_only)
 /* Do computations that are needed before master selection phase */
 {
@@ -354,7 +354,7 @@ initial_setup (j_compress_ptr cinfo, boolean transcode_only)
 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
 
-LOCAL(void)
+LOCALVX(void)
 validate_script (j_compress_ptr cinfo)
 /* Verify that the scan script in cinfo->scan_info[] is valid; also
  * determine whether it uses progressive JPEG, and set cinfo->progressive_mode.
@@ -489,7 +489,7 @@ validate_script (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 reduce_script (j_compress_ptr cinfo)
 /* Adapt scan script for use with reduced block size;
  * assume that script has been validated before.
@@ -524,7 +524,7 @@ reduce_script (j_compress_ptr cinfo)
 #endif /* C_MULTISCAN_FILES_SUPPORTED */
 
 
-LOCAL(void)
+LOCALVX(void)
 select_scan_parameters (j_compress_ptr cinfo)
 /* Set up the scan parameters for the current scan */
 {
@@ -568,7 +568,7 @@ select_scan_parameters (j_compress_ptr cinfo)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 per_scan_setup (j_compress_ptr cinfo)
 /* Do computations that are needed before processing a JPEG scan */
 /* cinfo->comps_in_scan and cinfo->cur_comp_info[] are already set */

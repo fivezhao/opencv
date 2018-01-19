@@ -232,15 +232,15 @@ typedef enum {
 
 typedef enum {
         JDCT_ISLOW,		/* slow but accurate integer algorithm */
-        JDCT_IFAST,		/* faster, less accurate integer method */
+        JDCT_IFASTVX,		/* faster, less accurate integer method */
         JDCT_FLOAT		/* floating-point: accurate, fast on fast HW */
 } J_DCT_METHOD;
 
 #ifndef JDCT_DEFAULT		/* may be overridden in jconfig.h */
 #define JDCT_DEFAULT  JDCT_ISLOW
 #endif
-#ifndef JDCT_FASTEST		/* may be overridden in jconfig.h */
-#define JDCT_FASTEST  JDCT_IFAST
+#ifndef JDCT_FASTVXEST		/* may be overridden in jconfig.h */
+#define JDCT_FASTVXEST  JDCT_IFASTVX
 #endif
 
 /* Dithering options for decompression. */

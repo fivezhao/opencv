@@ -274,7 +274,7 @@ namespace cvtest
             ts->set_failed_test_info(cvtest::TS::FAIL_BAD_ACCURACY);
         }
         else
-            ts->set_failed_test_info(cvtest::TS::OK);
+            ts->set_failed_test_info(cvtest::TS::OKVX);
 
         return BaseTest::validate_test_results(test_case_index);
     }

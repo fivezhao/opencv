@@ -59,7 +59,7 @@ CV_DecomposeProjectionMatrixTest::CV_DecomposeProjectionMatrixTest()
 void CV_DecomposeProjectionMatrixTest::run(int start_from)
 {
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 
     cv::RNG& rng = ts->get_rng();
     int progress = 0;

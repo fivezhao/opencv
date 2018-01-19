@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 #include <windowsx.h> // required for GET_X_LPARAM() and GET_Y_LPARAM() macros
 
@@ -2446,3 +2446,4 @@ cvSetPostprocessFuncWin32_(const void* callback)
 }
 
 #endif //_WIN32
+#endif

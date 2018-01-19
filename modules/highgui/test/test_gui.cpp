@@ -85,7 +85,7 @@ void CV_HighGuiOnlyGuiTest::run( int /*start_from */)
 
     ts->printf(ts->LOG, "GUI 8\n");
     destroyAllWindows();
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Highgui_GUI,    regression) { CV_HighGuiOnlyGuiTest test; test.safe_run(); }

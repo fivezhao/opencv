@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "test_precomp.hpp"
 #include "opencv2/ts/ocl_test.hpp"
 
@@ -878,7 +878,7 @@ void CV_UMatTest::run( int /* start_from */)
     if (!TestUMat())
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Core_UMat, base) { CV_UMatTest test; test.safe_run(); }
@@ -1384,3 +1384,4 @@ TEST(UMat, testTempObjects_Mat_issue_8693)
 }
 
 } } // namespace cvtest::ocl
+#endif

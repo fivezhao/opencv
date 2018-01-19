@@ -587,7 +587,7 @@ static struct __IppInitializer__ __ipp_initializer__;
 #define CV_IPP_RUN_(condition, func, ...)
 #endif
 
-#define CV_IPP_RUN_FAST(func, ...) CV_IPP_RUN_(true, func, __VA_ARGS__)
+#define CV_IPP_RUN_FASTVX(func, ...) CV_IPP_RUN_(true, func, __VA_ARGS__)
 #define CV_IPP_RUN(condition, func, ...) CV_IPP_RUN_((condition), (func), __VA_ARGS__)
 
 

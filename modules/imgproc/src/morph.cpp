@@ -73,8 +73,8 @@ template<typename T> struct MaxOp
 
 #undef CV_MIN_8U
 #undef CV_MAX_8U
-#define CV_MIN_8U(a,b)       ((a) - CV_FAST_CAST_8U((a) - (b)))
-#define CV_MAX_8U(a,b)       ((a) + CV_FAST_CAST_8U((b) - (a)))
+#define CV_MIN_8U(a,b)       ((a) - CV_FASTVX_CAST_8U((a) - (b)))
+#define CV_MAX_8U(a,b)       ((a) + CV_FASTVX_CAST_8U((b) - (a)))
 
 template<> inline uchar MinOp<uchar>::operator ()(const uchar a, const uchar b) const { return CV_MIN_8U(a, b); }
 template<> inline uchar MaxOp<uchar>::operator ()(const uchar a, const uchar b) const { return CV_MAX_8U(a, b); }
@@ -1382,7 +1382,7 @@ void morph(int op, int src_type, int dst_type,
             return;
     }
 
-    CV_IPP_RUN_FAST(ippMorph(op, src_type, dst_type, src_data, src_step, dst_data, dst_step, width, height,
+    CV_IPP_RUN_FASTVX(ippMorph(op, src_type, dst_type, src_data, src_step, dst_data, dst_step, width, height,
                             roi_width, roi_height, roi_x, roi_y,
                             roi_width2, roi_height2, roi_x2, roi_y2,
                             kernel_type, kernel_data, kernel_step,
@@ -2062,7 +2062,7 @@ void cv::morphologyEx( InputArray _src, OutputArray _dst, int op,
     Mat dst = _dst.getMat();
 
 #if !IPP_DISABLE_MORPH_ADV
-    CV_IPP_RUN_FAST(ipp_morphologyEx(op, src, dst, kernel, anchor, iterations, borderType, borderValue));
+    CV_IPP_RUN_FASTVX(ipp_morphologyEx(op, src, dst, kernel, anchor, iterations, borderType, borderValue));
 #endif
 
     switch( op )

@@ -167,7 +167,7 @@ void CV_ECC_Test_Translation::run(int from)
     if (!testTranslation(from))
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 
@@ -243,7 +243,7 @@ void CV_ECC_Test_Euclidean::run(int from)
     if (!testEuclidean(from))
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 class CV_ECC_Test_Affine : public CV_ECC_BaseTest
@@ -319,7 +319,7 @@ void CV_ECC_Test_Affine::run(int from)
     if (!testAffine(from))
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 class CV_ECC_Test_Homography : public CV_ECC_BaseTest
@@ -391,7 +391,7 @@ void CV_ECC_Test_Homography::run(int from)
     if (!testHomography(from))
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 class CV_ECC_Test_Mask : public CV_ECC_BaseTest
@@ -474,7 +474,7 @@ void CV_ECC_Test_Mask::run(int from)
     if (!testMask(from))
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Video_ECC_Translation, accuracy) { CV_ECC_Test_Translation test; test.safe_run();}

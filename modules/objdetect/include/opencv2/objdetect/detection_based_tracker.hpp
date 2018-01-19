@@ -47,7 +47,7 @@
 #include <opencv2/core.hpp>
 
 // After this condition removal update blacklist for bindings: modules/python/common.cmake
-#if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) || \
+#if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) || defined(ONVXWORKS) || \
   defined(CV_CXX11)
 
 #include <vector>

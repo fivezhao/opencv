@@ -119,7 +119,7 @@ CV_ChessboardSubpixelTest::CV_ChessboardSubpixelTest() :
 /* ///////////////////// chess_corner_test ///////////////////////// */
 void CV_ChessboardSubpixelTest::run( int )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int  progress = 0;
 
     RNG& rng = ts->get_rng();

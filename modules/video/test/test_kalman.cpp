@@ -59,7 +59,7 @@ CV_KalmanTest::CV_KalmanTest()
 
 void CV_KalmanTest::run( int )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     const int Dim = 7;
     const int Steps = 100;
     const double max_init = 1;

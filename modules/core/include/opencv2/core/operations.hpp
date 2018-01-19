@@ -52,7 +52,7 @@
 #include <cstdio>
 
 //! @cond IGNORED
-
+using namespace std;
 namespace cv
 {
 

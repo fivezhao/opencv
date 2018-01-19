@@ -287,7 +287,7 @@ public:
     */
     enum Format
     {
-        NONE            = 0,
+        NONEVX            = 0,
         DEPTH_COMPONENT = 0x1902, //!< Depth
         RGB             = 0x1907, //!< Red, Green, Blue
         RGBA            = 0x1908  //!< Red, Green, Blue, Alpha
@@ -658,13 +658,13 @@ int cv::ogl::Buffer::elemSize1() const
 ///////
 
 inline
-cv::ogl::Texture2D::Texture2D(int arows, int acols, Format aformat, bool autoRelease) : rows_(0), cols_(0), format_(NONE)
+cv::ogl::Texture2D::Texture2D(int arows, int acols, Format aformat, bool autoRelease) : rows_(0), cols_(0), format_(NONEVX)
 {
     create(arows, acols, aformat, autoRelease);
 }
 
 inline
-cv::ogl::Texture2D::Texture2D(Size asize, Format aformat, bool autoRelease) : rows_(0), cols_(0), format_(NONE)
+cv::ogl::Texture2D::Texture2D(Size asize, Format aformat, bool autoRelease) : rows_(0), cols_(0), format_(NONEVX)
 {
     create(asize, aformat, autoRelease);
 }

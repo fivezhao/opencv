@@ -58,7 +58,7 @@
  * entry; produce a float result.
  */
 
-#define DEQUANTIZE(coef,quantval)  (((FAST_FLOAT) (coef)) * (quantval))
+#define DEQUANTIZE(coef,quantval)  (((FASTVX_FLOAT) (coef)) * (quantval))
 
 
 /*
@@ -70,16 +70,16 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
                  JCOEFPTR coef_block,
                  JSAMPARRAY output_buf, JDIMENSION output_col)
 {
-  FAST_FLOAT tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  FAST_FLOAT tmp10, tmp11, tmp12, tmp13;
-  FAST_FLOAT z5, z10, z11, z12, z13;
+  FASTVX_FLOAT tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  FASTVX_FLOAT tmp10, tmp11, tmp12, tmp13;
+  FASTVX_FLOAT z5, z10, z11, z12, z13;
   JCOEFPTR inptr;
   FLOAT_MULT_TYPE * quantptr;
-  FAST_FLOAT * wsptr;
+  FASTVX_FLOAT * wsptr;
   JSAMPROW outptr;
   JSAMPLE *range_limit = cinfo->sample_range_limit;
   int ctr;
-  FAST_FLOAT workspace[DCTSIZE2]; /* buffers data between passes */
+  FASTVX_FLOAT workspace[DCTSIZE2]; /* buffers data between passes */
 
   /* Pass 1: process columns from input, store into work array. */
 
@@ -101,7 +101,7 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
         inptr[DCTSIZE*5] == 0 && inptr[DCTSIZE*6] == 0 &&
         inptr[DCTSIZE*7] == 0) {
       /* AC terms all zero */
-      FAST_FLOAT dcval = DEQUANTIZE(inptr[DCTSIZE*0], quantptr[DCTSIZE*0]);
+      FASTVX_FLOAT dcval = DEQUANTIZE(inptr[DCTSIZE*0], quantptr[DCTSIZE*0]);
 
       wsptr[DCTSIZE*0] = dcval;
       wsptr[DCTSIZE*1] = dcval;
@@ -129,7 +129,7 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp11 = tmp0 - tmp2;
 
     tmp13 = tmp1 + tmp3;	/* phases 5-3 */
-    tmp12 = (tmp1 - tmp3) * ((FAST_FLOAT) 1.414213562) - tmp13; /* 2*c4 */
+    tmp12 = (tmp1 - tmp3) * ((FASTVX_FLOAT) 1.414213562) - tmp13; /* 2*c4 */
 
     tmp0 = tmp10 + tmp13;	/* phase 2 */
     tmp3 = tmp10 - tmp13;
@@ -149,11 +149,11 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z12 = tmp4 - tmp7;
 
     tmp7 = z11 + z13;		/* phase 5 */
-    tmp11 = (z11 - z13) * ((FAST_FLOAT) 1.414213562); /* 2*c4 */
+    tmp11 = (z11 - z13) * ((FASTVX_FLOAT) 1.414213562); /* 2*c4 */
 
-    z5 = (z10 + z12) * ((FAST_FLOAT) 1.847759065); /* 2*c2 */
-    tmp10 = z5 - z12 * ((FAST_FLOAT) 1.082392200); /* 2*(c2-c6) */
-    tmp12 = z5 - z10 * ((FAST_FLOAT) 2.613125930); /* 2*(c2+c6) */
+    z5 = (z10 + z12) * ((FASTVX_FLOAT) 1.847759065); /* 2*c2 */
+    tmp10 = z5 - z12 * ((FASTVX_FLOAT) 1.082392200); /* 2*(c2-c6) */
+    tmp12 = z5 - z10 * ((FASTVX_FLOAT) 2.613125930); /* 2*(c2+c6) */
 
     tmp6 = tmp12 - tmp7;	/* phase 2 */
     tmp5 = tmp11 - tmp6;
@@ -187,12 +187,12 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     /* Even part */
 
     /* Apply signed->unsigned and prepare float->int conversion */
-    z5 = wsptr[0] + ((FAST_FLOAT) CENTERJSAMPLE + (FAST_FLOAT) 0.5);
+    z5 = wsptr[0] + ((FASTVX_FLOAT) CENTERJSAMPLE + (FASTVX_FLOAT) 0.5);
     tmp10 = z5 + wsptr[4];
     tmp11 = z5 - wsptr[4];
 
     tmp13 = wsptr[2] + wsptr[6];
-    tmp12 = (wsptr[2] - wsptr[6]) * ((FAST_FLOAT) 1.414213562) - tmp13;
+    tmp12 = (wsptr[2] - wsptr[6]) * ((FASTVX_FLOAT) 1.414213562) - tmp13;
 
     tmp0 = tmp10 + tmp13;
     tmp3 = tmp10 - tmp13;
@@ -207,11 +207,11 @@ jpeg_idct_float (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z12 = wsptr[1] - wsptr[7];
 
     tmp7 = z11 + z13;
-    tmp11 = (z11 - z13) * ((FAST_FLOAT) 1.414213562);
+    tmp11 = (z11 - z13) * ((FASTVX_FLOAT) 1.414213562);
 
-    z5 = (z10 + z12) * ((FAST_FLOAT) 1.847759065); /* 2*c2 */
-    tmp10 = z5 - z12 * ((FAST_FLOAT) 1.082392200); /* 2*(c2-c6) */
-    tmp12 = z5 - z10 * ((FAST_FLOAT) 2.613125930); /* 2*(c2+c6) */
+    z5 = (z10 + z12) * ((FASTVX_FLOAT) 1.847759065); /* 2*c2 */
+    tmp10 = z5 - z12 * ((FASTVX_FLOAT) 1.082392200); /* 2*(c2-c6) */
+    tmp12 = z5 - z10 * ((FASTVX_FLOAT) 2.613125930); /* 2*(c2+c6) */
 
     tmp6 = tmp12 - tmp7;
     tmp5 = tmp11 - tmp6;

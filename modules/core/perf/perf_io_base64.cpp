@@ -35,12 +35,20 @@ PERF_TEST_P(Size_Mat_StrType, fs_text,
     TEST_CYCLE_MULTIRUN(2)
     {
         {
+#ifndef ONVXWORKS
             FileStorage fs(file_name, cv::FileStorage::WRITE);
+#else
+            FileStorage fs(file_name, cv::FileStorage::CVWRITE);
+#endif
             fs << key << src;
             fs.release();
         }
         {
+#ifndef ONVXWORKS
             FileStorage fs(file_name, cv::FileStorage::READ);
+#else
+            FileStorage fs(file_name, cv::FileStorage::CVREAD);
+#endif
             fs[key] >> dst;
             fs.release();
         }
@@ -75,7 +83,11 @@ PERF_TEST_P(Size_Mat_StrType, fs_base64,
             fs.release();
         }
         {
+#ifndef ONVXWORKS
             FileStorage fs(file_name, cv::FileStorage::READ);
+#else
+            FileStorage fs(file_name, cv::FileStorage::CVREAD);
+#endif
             fs[key] >> dst;
             fs.release();
         }

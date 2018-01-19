@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #ifndef OPENCV_TS_OCL_TEST_HPP
 #define OPENCV_TS_OCL_TEST_HPP
 
@@ -365,3 +365,4 @@ CV_ENUM(BorderType, BORDER_CONSTANT, BORDER_REPLICATE, BORDER_REFLECT, BORDER_WR
 } } // namespace cvtest::ocl
 
 #endif // OPENCV_TS_OCL_TEST_HPP
+#endif

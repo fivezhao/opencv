@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "test_precomp.hpp"
 #include <opencv2/ts/cuda_test.hpp>
 #include "../src/fisheye.hpp"
@@ -658,3 +658,4 @@ cv::Mat fisheyeTest::mergeRectification(const cv::Mat& l, const cv::Mat& r)
 
     return merged;
 }
+#endif

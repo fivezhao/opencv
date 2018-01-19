@@ -240,7 +240,7 @@ void CV_KMeansTest::run( int /*start_from*/ )
     defaultDistribs( means, covs );
     generateData( data, labels, sizes, means, covs, CV_32FC1, CV_32SC1 );
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     float err;
     Mat bestLabels;
     // 1. flag==KMEANS_PP_CENTERS
@@ -314,7 +314,7 @@ void CV_KNearestTest::run( int /*start_from*/ )
     Mat testData( pointsCount, 2, CV_32FC1 ), testLabels, bestLabels;
     generateData( testData, testLabels, sizes, means, covs, CV_32FC1, CV_32FC1 );
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     // KNearest default implementation
     Ptr<KNearest> knearest = KNearest::create();
@@ -393,7 +393,7 @@ int CV_EMTest::runCase( int caseIndex, const EM_Params& params,
                         const cv::Mat& testData, const cv::Mat& testLabels,
                         const vector<int>& sizes )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     cv::Mat labels;
     float err;
@@ -473,61 +473,61 @@ void CV_EMTest::run( int /*start_from*/ )
     params.means = &means;
     params.covs = &covs;
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int caseIndex = 0;
     {
         params.startStep = EM::START_AUTO_STEP;
         params.covMatType = EM::COV_MAT_GENERIC;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_AUTO_STEP;
         params.covMatType = EM::COV_MAT_DIAGONAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_AUTO_STEP;
         params.covMatType = EM::COV_MAT_SPHERICAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_M_STEP;
         params.covMatType = EM::COV_MAT_GENERIC;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_M_STEP;
         params.covMatType = EM::COV_MAT_DIAGONAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_M_STEP;
         params.covMatType = EM::COV_MAT_SPHERICAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_E_STEP;
         params.covMatType = EM::COV_MAT_GENERIC;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_E_STEP;
         params.covMatType = EM::COV_MAT_DIAGONAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
     {
         params.startStep = EM::START_E_STEP;
         params.covMatType = EM::COV_MAT_SPHERICAL;
         int currCode = runCase(caseIndex++, params, trainData, trainLabels, testData, testLabels, sizes);
-        code = currCode == cvtest::TS::OK ? code : currCode;
+        code = currCode == cvtest::TS::OKVX ? code : currCode;
     }
 
     ts->set_failed_test_info( code );
@@ -539,7 +539,7 @@ public:
 protected:
     virtual void run( int /*start_from*/ )
     {
-        int code = cvtest::TS::OK;
+        int code = cvtest::TS::OKVX;
         const int nclusters = 2;
 
         Mat samples = Mat(3,1,CV_64FC1);
@@ -560,7 +560,11 @@ protected:
         // Write out
         string filename = cv::tempfile(".xml");
         {
-            FileStorage fs = FileStorage(filename, FileStorage::WRITE);
+#ifndef ONVXWORKS
+       FileStorage fs = FileStorage(filename, FileStorage::WRITE);
+#else
+       FileStorage fs = FileStorage(filename, FileStorage::CVWRITE);
+#endif
             try
             {
                 fs << "em" << "{";
@@ -685,7 +689,7 @@ protected:
         const double maxTrainError = 0.23;
         const double maxTestError = 0.26;
 
-        int code = cvtest::TS::OK;
+        int code = cvtest::TS::OKVX;
         if(trainError > maxTrainError)
         {
             ts->printf(cvtest::TS::LOG, "Too large train classification error (calc = %f, valid=%f).\n", trainError, maxTrainError);

@@ -830,7 +830,7 @@ static void computeKeyPoints(const Mat& imagePyramid,
         Mat img = imagePyramid(layerInfo[level]);
         Mat mask = maskPyramid.empty() ? Mat() : maskPyramid(layerInfo[level]);
 
-        // Detect FAST features, 20 is a good threshold
+        // Detect FASTVX features, 20 is a good threshold
         {
         Ptr<FastFeatureDetector> fd = FastFeatureDetector::create(fastThreshold, true);
         fd->detect(img, keypoints, mask);
@@ -839,7 +839,7 @@ static void computeKeyPoints(const Mat& imagePyramid,
         // Remove keypoints very close to the border
         KeyPointsFilter::runByImageBorder(keypoints, img.size(), edgeThreshold);
 
-        // Keep more points than necessary as FAST does not give amazing corners
+        // Keep more points than necessary as FASTVX does not give amazing corners
         KeyPointsFilter::retainBest(keypoints, scoreType == ORB_Impl::HARRIS_SCORE ? 2 * featuresNum : featuresNum);
 
         nkeypoints = (int)keypoints.size();
@@ -865,7 +865,7 @@ static void computeKeyPoints(const Mat& imagePyramid,
     Mat responses;
     UMat ukeypoints, uresponses(1, nkeypoints, CV_32F);
 
-    // Select best features using the Harris cornerness (better scoring than FAST)
+    // Select best features using the Harris cornerness (better scoring than FASTVX)
     if( scoreType == ORB_Impl::HARRIS_SCORE )
     {
 #ifdef HAVE_OPENCL

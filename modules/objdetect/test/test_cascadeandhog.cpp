@@ -145,7 +145,7 @@ int CV_DetectorTest::prepareData( FileStorage& _fs )
             }
         }
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 void CV_DetectorTest::run( int )
@@ -153,8 +153,11 @@ void CV_DetectorTest::run( int )
     string dataPath = ts->get_data_path();
     string vs_filename = dataPath + getValidationFilename();
 
+#ifndef ONVXWORKS
     write_results = !validationFS.open( vs_filename, FileStorage::READ );
-
+#else
+    write_results = !validationFS.open( vs_filename, FileStorage::CVREAD );
+#endif
     int code;
     if( !write_results )
     {
@@ -162,7 +165,11 @@ void CV_DetectorTest::run( int )
     }
     else
     {
+#ifndef ONVXWORKS
         FileStorage fs0(dataPath + configFilename, FileStorage::READ );
+#else
+        FileStorage fs0(dataPath + configFilename, FileStorage::CVREAD );
+#endif
         code = prepareData(fs0);
     }
 
@@ -175,7 +182,11 @@ void CV_DetectorTest::run( int )
     if( write_results )
     {
         validationFS.release();
+#ifndef ONVXWORKS
         validationFS.open( vs_filename, FileStorage::WRITE );
+#else
+        validationFS.open( vs_filename, FileStorage::CVWRITE );
+#endif
         validationFS << FileStorage::getDefaultObjectName(validationFilename) << "{";
 
         validationFS << DIST_E << eps.dist;
@@ -228,10 +239,10 @@ void CV_DetectorTest::run( int )
         vector<vector<Rect> > objects;
         int temp_code = runTestCase( di, objects );
 
-        if (!write_results && temp_code == cvtest::TS::OK)
+        if (!write_results && temp_code == cvtest::TS::OKVX)
             temp_code = validate( di, objects );
 
-        if (temp_code != cvtest::TS::OK)
+        if (temp_code != cvtest::TS::OKVX)
             code = temp_code;
 
         if( write_results )
@@ -271,7 +282,7 @@ int CV_DetectorTest::runTestCase( int detectorIdx, vector<vector<Rect> >& object
             return cvtest::TS::FAIL_INVALID_TEST_DATA;
         }
         int code = detectMultiScale( detectorIdx, image, imgObjects );
-        if( code != cvtest::TS::OK )
+        if( code != cvtest::TS::OKVX)
             return code;
 
         objects.push_back( imgObjects );
@@ -290,7 +301,7 @@ int CV_DetectorTest::runTestCase( int detectorIdx, vector<vector<Rect> >& object
             validationFS << "]"; // imageIdxStr
         }
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 
@@ -380,7 +391,7 @@ int CV_DetectorTest::validate( int detectorIdx, vector<vector<Rect> >& objects )
     if (::testing::Test::HasFailure())
         return cvtest::TS::FAIL_BAD_ACCURACY;
 
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 //----------------------------------------------- CascadeDetectorTest -----------------------------------
@@ -449,7 +460,7 @@ int CV_CascadeDetectorTest::detectMultiScale_C( const string& filename,
         objects.push_back(r);
     }
 
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 int CV_CascadeDetectorTest::detectMultiScale( int di, const Mat& img,
@@ -474,7 +485,7 @@ int CV_CascadeDetectorTest::detectMultiScale( int di, const Mat& img,
     cvtColor( img, grayImg, COLOR_BGR2GRAY );
     equalizeHist( grayImg, grayImg );
     cascade.detectMultiScale( grayImg, objects, 1.1, 3, flags[di] );
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 //----------------------------------------------- HOGDetectorTest -----------------------------------
@@ -515,7 +526,7 @@ int CV_HOGDetectorTest::detectMultiScale( int di, const Mat& img,
     else
         assert(0);
     hog.detectMultiScale(img, objects);
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 //----------------------------------------------- HOGDetectorReadWriteTest -----------------------------------
@@ -530,10 +541,17 @@ TEST(Objdetect_HOGDetectorReadWrite, regression)
     hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
 
     string tempfilename = cv::tempfile(".xml");
+#ifndef ONVXWORKS
     FileStorage fs(tempfilename, FileStorage::WRITE);
+#else
+    FileStorage fs(tempfilename, FileStorage::CVWRITE);
+#endif
     hog.write(fs, "myHOG");
-
+#ifndef ONVXWORKS
     fs.open(tempfilename, FileStorage::READ);
+#else
+    fs.open(tempfilename, FileStorage::CVREAD);
+#endif
     remove(tempfilename.c_str());
 
     FileNode n = fs["opencv_storage"]["myHOG"];

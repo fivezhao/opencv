@@ -1256,7 +1256,7 @@ Mat _InputArray::getMat_(int i) const
         return m;
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
         return Mat();
 
     if( k == STD_VECTOR_VECTOR )
@@ -1300,6 +1300,7 @@ Mat _InputArray::getMat_(int i) const
         return Mat();
     }
 
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT )
     {
         CV_Assert( i < 0 );
@@ -1316,6 +1317,7 @@ Mat _InputArray::getMat_(int i) const
         return cuda_mem->createMatHeader();
     }
 
+#endif
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
     return Mat();
 }
@@ -1403,7 +1405,7 @@ void _InputArray::getMatVector(std::vector<Mat>& mv) const
         return;
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
     {
         mv.clear();
         return;
@@ -1465,7 +1467,7 @@ void _InputArray::getUMatVector(std::vector<UMat>& umv) const
     int k = kind();
     int accessFlags = flags & ACCESS_MASK;
 
-    if( k == NONE )
+    if( k == NONEVX )
     {
         umv.clear();
         return;
@@ -1521,7 +1523,7 @@ void _InputArray::getUMatVector(std::vector<UMat>& umv) const
 
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
 }
-
+#ifndef ONVXWORKS
 cuda::GpuMat _InputArray::getGpuMat() const
 {
     int k = kind();
@@ -1544,7 +1546,7 @@ cuda::GpuMat _InputArray::getGpuMat() const
         return cuda::GpuMat();
     }
 
-    if (k == NONE)
+    if (k == NONEVX)
         return cuda::GpuMat();
 
     CV_Error(cv::Error::StsNotImplemented, "getGpuMat is available only for cuda::GpuMat and cuda::HostMem");
@@ -1558,6 +1560,7 @@ void _InputArray::getGpuMatVector(std::vector<cuda::GpuMat>& gpumv) const
         gpumv = *(std::vector<cuda::GpuMat>*)obj;
     }
 }
+
 ogl::Buffer _InputArray::getOGlBuffer() const
 {
     int k = kind();
@@ -1567,7 +1570,7 @@ ogl::Buffer _InputArray::getOGlBuffer() const
     const ogl::Buffer* gl_buf = (const ogl::Buffer*)obj;
     return *gl_buf;
 }
-
+#endif
 int _InputArray::kind() const
 {
     return flags & KIND_MASK;
@@ -1627,7 +1630,7 @@ Size _InputArray::size(int i) const
         return Size((int)v.size(), 1);
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
         return Size();
 
     if( k == STD_VECTOR_VECTOR )
@@ -1661,7 +1664,7 @@ Size _InputArray::size(int i) const
 
         return vv[i].size();
     }
-
+#ifndef ONVXWORKS
     if (k == STD_VECTOR_CUDA_GPU_MAT)
     {
         const std::vector<cuda::GpuMat>& vv = *(const std::vector<cuda::GpuMat>*)obj;
@@ -1670,7 +1673,7 @@ Size _InputArray::size(int i) const
         CV_Assert(i < (int)vv.size());
         return vv[i].size();
     }
-
+#endif
     if( k == STD_VECTOR_UMAT )
     {
         const std::vector<UMat>& vv = *(const std::vector<UMat>*)obj;
@@ -1680,7 +1683,7 @@ Size _InputArray::size(int i) const
 
         return vv[i].size();
     }
-
+#ifndef ONVXWORKS
     if( k == OPENGL_BUFFER )
     {
         CV_Assert( i < 0 );
@@ -1701,7 +1704,7 @@ Size _InputArray::size(int i) const
         const cuda::HostMem* cuda_mem = (const cuda::HostMem*)obj;
         return cuda_mem->size();
     }
-
+#endif
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
     return Size();
 }
@@ -1710,7 +1713,7 @@ int _InputArray::sizend(int* arrsz, int i) const
 {
     int j, d=0, k = kind();
 
-    if( k == NONE )
+    if( k == NONEVX )
         ;
     else if( k == MAT )
     {
@@ -1842,7 +1845,7 @@ int _InputArray::dims(int i) const
         return 2;
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
         return 0;
 
     if( k == STD_VECTOR_VECTOR )
@@ -1971,7 +1974,7 @@ int _InputArray::type(int i) const
     if( k == MATX || k == STD_VECTOR || k == STD_ARRAY || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
         return CV_MAT_TYPE(flags);
 
-    if( k == NONE )
+    if( k == NONEVX )
         return -1;
 
     if( k == STD_VECTOR_UMAT )
@@ -2009,7 +2012,7 @@ int _InputArray::type(int i) const
         CV_Assert( i < sz.height );
         return vv[i >= 0 ? i : 0].type();
     }
-
+#ifndef ONVXWORKS
     if (k == STD_VECTOR_CUDA_GPU_MAT)
     {
         const std::vector<cuda::GpuMat>& vv = *(const std::vector<cuda::GpuMat>*)obj;
@@ -2030,7 +2033,7 @@ int _InputArray::type(int i) const
 
     if( k == CUDA_HOST_MEM )
         return ((const cuda::HostMem*)obj)->type();
-
+#endif
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
     return 0;
 }
@@ -2073,7 +2076,7 @@ bool _InputArray::empty() const
         return v.empty();
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
         return true;
 
     if( k == STD_VECTOR_VECTOR )
@@ -2098,7 +2101,7 @@ bool _InputArray::empty() const
         const std::vector<UMat>& vv = *(const std::vector<UMat>*)obj;
         return vv.empty();
     }
-
+#ifndef ONVXWORKS
     if( k == OPENGL_BUFFER )
         return ((const ogl::Buffer*)obj)->empty();
 
@@ -2113,7 +2116,7 @@ bool _InputArray::empty() const
 
     if( k == CUDA_HOST_MEM )
         return ((const cuda::HostMem*)obj)->empty();
-
+#endif
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
     return true;
 }
@@ -2129,7 +2132,7 @@ bool _InputArray::isContinuous(int i) const
         return i < 0 ? ((const UMat*)obj)->isContinuous() : true;
 
     if( k == EXPR || k == MATX || k == STD_VECTOR || k == STD_ARRAY ||
-        k == NONE || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
+        k == NONEVX || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
         return true;
 
     if( k == STD_VECTOR_MAT )
@@ -2152,10 +2155,10 @@ bool _InputArray::isContinuous(int i) const
         CV_Assert((size_t)i < vv.size());
         return vv[i].isContinuous();
     }
-
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT )
       return i < 0 ? ((const cuda::GpuMat*)obj)->isContinuous() : true;
-
+#endif
     CV_Error(CV_StsNotImplemented, "Unknown/unsupported array type");
     return false;
 }
@@ -2171,7 +2174,7 @@ bool _InputArray::isSubmatrix(int i) const
         return i < 0 ? ((const UMat*)obj)->isSubmatrix() : false;
 
     if( k == EXPR || k == MATX || k == STD_VECTOR || k == STD_ARRAY ||
-        k == NONE || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
+        k == NONEVX || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
         return false;
 
     if( k == STD_VECTOR_MAT )
@@ -2217,7 +2220,7 @@ size_t _InputArray::offset(int i) const
     }
 
     if( k == EXPR || k == MATX || k == STD_VECTOR || k == STD_ARRAY ||
-        k == NONE || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
+        k == NONEVX || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
         return 0;
 
     if( k == STD_VECTOR_MAT )
@@ -2245,7 +2248,7 @@ size_t _InputArray::offset(int i) const
         CV_Assert((size_t)i < vv.size());
         return vv[i].offset;
     }
-
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT )
     {
         CV_Assert( i < 0 );
@@ -2259,7 +2262,7 @@ size_t _InputArray::offset(int i) const
         CV_Assert((size_t)i < vv.size());
         return (size_t)(vv[i].data - vv[i].datastart);
     }
-
+#endif
     CV_Error(Error::StsNotImplemented, "");
     return 0;
 }
@@ -2281,7 +2284,7 @@ size_t _InputArray::step(int i) const
     }
 
     if( k == EXPR || k == MATX || k == STD_VECTOR || k == STD_ARRAY ||
-        k == NONE || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
+        k == NONEVX || k == STD_VECTOR_VECTOR || k == STD_BOOL_VECTOR )
         return 0;
 
     if( k == STD_VECTOR_MAT )
@@ -2308,7 +2311,7 @@ size_t _InputArray::step(int i) const
         CV_Assert((size_t)i < vv.size());
         return vv[i].step;
     }
-
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT )
     {
         CV_Assert( i < 0 );
@@ -2320,7 +2323,7 @@ size_t _InputArray::step(int i) const
         CV_Assert((size_t)i < vv.size());
         return vv[i].step;
     }
-
+#endif
     CV_Error(Error::StsNotImplemented, "");
     return 0;
 }
@@ -2329,7 +2332,7 @@ void _InputArray::copyTo(const _OutputArray& arr) const
 {
     int k = kind();
 
-    if( k == NONE )
+    if( k == NONEVX )
         arr.release();
     else if( k == MAT || k == MATX || k == STD_VECTOR || k == STD_ARRAY || k == STD_BOOL_VECTOR )
     {
@@ -2354,7 +2357,7 @@ void _InputArray::copyTo(const _OutputArray& arr, const _InputArray & mask) cons
 {
     int k = kind();
 
-    if( k == NONE )
+    if( k == NONEVX )
         arr.release();
     else if( k == MAT || k == MATX || k == STD_VECTOR || k == STD_ARRAY || k == STD_BOOL_VECTOR )
     {
@@ -2394,6 +2397,7 @@ void _OutputArray::create(Size _sz, int mtype, int i, bool allowTransposed, int 
         ((UMat*)obj)->create(_sz, mtype);
         return;
     }
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT && i < 0 && !allowTransposed && fixedDepthMask == 0 )
     {
         CV_Assert(!fixedSize() || ((cuda::GpuMat*)obj)->size() == _sz);
@@ -2408,6 +2412,7 @@ void _OutputArray::create(Size _sz, int mtype, int i, bool allowTransposed, int 
         ((ogl::Buffer*)obj)->create(_sz, mtype);
         return;
     }
+
     if( k == CUDA_HOST_MEM && i < 0 && !allowTransposed && fixedDepthMask == 0 )
     {
         CV_Assert(!fixedSize() || ((cuda::HostMem*)obj)->size() == _sz);
@@ -2415,6 +2420,7 @@ void _OutputArray::create(Size _sz, int mtype, int i, bool allowTransposed, int 
         ((cuda::HostMem*)obj)->create(_sz, mtype);
         return;
     }
+#endif
     int sizes[] = {_sz.height, _sz.width};
     create(2, sizes, mtype, i, allowTransposed, fixedDepthMask);
 }
@@ -2436,6 +2442,7 @@ void _OutputArray::create(int _rows, int _cols, int mtype, int i, bool allowTran
         ((UMat*)obj)->create(_rows, _cols, mtype);
         return;
     }
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT && i < 0 && !allowTransposed && fixedDepthMask == 0 )
     {
         CV_Assert(!fixedSize() || ((cuda::GpuMat*)obj)->size() == Size(_cols, _rows));
@@ -2457,6 +2464,7 @@ void _OutputArray::create(int _rows, int _cols, int mtype, int i, bool allowTran
         ((cuda::HostMem*)obj)->create(_rows, _cols, mtype);
         return;
     }
+#endif
     int sizes[] = {_rows, _cols};
     create(2, sizes, mtype, i, allowTransposed, fixedDepthMask);
 }
@@ -2635,7 +2643,7 @@ void _OutputArray::create(int d, const int* sizes, int mtype, int i,
         return;
     }
 
-    if( k == NONE )
+    if( k == NONEVX )
     {
         CV_Error(CV_StsNullPtr, "create() called for the missing output array" );
         return;
@@ -2845,6 +2853,7 @@ void _OutputArray::release() const
         return;
     }
 
+#ifndef ONVXWORKS
     if( k == CUDA_GPU_MAT )
     {
         ((cuda::GpuMat*)obj)->release();
@@ -2856,14 +2865,13 @@ void _OutputArray::release() const
         ((cuda::HostMem*)obj)->release();
         return;
     }
-
     if( k == OPENGL_BUFFER )
     {
         ((ogl::Buffer*)obj)->release();
         return;
     }
-
-    if( k == NONE )
+#endif
+    if( k == NONEVX )
         return;
 
     if( k == STD_VECTOR )
@@ -2889,11 +2897,13 @@ void _OutputArray::release() const
         ((std::vector<UMat>*)obj)->clear();
         return;
     }
+#ifndef ONVXWORKS
     if (k == STD_VECTOR_CUDA_GPU_MAT)
     {
         ((std::vector<cuda::GpuMat>*)obj)->clear();
         return;
     }
+#endif
     CV_Error(Error::StsNotImplemented, "Unknown/unsupported array type");
 }
 
@@ -2913,7 +2923,7 @@ void _OutputArray::clear() const
 
 bool _OutputArray::needed() const
 {
-    return kind() != NONE;
+    return kind() != NONEVX;
 }
 
 Mat& _OutputArray::getMatRef(int i) const
@@ -2989,7 +2999,7 @@ void _OutputArray::setTo(const _InputArray& arr, const _InputArray & mask) const
 {
     int k = kind();
 
-    if( k == NONE )
+    if( k == NONEVX )
         ;
     else if( k == MAT || k == MATX || k == STD_VECTOR || k == STD_ARRAY )
     {
@@ -2998,12 +3008,14 @@ void _OutputArray::setTo(const _InputArray& arr, const _InputArray & mask) const
     }
     else if( k == UMAT )
         ((UMat*)obj)->setTo(arr, mask);
+#ifndef ONVXWORKS
     else if( k == CUDA_GPU_MAT )
     {
         Mat value = arr.getMat();
         CV_Assert( checkScalar(value, type(), arr.kind(), _InputArray::CUDA_GPU_MAT) );
         ((cuda::GpuMat*)obj)->setTo(Scalar(Vec<double, 4>(value.ptr<double>())), mask);
     }
+#endif
     else
         CV_Error(Error::StsNotImplemented, "");
 }
@@ -3053,8 +3065,8 @@ void _OutputArray::assign(const Mat& m) const
 }
 
 
-static _InputOutputArray _none;
-InputOutputArray noArray() { return _none; }
+static _InputOutputArray _NONEVX;
+InputOutputArray noArray() { return _NONEVX; }
 
 }
 
@@ -3535,7 +3547,7 @@ void cv::transpose( InputArray _src, OutputArray _dst )
         return;
     }
 
-    CV_IPP_RUN_FAST(ipp_transpose(src, dst))
+    CV_IPP_RUN_FASTVX(ipp_transpose(src, dst))
 
     if( dst.data == src.data )
     {
@@ -3782,7 +3794,7 @@ static inline bool ipp_reduceSumC_8u16u16s32f_64f(const cv::Mat& srcmat, cv::Mat
 
 static inline void reduceSumC_8u16u16s32f_64f(const cv::Mat& srcmat, cv::Mat& dstmat)
 {
-    CV_IPP_RUN_FAST(ipp_reduceSumC_8u16u16s32f_64f(srcmat, dstmat));
+    CV_IPP_RUN_FASTVX(ipp_reduceSumC_8u16u16s32f_64f(srcmat, dstmat));
 
     cv::ReduceFunc func = 0;
 
@@ -3841,7 +3853,7 @@ static inline bool ipp_reduce##optype##C##favor(const cv::Mat& srcmat, cv::Mat& 
 } \
 static inline void reduce##optype##C##favor(const cv::Mat& srcmat, cv::Mat& dstmat) \
 { \
-    CV_IPP_RUN_FAST(ipp_reduce##optype##C##favor(srcmat, dstmat)); \
+    CV_IPP_RUN_FASTVX(ipp_reduce##optype##C##favor(srcmat, dstmat)); \
     cv::reduceC_ < type1, type2, cv::Op##optype < type2 > >(srcmat, dstmat); \
 }
 #endif
@@ -4428,7 +4440,7 @@ void cv::sort( InputArray _src, OutputArray _dst, int flags )
     CV_Assert( src.dims <= 2 && src.channels() == 1 );
     _dst.create( src.size(), src.type() );
     Mat dst = _dst.getMat();
-    CV_IPP_RUN_FAST(ipp_sort(src, dst, flags));
+    CV_IPP_RUN_FASTVX(ipp_sort(src, dst, flags));
 
     static SortFunc tab[] =
     {
@@ -4453,7 +4465,7 @@ void cv::sortIdx( InputArray _src, OutputArray _dst, int flags )
     _dst.create( src.size(), CV_32S );
     dst = _dst.getMat();
 
-    CV_IPP_RUN_FAST(ipp_sortIdx(src, dst, flags));
+    CV_IPP_RUN_FASTVX(ipp_sortIdx(src, dst, flags));
 
     static SortFunc tab[] =
     {

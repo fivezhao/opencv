@@ -465,7 +465,7 @@ void CV_DescriptorMatcherTest::radiusMatchTest( const Mat& query, const Mat& tra
 
         dmatcher->radiusMatch( query, matches, radius, masks );
 
-        //int curRes = cvtest::TS::OK;
+        //int curRes = cvtest::TS::OKVX;
         if( (int)matches.size() != queryDescCount )
         {
             ts->printf(cvtest::TS::LOG, "Incorrect matches count while test radiusMatch() function (1).\n");
@@ -547,7 +547,11 @@ TEST( Features2d_DescriptorMatcher_FlannBased, regression )
 
 TEST( Features2d_DMatch, read_write )
 {
+#ifndef ONVXWORKS
     FileStorage fs(".xml", FileStorage::WRITE + FileStorage::MEMORY);
+#else
+    FileStorage fs(".xml", FileStorage::CVWRITE + FileStorage::CVMEMORY);
+#endif
     vector<DMatch> matches;
     matches.push_back(DMatch(1,2,3,4.5f));
     fs << "Match" << matches;

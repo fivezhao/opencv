@@ -182,8 +182,8 @@ typedef hist2d * hist3d;	/* type for top-level pointer */
 typedef INT16 FSERROR;		/* 16 bits should be enough */
 typedef int LOCFSERROR;		/* use 'int' for calculation temps */
 #else
-typedef INT32 FSERROR;		/* may need more than 16 bits */
-typedef INT32 LOCFSERROR;	/* be sure calculation temps are big enough */
+typedef CVINT32 FSERROR;		/* may need more than 16 bits */
+typedef CVINT32 LOCFSERROR;	/* be sure calculation temps are big enough */
 #endif
 
 typedef FSERROR FAR *FSERRPTR;	/* pointer to error array (in FAR storage!) */
@@ -262,7 +262,7 @@ typedef struct {
   int c1min, c1max;
   int c2min, c2max;
   /* The volume (actually 2-norm) of the box */
-  INT32 volume;
+  CVINT32 volume;
   /* The number of nonzero histogram cells within this box */
   long colorcount;
 } _box;
@@ -270,7 +270,7 @@ typedef struct {
 typedef _box * boxptr;
 
 
-LOCAL(boxptr)
+LOCALVX(boxptr)
 find_biggest_color_pop (boxptr boxlist, int numboxes)
 /* Find the splittable box with the largest color population */
 /* Returns NULL if no splittable boxes remain */
@@ -290,14 +290,14 @@ find_biggest_color_pop (boxptr boxlist, int numboxes)
 }
 
 
-LOCAL(boxptr)
+LOCALVX(boxptr)
 find_biggest_volume (boxptr boxlist, int numboxes)
 /* Find the splittable box with the largest (scaled) volume */
 /* Returns NULL if no splittable boxes remain */
 {
   register boxptr boxp;
   register int i;
-  register INT32 maxv = 0;
+  register CVINT32 maxv = 0;
   boxptr which = NULL;
 
   for (i = 0, boxp = boxlist; i < numboxes; i++, boxp++) {
@@ -310,7 +310,7 @@ find_biggest_volume (boxptr boxlist, int numboxes)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 update_box (j_decompress_ptr cinfo, boxptr boxp)
 /* Shrink the min/max bounds of a box to enclose only nonzero elements, */
 /* and recompute its volume and population */
@@ -320,7 +320,7 @@ update_box (j_decompress_ptr cinfo, boxptr boxp)
   histptr histp;
   int c0,c1,c2;
   int c0min,c0max,c1min,c1max,c2min,c2max;
-  INT32 dist0,dist1,dist2;
+  CVINT32 dist0,dist1,dist2;
   long ccount;
 
   c0min = boxp->c0min;  c0max = boxp->c0max;
@@ -421,7 +421,7 @@ update_box (j_decompress_ptr cinfo, boxptr boxp)
 }
 
 
-LOCAL(int)
+LOCALVX(int)
 median_cut (j_decompress_ptr cinfo, boxptr boxlist, int numboxes,
             int desired_colors)
 /* Repeatedly select and split the largest box until we have enough boxes */
@@ -496,7 +496,7 @@ median_cut (j_decompress_ptr cinfo, boxptr boxlist, int numboxes,
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 compute_color (j_decompress_ptr cinfo, boxptr boxp, int icolor)
 /* Compute representative color for a box, put it in colormap[icolor] */
 {
@@ -536,7 +536,7 @@ compute_color (j_decompress_ptr cinfo, boxptr boxp, int icolor)
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 select_colors (j_decompress_ptr cinfo, int desired_colors)
 /* Master routine for color selection */
 {
@@ -593,7 +593,7 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  * distance from every colormap entry to every histogram cell.  Unfortunately,
  * it needs a work array to hold the best-distance-so-far for each histogram
  * cell (because the inner loop has to be over cells, not colormap entries).
- * The work array elements have to be INT32s, so the work array would need
+ * The work array elements have to be CVINT32s, so the work array would need
  * 256Kb at our recommended precision.  This is not feasible in DOS machines.
  *
  * To get around these problems, we apply Thomas' method to compute the
@@ -643,7 +643,7 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  * inner-loop variables.
  */
 
-LOCAL(int)
+LOCALVX(int)
 find_nearby_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
                     JSAMPLE colorlist[])
 /* Locate the colormap entries close enough to an update box to be candidates
@@ -659,8 +659,8 @@ find_nearby_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
   int maxc0, maxc1, maxc2;
   int centerc0, centerc1, centerc2;
   int i, x, ncolors;
-  INT32 minmaxdist, min_dist, max_dist, tdist;
-  INT32 mindist[MAXNUMCOLORS];	/* min distance to colormap entry i */
+  CVINT32 minmaxdist, min_dist, max_dist, tdist;
+  CVINT32 mindist[MAXNUMCOLORS];	/* min distance to colormap entry i */
 
   /* Compute true coordinates of update box's upper corner and center.
    * Actually we compute the coordinates of the center of the upper-corner
@@ -772,7 +772,7 @@ find_nearby_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 find_best_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
                   int numcolors, JSAMPLE colorlist[], JSAMPLE bestcolor[])
 /* Find the closest colormap entry for each cell in the update box,
@@ -784,15 +784,15 @@ find_best_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
 {
   int ic0, ic1, ic2;
   int i, icolor;
-  register INT32 * bptr;	/* pointer into bestdist[] array */
+  register CVINT32 * bptr;	/* pointer into bestdist[] array */
   JSAMPLE * cptr;		/* pointer into bestcolor[] array */
-  INT32 dist0, dist1;		/* initial distance values */
-  register INT32 dist2;		/* current distance in inner loop */
-  INT32 xx0, xx1;		/* distance increments */
-  register INT32 xx2;
-  INT32 inc0, inc1, inc2;	/* initial values for increments */
+  CVINT32 dist0, dist1;		/* initial distance values */
+  register CVINT32 dist2;		/* current distance in inner loop */
+  CVINT32 xx0, xx1;		/* distance increments */
+  register CVINT32 xx2;
+  CVINT32 inc0, inc1, inc2;	/* initial values for increments */
   /* This array holds the distance to the nearest-so-far color for each cell */
-  INT32 bestdist[BOX_C0_ELEMS * BOX_C1_ELEMS * BOX_C2_ELEMS];
+  CVINT32 bestdist[BOX_C0_ELEMS * BOX_C1_ELEMS * BOX_C2_ELEMS];
 
   /* Initialize best-distance for each cell of the update box */
   bptr = bestdist;
@@ -852,7 +852,7 @@ find_best_colors (j_decompress_ptr cinfo, int minc0, int minc1, int minc2,
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 fill_inverse_cmap (j_decompress_ptr cinfo, int c0, int c1, int c2)
 /* Fill the inverse-colormap entries in the update box that contains */
 /* histogram cell c0/c1/c2.  (Only that one cell MUST be filled, but */
@@ -1105,7 +1105,7 @@ pass2_fs_dither (j_decompress_ptr cinfo,
  * to Aaron Giles for this idea.
  */
 
-LOCAL(void)
+LOCALVX(void)
 init_error_limit (j_decompress_ptr cinfo)
 /* Allocate and fill in the error_limiter table */
 {

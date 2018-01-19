@@ -1501,8 +1501,8 @@ PNG_EXPORT(67, void, png_set_filter, (png_structrp png_ptr, int method,
 #define PNG_FILTER_UP      0x20
 #define PNG_FILTER_AVG     0x40
 #define PNG_FILTER_PAETH   0x80
-#define PNG_FAST_FILTERS (PNG_FILTER_NONE | PNG_FILTER_SUB | PNG_FILTER_UP)
-#define PNG_ALL_FILTERS (PNG_FAST_FILTERS | PNG_FILTER_AVG | PNG_FILTER_PAETH)
+#define PNG_FASTVX_FILTERS (PNG_FILTER_NONE | PNG_FILTER_SUB | PNG_FILTER_UP)
+#define PNG_ALL_FILTERS (PNG_FASTVX_FILTERS | PNG_FILTER_AVG | PNG_FILTER_PAETH)
 
 /* Filter values (not flags) - used in pngwrite.c, pngwutil.c for now.
  * These defines should NOT be changed.
@@ -2962,7 +2962,7 @@ typedef struct
     * correspond to the red, green and blue end-points defined by sRGB.
     */
 
-#define PNG_IMAGE_FLAG_FAST 0x02
+#define PNG_IMAGE_FLAG_FASTVX 0x02
    /* On write emphasise speed over compression; the resultant PNG file will be
     * larger but will be produced significantly faster, particular for large
     * images.  Do not use this option for images which will be distributed, only

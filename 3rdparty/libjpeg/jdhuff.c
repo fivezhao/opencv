@@ -27,9 +27,9 @@
 
 typedef struct {
   /* Basic tables: (element [0] of each array is unused) */
-  INT32 maxcode[18];		/* largest code of length k (-1 if none) */
+  CVINT32 maxcode[18];		/* largest code of length k (-1 if none) */
   /* (maxcode[17] is a sentinel to ensure jpeg_huff_decode terminates) */
-  INT32 valoffset[17];		/* huffval[] offset for codes of length k */
+  CVINT32 valoffset[17];		/* huffval[] offset for codes of length k */
   /* valoffset[k] = huffval[] index of 1st symbol of code length k, less
    * the smallest code of length k; so given a code of length k, the
    * corresponding symbol is huffval[code + valoffset[k]]
@@ -66,7 +66,7 @@ typedef struct {
  * necessary.
  */
 
-typedef INT32 bit_buf_type;	/* type of bit-extraction buffer */
+typedef CVINT32 bit_buf_type;	/* type of bit-extraction buffer */
 #define BIT_BUF_SIZE  32	/* size of buffer in bits */
 
 /* If long is > 32 bits on your machine, and shifting/masking longs is
@@ -319,7 +319,7 @@ static const int jpeg_zigzag_order2[2][2] = {
  * This routine also performs some validation checks on the table.
  */
 
-LOCAL(void)
+LOCALVX(void)
 jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
                          d_derived_tbl ** pdtbl)
 {
@@ -378,7 +378,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
     /* code is now 1 more than the last code used for codelength si; but
      * it must still fit in si bits, since no code is allowed to be all ones.
      */
-    if (((INT32) code) >= (((INT32) 1) << si))
+    if (((CVINT32) code) >= (((CVINT32) 1) << si))
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     code <<= 1;
     si++;
@@ -392,7 +392,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
       /* valoffset[l] = huffval[] index of 1st symbol of code length l,
        * minus the minimum code of length l
        */
-      dtbl->valoffset[l] = (INT32) p - (INT32) huffcode[p];
+      dtbl->valoffset[l] = (CVINT32) p - (CVINT32) huffcode[p];
       p += htbl->bits[l];
       dtbl->maxcode[l] = huffcode[p-1]; /* maximum code of length l */
     } else {
@@ -461,7 +461,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
 #endif
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 jpeg_fill_bit_buffer (bitread_working_state * state,
                       register bit_buf_type get_buffer, register int bits_left,
                       int nbits)
@@ -588,13 +588,13 @@ static const int bmask[16] =	/* bmask[n] is mask for n rightmost bits */
  * Out-of-line code for Huffman code decoding.
  */
 
-LOCAL(int)
+LOCALVX(int)
 jpeg_huff_decode (bitread_working_state * state,
                   register bit_buf_type get_buffer, register int bits_left,
                   d_derived_tbl * htbl, int min_bits)
 {
   register int l = min_bits;
-  register INT32 code;
+  register CVINT32 code;
 
   /* HUFF_DECODE has determined that the code is at least min_bits */
   /* bits long, so fetch that many bits in one swoop. */
@@ -632,7 +632,7 @@ jpeg_huff_decode (bitread_working_state * state,
  * Returns FALSE if must suspend.
  */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 process_restart (j_decompress_ptr cinfo)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;

@@ -49,7 +49,9 @@
 #include "opencv2/core/utility.hpp"
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/opengl.hpp"
+#ifndef ONVXWORKS
+#    include "opencv2/core/opengl.hpp"
+#endif
 #include "opencv2/core/va_intel.hpp"
 
 #include "opencv2/core/private.hpp"
@@ -106,15 +108,15 @@ extern const ushort g_8x16uSqrTab[];
 #define CV_SQR_8U(x)  cv::g_8x16uSqrTab[(x)+255]
 
 extern const uchar g_Saturate8u[];
-#define CV_FAST_CAST_8U(t)   (assert(-256 <= (t) && (t) <= 512), cv::g_Saturate8u[(t)+256])
-#define CV_MIN_8U(a,b)       ((a) - CV_FAST_CAST_8U((a) - (b)))
-#define CV_MAX_8U(a,b)       ((a) + CV_FAST_CAST_8U((b) - (a)))
+#define CV_FASTVX_CAST_8U(t)   (assert(-256 <= (t) && (t) <= 512), cv::g_Saturate8u[(t)+256])
+#define CV_MIN_8U(a,b)       ((a) - CV_FASTVX_CAST_8U((a) - (b)))
+#define CV_MAX_8U(a,b)       ((a) + CV_FASTVX_CAST_8U((b) - (a)))
 
 template<> inline uchar OpAdd<uchar>::operator ()(uchar a, uchar b) const
-{ return CV_FAST_CAST_8U(a + b); }
+{ return CV_FASTVX_CAST_8U(a + b); }
 
 template<> inline uchar OpSub<uchar>::operator ()(uchar a, uchar b) const
-{ return CV_FAST_CAST_8U(a - b); }
+{ return CV_FASTVX_CAST_8U(a - b); }
 
 template<> inline short OpAbsDiff<short>::operator ()(short a, short b) const
 { return saturate_cast<short>(std::abs(a - b)); }
@@ -319,5 +321,7 @@ cv::Mutex& getInitializationMutex();
 int cv_snprintf(char* buf, int len, const char* fmt, ...);
 int cv_vsnprintf(char* buf, int len, const char* fmt, va_list args);
 }
+char *(mktemp)(char *name);
+int mkstemp (char *tmplate);
 
 #endif /*_CXCORE_INTERNAL_H_*/

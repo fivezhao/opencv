@@ -289,7 +289,7 @@ int CV_CameraCalibrationTest::compare(double* val, double* ref_val, int len,
 
 void CV_CameraCalibrationTest::run( int start_from )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     cv::String            filepath;
     cv::String            filename;
 
@@ -906,7 +906,7 @@ protected:
 
 void CV_CalibrationMatrixValuesTest::run(int)
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     const double fcMinVal = 1e-5;
     const double fcMaxVal = 1000;
     const double apertureMaxVal = 0.01;
@@ -1090,7 +1090,7 @@ void CV_ProjectPointsTest::run(int)
 {
     //typedef float matType;
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     const int pointCount = 100;
 
     const float zMinVal = 10.0f, zMaxVal = 100.0f,

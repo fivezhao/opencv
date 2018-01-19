@@ -537,7 +537,7 @@ void CV_QueryHistTest::run_func(void)
 
 int CV_QueryHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int i, j, iters = values->cols;
 
     for( i = 0; i < iters; i++ )
@@ -644,7 +644,7 @@ void CV_MinMaxHistTest::run_func(void)
 
 int CV_MinMaxHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     if( cvIsNaN(min_val) || cvIsInf(min_val) ||
         cvIsNaN(max_val) || cvIsInf(max_val) )
@@ -741,7 +741,7 @@ void CV_NormHistTest::run_func(void)
 
 int CV_NormHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     double sum = 0;
 
     if( hist_type == CV_HIST_ARRAY )
@@ -886,7 +886,7 @@ void CV_ThreshHistTest::run_func(void)
 
 int CV_ThreshHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int i;
     float* ptr0 = values->data.fl;
     float* ptr = 0;
@@ -994,7 +994,7 @@ void CV_CompareHistTest::run_func(void)
 
 int CV_CompareHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int i;
     double result0[MAX_METHOD+1];
     double s0 = 0, s1 = 0, sq0 = 0, sq1 = 0, t;
@@ -1305,7 +1305,7 @@ cvTsCalcHist( IplImage** _images, CvHistogram* hist, IplImage* _mask, int* chann
 
 int CV_CalcHistTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     double diff;
     cvTsCalcHist( images, hist[1], images[CV_MAX_DIM], channels );
     diff = cvCompareHist( hist[0], hist[1], CV_COMP_CHISQR );
@@ -1531,7 +1531,7 @@ cvTsCalcBackProject( IplImage** images, IplImage* dst, CvHistogram* hist, int* c
 
 int CV_CalcBackProjectTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     cvTsCalcBackProject( images, images[CV_MAX_DIM+2], hist[0], channels );
     Mat a = cvarrToMat(images[CV_MAX_DIM+1]), b = cvarrToMat(images[CV_MAX_DIM+2]);
@@ -1723,7 +1723,7 @@ cvTsCalcBackProjectPatch( IplImage** images, IplImage* dst, CvSize patch_size,
 
 int CV_CalcBackProjectPatchTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     double err_level = 5e-3;
 
     cvTsCalcBackProjectPatch( images, images[CV_MAX_DIM+1],
@@ -1798,7 +1798,7 @@ void CV_BayesianProbTest::run_func(void)
 
 int CV_BayesianProbTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     int i, j, n = hist_count/2;
     double s[CV_MAX_DIM];
     const double err_level = 1e-5;

@@ -41,6 +41,11 @@
    typedef unsigned uint;
 #endif
 
+#ifdef ONVXWORKS
+#   include <stdint.h>
+    typedef uint32_t uint;
+#endif
+
 typedef signed char schar;
 
 #ifndef __IPL_H__

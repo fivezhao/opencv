@@ -346,11 +346,11 @@ protected:
 class CV_EXPORTS KernelArg
 {
 public:
-    enum { LOCAL=1, READ_ONLY=2, WRITE_ONLY=4, READ_WRITE=6, CONSTANT=8, PTR_ONLY = 16, NO_SIZE=256 };
+    enum { LOCALVX=1, READ_ONLY=2, WRITE_ONLY=4, READ_WRITE=6, CONSTANT=8, PTR_ONLY = 16, NO_SIZE=256 };
     KernelArg(int _flags, UMat* _m, int wscale=1, int iwscale=1, const void* _obj=0, size_t _sz=0);
     KernelArg();
 
-    static KernelArg Local() { return KernelArg(LOCAL, 0); }
+    static KernelArg Local() { return KernelArg(LOCALVX, 0); }
     static KernelArg PtrWriteOnly(const UMat& m)
     { return KernelArg(PTR_ONLY+WRITE_ONLY, (UMat*)&m); }
     static KernelArg PtrReadOnly(const UMat& m)

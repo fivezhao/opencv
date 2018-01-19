@@ -52,10 +52,10 @@ CV_AMLTest::CV_AMLTest( const char* _modelName ) : CV_MLBaseTest( _modelName )
 int CV_AMLTest::run_test_case( int testCaseIdx )
 {
     CV_TRACE_FUNCTION();
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     code = prepare_test_case( testCaseIdx );
 
-    if (code == cvtest::TS::OK)
+    if (code == cvtest::TS::OKVX)
     {
         //#define GET_STAT
 #ifdef GET_STAT
@@ -122,7 +122,7 @@ int CV_AMLTest::validate_test_results( int testCaseIdx )
         ts->printf( cvtest::TS::LOG, "validation info is not suitable" );
         return cvtest::TS::FAIL_INVALID_TEST_DATA;
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 TEST(ML_DTree, regression) { CV_AMLTest test( CV_DTREE ); test.safe_run(); }

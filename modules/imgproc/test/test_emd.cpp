@@ -61,7 +61,7 @@ CV_EMDTest::CV_EMDTest()
 
 void CV_EMDTest::run( int )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     const double success_error_level = 1e-6;
     #define M 10000
     double emd0 = 2460./210;

@@ -52,7 +52,9 @@
 #include "opencv2/video.hpp"
 #include "opencv2/features2d.hpp"
 #include "opencv2/calib3d.hpp"
-
+#ifdef ONVXWORKS
+#include "sysLib.h"
+#endif
 #include "opencv2/core/private.hpp"
 
 // some aux. functions

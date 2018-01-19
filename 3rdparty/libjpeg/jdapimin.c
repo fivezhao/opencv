@@ -111,7 +111,7 @@ jpeg_abort_decompress (j_decompress_ptr cinfo)
  * Set default decompression parameters.
  */
 
-LOCAL(void)
+LOCALVX(void)
 default_decompress_parms (j_decompress_ptr cinfo)
 {
   /* Guess the input colorspace, and set output colorspace accordingly. */

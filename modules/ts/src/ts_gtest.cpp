@@ -114,6 +114,27 @@
 #ifndef GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 #define GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 
+#ifdef ONVXWORKS
+#include <fcntl.h>
+namespace cv {
+static unsigned int seed = 0;
+char *(mktemp)(char *name)
+{	/* make unique file name */
+    char *p = name + strlen(name);
+    int i = 6;
+    unsigned int val = seed++;
+
+    for (; 0 <= --i && name <= --p && *p == 'X'; val >>= 3)
+        *p = (char)('0' + (val & 0x7));	/* insert an octal digit */
+    return (name);
+}
+
+}
+int mkstemp (char *tmplate)
+{
+    return open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL);
+}
+#endif
 
 namespace testing {
 

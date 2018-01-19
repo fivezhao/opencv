@@ -1004,7 +1004,11 @@ LDA::~LDA() {}
 
 void LDA::save(const String& filename) const
 {
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::WRITE);
+#else
+    FileStorage fs(filename, FileStorage::CVWRITE);
+#endif
     if (!fs.isOpened()) {
         CV_Error(Error::StsError, "File can't be opened for writing!");
     }
@@ -1014,7 +1018,11 @@ void LDA::save(const String& filename) const
 
 // Deserializes this object from a given filename.
 void LDA::load(const String& filename) {
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::READ);
+#else
+    FileStorage fs(filename, FileStorage::CVREAD);
+#endif
     if (!fs.isOpened())
        CV_Error(Error::StsError, "File can't be opened for reading!");
     this->load(fs);

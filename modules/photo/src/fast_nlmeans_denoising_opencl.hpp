@@ -6,8 +6,8 @@
 // Third party copyrights are property of their respective owners.
 
 #include "precomp.hpp"
-#ifndef __OPENCV_FAST_NLMEANS_DENOISING_OPENCL_HPP__
-#define __OPENCV_FAST_NLMEANS_DENOISING_OPENCL_HPP__
+#ifndef __OPENCV_FASTVX_NLMEANS_DENOISING_OPENCL_HPP__
+#define __OPENCV_FASTVX_NLMEANS_DENOISING_OPENCL_HPP__
 
 #include "opencl_kernels_photo.hpp"
 
@@ -95,7 +95,7 @@ static bool ocl_fastNlMeansDenoising(InputArray _src, OutputArray _dst, const fl
     int almostTemplateWindowSizeSqBinShift = -1;
 
     char buf[4][40];
-    String opts = format("-D OP_CALC_FASTNLMEANS -D TEMPLATE_SIZE=%d -D SEARCH_SIZE=%d"
+    String opts = format("-D OP_CALC_FASTVXNLMEANS -D TEMPLATE_SIZE=%d -D SEARCH_SIZE=%d"
                          " -D pixel_t=%s -D int_t=%s -D wlut_t=%s"
                          " -D weight_t=%s -D convert_weight_t=%s -D sum_t=%s -D convert_sum_t=%s"
                          " -D BLOCK_COLS=%d -D BLOCK_ROWS=%d"

@@ -3,7 +3,7 @@
 // of this distribution and at http://opencv.org/license.html.
 //
 // Copyright (C) 2014, Itseez, Inc, all rights reserved.
-
+#ifndef ONVXWORKS
 #include "../perf_precomp.hpp"
 #include "opencv2/ts/ocl_perf.hpp"
 
@@ -149,3 +149,4 @@ OCL_PERF_TEST_P(stitch, boat, TEST_DETECTORS)
 } } // namespace cvtest::ocl
 
 #endif // HAVE_OPENCL
+#endif

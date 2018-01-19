@@ -156,13 +156,13 @@ typedef unsigned int UINT16;
 typedef short INT16;
 #endif
 
-/* INT32 must hold at least signed 32-bit values. */
+/* CVINT32 must hold at least signed 32-bit values. */
 
-#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
+#ifndef XMD_H			/* X11/xmd.h correctly defines CVINT32 */
 #ifndef _BASETSD_H_		/* Microsoft defines it in basetsd.h */
 #ifndef _BASETSD_H		/* MinGW is slightly different */
 #ifndef QGLOBAL_H		/* Qt defines it in qglobal.h */
-typedef long INT32;
+typedef long CVINT32;
 #endif
 #endif
 #endif
@@ -190,7 +190,7 @@ typedef unsigned int JDIMENSION;
 /* a function called through method pointers: */
 #define METHODDEF(type)		static type
 /* a function used only in its module: */
-#define LOCAL(type)		static type
+#define LOCALVX(type)		static type
 /* a function referenced thru EXTERNs: */
 #define GLOBAL(type)		type
 /* a reference to a GLOBAL function: */
@@ -289,7 +289,7 @@ typedef enum { FALSE = 0, TRUE = 1 } boolean;
 /* Capability options common to encoder and decoder: */
 
 #define DCT_ISLOW_SUPPORTED	/* slow but accurate integer algorithm */
-#define DCT_IFAST_SUPPORTED	/* faster, less accurate integer method */
+#define DCT_IFASTVX_SUPPORTED	/* faster, less accurate integer method */
 #define DCT_FLOAT_SUPPORTED	/* floating-point: accurate, fast on fast HW */
 
 /* Encoder capability options: */
@@ -371,7 +371,7 @@ typedef enum { FALSE = 0, TRUE = 1 } boolean;
 #endif
 
 
-/* FAST_FLOAT should be either float or double, whichever is done faster
+/* FASTVX_FLOAT should be either float or double, whichever is done faster
  * by your compiler.  (Note that this type is only used in the floating point
  * DCT routines, so it only matters if you've defined DCT_FLOAT_SUPPORTED.)
  * Typically, float is faster in ANSI C compilers, while double is faster in
@@ -379,11 +379,11 @@ typedef enum { FALSE = 0, TRUE = 1 } boolean;
  * The code below therefore chooses float if we have ANSI-style prototypes.
  */
 
-#ifndef FAST_FLOAT
+#ifndef FASTVX_FLOAT
 #ifdef HAVE_PROTOTYPES
-#define FAST_FLOAT  float
+#define FASTVX_FLOAT  float
 #else
-#define FAST_FLOAT  double
+#define FASTVX_FLOAT  double
 #endif
 #endif
 

@@ -79,6 +79,31 @@ static void setCurrentThreadAffinityMask(int mask)
 
 static double perf_stability_criteria = 0.03; // 3%
 
+
+#ifdef ONVXWORKS
+static int usleep 
+        (
+        unsigned long useconds
+        )
+{
+
+#if 0 /* is not diab compatible */
+        struct timespec ts = { .tv_sec = (long int) (useconds / 1000000),
+        .tv_nsec = (long int) (useconds % 1000000) * 1000ul };
+#endif
+        struct timespec ts;
+        ts.tv_sec = (long int) (useconds / 1000000);
+        ts.tv_nsec = (long int) (useconds % 1000000) * 1000ul;
+        /* 
+         * Note the usleep() is a cancellation point. But since we call
+         * nanosleep() which itself is a cancellation point we do not have
+         * to do anything here. 
+         */
+
+        return nanosleep (&ts, NULL);
+}
+#endif
+
 namespace {
 
 class PerfEnvironment: public ::testing::Environment
@@ -225,7 +250,11 @@ void Regression::init(const std::string& testSuitName, const std::string& ext)
 
     try
     {
+#ifndef ONVXWORKS
         if (storageIn.open(storageInPath, cv::FileStorage::READ))
+#else
+        if (storageIn.open(storageInPath, cv::FileStorage::CVREAD))
+#endif
         {
             rootIn = storageIn.root();
             if (storageInPath.length() > 3 && storageInPath.substr(storageInPath.length()-3) == ".gz")
@@ -262,15 +291,25 @@ cv::FileStorage& Regression::write()
 {
     if (!storageOut.isOpened() && !storageOutPath.empty())
     {
+#ifndef ONVXWORKS
         int mode = (storageIn.isOpened() && storageInPath == storageOutPath)
-                ? cv::FileStorage::APPEND : cv::FileStorage::WRITE;
+                ? cv::FileStorage::CVAPPEND : cv::FileStorage::WRITE;
+#else
+        int mode = (storageIn.isOpened() && storageInPath == storageOutPath)
+                ? cv::FileStorage::CVAPPEND : cv::FileStorage::CVWRITE;
+
+#endif
         storageOut.open(storageOutPath, mode);
         if (!storageOut.isOpened())
         {
             LOGE("Could not open \"%s\" file for writing", storageOutPath.c_str());
             storageOutPath.clear();
         }
+#ifndef ONVXWORKS
         else if (mode == cv::FileStorage::WRITE && !rootIn.empty())
+#else
+        else if (mode == cv::FileStorage::CVWRITE && !rootIn.empty())
+#endif
         {
             //TODO: write content of rootIn node into the storageOut
         }
@@ -1261,7 +1300,7 @@ void TestBase::declareArray(SizeVector& sizes, cv::InputOutputArray a, WarmUpTyp
         sizes.push_back(std::pair<int, cv::Size>(getSizeInBytes(a), getSize(a)));
         warmup(a, wtype);
     }
-    else if (a.kind() != cv::_InputArray::NONE)
+    else if (a.kind() != cv::_InputArray::NONEVX)
         ADD_FAILURE() << "  Uninitialized input/output parameters are not allowed for performance tests";
 }
 

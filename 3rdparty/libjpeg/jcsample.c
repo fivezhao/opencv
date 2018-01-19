@@ -92,7 +92,7 @@ start_pass_downsample (j_compress_ptr cinfo)
  * by duplicating the rightmost samples.
  */
 
-LOCAL(void)
+LOCALVX(void)
 expand_right_edge (JSAMPARRAY image_data, int num_rows,
                    JDIMENSION input_cols, JDIMENSION output_cols)
 {
@@ -155,7 +155,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   JDIMENSION outcol, outcol_h;	/* outcol_h == outcol*h_expand */
   JDIMENSION output_cols = compptr->width_in_blocks * compptr->DCT_h_scaled_size;
   JSAMPROW inptr, outptr;
-  INT32 outvalue;
+  CVINT32 outvalue;
 
   h_expand = downsample->h_expand[compptr->component_index];
   v_expand = downsample->v_expand[compptr->component_index];
@@ -178,7 +178,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
       for (v = 0; v < v_expand; v++) {
         inptr = input_data[inrow+v] + outcol_h;
         for (h = 0; h < h_expand; h++) {
-          outvalue += (INT32) GETJSAMPLE(*inptr++);
+          outvalue += (CVINT32) GETJSAMPLE(*inptr++);
         }
       }
       *outptr++ = (JSAMPLE) ((outvalue + numpix2) / numpix);
@@ -309,7 +309,7 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   JDIMENSION colctr;
   JDIMENSION output_cols = compptr->width_in_blocks * compptr->DCT_h_scaled_size;
   register JSAMPROW inptr0, inptr1, above_ptr, below_ptr, outptr;
-  INT32 membersum, neighsum, memberscale, neighscale;
+  CVINT32 membersum, neighsum, memberscale, neighscale;
 
   /* Expand input data enough to let all the output samples be generated
    * by the standard loop.  Special-casing padded output would be more
@@ -410,7 +410,7 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
   JDIMENSION colctr;
   JDIMENSION output_cols = compptr->width_in_blocks * compptr->DCT_h_scaled_size;
   register JSAMPROW inptr, above_ptr, below_ptr, outptr;
-  INT32 membersum, neighsum, memberscale, neighscale;
+  CVINT32 membersum, neighsum, memberscale, neighscale;
   int colsum, lastcolsum, nextcolsum;
 
   /* Expand input data enough to let all the output samples be generated

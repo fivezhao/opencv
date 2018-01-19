@@ -3290,7 +3290,7 @@ static double dotProd_16u(const ushort* src1, const ushort* src2, int len)
 {
 #if ARITHM_USE_IPP
     double r = 0;
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippiDotProd_16u64f_C1R, src1, len*sizeof(ushort), src2, len*sizeof(ushort), ippiSize(len, 1), &r) >= 0, r);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippiDotProd_16u64f_C1R, src1, len*sizeof(ushort), src2, len*sizeof(ushort), ippiSize(len, 1), &r) >= 0, r);
 #endif
     return dotProd_(src1, src2, len);
 }
@@ -3299,7 +3299,7 @@ static double dotProd_16s(const short* src1, const short* src2, int len)
 {
 #if ARITHM_USE_IPP && (IPP_VERSION_X100 != 900) // bug in IPP 9.0.0
     double r = 0;
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippiDotProd_16s64f_C1R, src1, len*sizeof(short), src2, len*sizeof(short), ippiSize(len, 1), &r) >= 0, r);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippiDotProd_16s64f_C1R, src1, len*sizeof(short), src2, len*sizeof(short), ippiSize(len, 1), &r) >= 0, r);
 #endif
     return dotProd_(src1, src2, len);
 }
@@ -3308,7 +3308,7 @@ static double dotProd_32s(const int* src1, const int* src2, int len)
 {
 #if ARITHM_USE_IPP
     double r = 0;
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippiDotProd_32s64f_C1R, src1, len*sizeof(int), src2, len*sizeof(int), ippiSize(len, 1), &r) >= 0, r);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippiDotProd_32s64f_C1R, src1, len*sizeof(int), src2, len*sizeof(int), ippiSize(len, 1), &r) >= 0, r);
 #endif
     return dotProd_(src1, src2, len);
 }
@@ -3318,7 +3318,7 @@ static double dotProd_32f(const float* src1, const float* src2, int len)
     double r = 0.0;
 
 #if ARITHM_USE_IPP
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippiDotProd_32f64f_C1R, src1, len*sizeof(float), src2, len*sizeof(float), ippiSize(len, 1), &r, ippAlgHintFast) >= 0, r);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippiDotProd_32f64f_C1R, src1, len*sizeof(float), src2, len*sizeof(float), ippiSize(len, 1), &r, ippAlgHintFast) >= 0, r);
 #endif
     int i = 0;
 
@@ -3351,7 +3351,7 @@ static double dotProd_64f(const double* src1, const double* src2, int len)
 {
 #if ARITHM_USE_IPP
     double r = 0;
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsDotProd_64f, src1, src2, len, &r) >= 0, r);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsDotProd_64f, src1, src2, len, &r) >= 0, r);
 #endif
 
     return dotProd_(src1, src2, len);

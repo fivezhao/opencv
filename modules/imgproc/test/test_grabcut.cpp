@@ -134,7 +134,7 @@ void CV_GrabcutTest::run( int /* start_from */)
         ts->set_failed_test_info(cvtest::TS::FAIL_MISMATCH);
         return;
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Imgproc_GrabCut, regression) { CV_GrabcutTest test; test.safe_run(); }

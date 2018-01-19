@@ -59,7 +59,7 @@ CV_ChessboardDetectorTimingTest::CV_ChessboardDetectorTimingTest()
 /* ///////////////////// chess_corner_test ///////////////////////// */
 void CV_ChessboardDetectorTimingTest::run( int start_from )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     /* test parameters */
     std::string   filepath;

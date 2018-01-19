@@ -4821,7 +4821,7 @@ void filter2D(int stype, int dtype, int kernel_type,
     if (res)
         return;
 
-    CV_IPP_RUN_FAST(ippFilter2D(stype, dtype, kernel_type,
+    CV_IPP_RUN_FASTVX(ippFilter2D(stype, dtype, kernel_type,
                               src_data, src_step,
                               dst_data, dst_step,
                               width, height,

@@ -1,5 +1,5 @@
 // highgui to XAML bridge for OpenCV
-
+#ifndef ONVXWORKS
 // Copyright (c) Microsoft Open Technologies, Inc.
 // All rights reserved.
 //
@@ -282,3 +282,4 @@ CV_IMPL int cvStartWindowThread() {
     CV_WINRT_NO_GUI_ERROR("cvStartWindowThread");
     return CV_StsNotImplemented;
 }
+#endif

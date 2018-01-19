@@ -287,7 +287,7 @@ void CV_FindContourTest::run_func()
 // the whole testing is done here, run_func() is not utilized in this test
 int CV_FindContourTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     cvCmpS( img[0], 0, img[0], CV_CMP_GT );
 

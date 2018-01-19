@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "test_precomp.hpp"
 #include <opencv2/ts/cuda_test.hpp>
 #include "opencv2/calib3d.hpp"
@@ -698,3 +698,4 @@ TEST_F(cameraCalibrationTiltTest, calibrateCamera)
         pixelNoiseHalfWidth *= .25;
     }
 }
+#endif

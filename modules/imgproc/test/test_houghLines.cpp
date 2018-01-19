@@ -166,16 +166,28 @@ void BaseHoughLineTest::run_test(int type)
                                     threshold, minLineLength, maxGap);
     test_case_name = getTestCaseName(test_case_name);
 
+#ifndef ONVXWORKS
     FileStorage fs(xml, FileStorage::READ);
+#else
+    FileStorage fs(xml, FileStorage::CVREAD);
+#endif
     FileNode node = fs[test_case_name];
     if (node.empty())
     {
         fs.release();
+#ifndef ONVXWORKS
         fs.open(xml, FileStorage::APPEND);
+#else
+        fs.open(xml, FileStorage::CVAPPEND);
+#endif
         EXPECT_TRUE(fs.isOpened()) << "Cannot open sanity data file: " << xml;
         fs << test_case_name << lines;
         fs.release();
+#ifndef ONVXWORKS
         fs.open(xml, FileStorage::READ);
+#else
+        fs.open(xml, FileStorage::CVREAD);
+#endif
         EXPECT_TRUE(fs.isOpened()) << "Cannot open sanity data file: " << xml;
     }
 

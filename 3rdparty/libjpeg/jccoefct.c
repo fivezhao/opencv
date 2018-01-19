@@ -69,7 +69,7 @@ METHODDEF(boolean) compress_output
 #endif
 
 
-LOCAL(void)
+LOCALVX(void)
 start_iMCU_row (j_compress_ptr cinfo)
 /* Reset within-iMCU-row counters for a new row */
 {

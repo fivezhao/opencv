@@ -136,7 +136,12 @@ TEST(Core_String, find_last_of__with__empty_string)
     cv::String s;
     size_t p = s.find_last_of("q", 0);
     // npos is not exported: EXPECT_EQ(cv::String::npos, p);
+#ifndef ONVXWORKS
     EXPECT_EQ(std::string::npos, p);
+#else
+    size_t cvsize = std::string::npos;
+    EXPECT_EQ(cvsize, p);
+#endif
 }
 
 TEST(Core_String, end_method_regression)

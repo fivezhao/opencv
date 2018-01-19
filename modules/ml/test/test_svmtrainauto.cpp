@@ -127,7 +127,7 @@ protected:
 };
 void CV_SVMGetSupportVectorsTest::run(int /*startFrom*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     // Set up training data
     int labels[4] = {1, -1, -1, -1};

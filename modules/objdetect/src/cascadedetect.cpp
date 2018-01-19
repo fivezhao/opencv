@@ -908,8 +908,11 @@ bool CascadeClassifierImpl::load(const String& filename)
     oldCascade.release();
     data = Data();
     featureEvaluator.release();
-
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::READ);
+#else
+    FileStorage fs(filename, FileStorage::CVREAD);
+#endif
     if( !fs.isOpened() )
         return false;
 

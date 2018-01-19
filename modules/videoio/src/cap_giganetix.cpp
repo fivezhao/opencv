@@ -43,7 +43,7 @@
 // The code has been contributed by Vladimir N. Litvinenko on 2012 Jul
 // mailto:vladimir.litvinenko@codepaint.ru
 //
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 #include <GigEVisionSDK.h>
 #include <GigEVisionSDK.cpp>
@@ -760,5 +760,5 @@ cvCreateCameraCapture_Giganetix( int index )
 
     return ((CvCapture*)capture);
 }
-
+#endif
 /*----------------------------------------------------------------------------*/

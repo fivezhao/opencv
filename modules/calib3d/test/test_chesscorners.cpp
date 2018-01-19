@@ -140,7 +140,7 @@ const double precise_success_error_level = 2;
 /* ///////////////////// chess_corner_test ///////////////////////// */
 void CV_ChessboardDetectorTest::run( int /*start_from */)
 {
-    ts->set_failed_test_info( cvtest::TS::OK );
+    ts->set_failed_test_info( cvtest::TS::OKVX);
 
     /*if (!checkByGenerator())
         return;*/
@@ -148,19 +148,19 @@ void CV_ChessboardDetectorTest::run( int /*start_from */)
     {
         case CHESSBOARD:
             checkByGenerator();
-            if (ts->get_err_code() != cvtest::TS::OK)
+            if (ts->get_err_code() != cvtest::TS::OKVX)
             {
                 break;
             }
 
             run_batch("negative_list.dat");
-            if (ts->get_err_code() != cvtest::TS::OK)
+            if (ts->get_err_code() != cvtest::TS::OKVX)
             {
                 break;
             }
 
             run_batch("chessboard_list.dat");
-            if (ts->get_err_code() != cvtest::TS::OK)
+            if (ts->get_err_code() != cvtest::TS::OKVX)
             {
                 break;
             }
@@ -197,7 +197,11 @@ void CV_ChessboardDetectorTest::run_batch( const string& filename )
             break;
     }
 
+#ifndef ONVXWORKS
     FileStorage fs( folder + filename, FileStorage::READ );
+#else
+    FileStorage fs( folder + filename, FileStorage::CVREAD );
+#endif
     FileNode board_list = fs["boards"];
 
     if( !fs.isOpened() || board_list.empty() || !board_list.isSeq() || board_list.size() % 2 != 0 )
@@ -233,7 +237,11 @@ void CV_ChessboardDetectorTest::run_batch( const string& filename )
         bool doesContatinChessboard;
         Mat expected;
         {
+#ifndef ONVXWORKS
             FileStorage fs1(_filename, FileStorage::READ);
+#else
+            FileStorage fs1(_filename, FileStorage::CVREAD);
+#endif
             fs1["corners"] >> expected;
             fs1["isFound"] >> doesContatinChessboard;
             fs1.release();

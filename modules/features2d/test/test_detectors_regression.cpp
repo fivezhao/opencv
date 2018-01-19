@@ -185,8 +185,11 @@ void CV_FeatureDetectorTest::regressionTest()
         return;
     }
 
+#ifndef ONVXWORKS
     FileStorage fs( resFilename, FileStorage::READ );
-
+#else
+    FileStorage fs( resFilename, FileStorage::CVREAD );
+#endif
     // Compute keypoints.
     vector<KeyPoint> calcKeypoints;
     fdetector->detect( image, calcKeypoints );
@@ -209,7 +212,11 @@ void CV_FeatureDetectorTest::regressionTest()
     }
     else // Write detector parameters and computed keypoints as validation data.
     {
+#ifndef ONVXWORKS
         fs.open( resFilename, FileStorage::WRITE );
+#else
+        fs.open( resFilename, FileStorage::CVWRITE );
+#endif
         if( !fs.isOpened() )
         {
             ts->printf( cvtest::TS::LOG, "File %s can not be opened to write.\n", resFilename.c_str() );
@@ -239,7 +246,7 @@ void CV_FeatureDetectorTest::run( int /*start_from*/ )
     emptyDataTest();
     regressionTest();
 
-    ts->set_failed_test_info( cvtest::TS::OK );
+    ts->set_failed_test_info( cvtest::TS::OKVX);
 }
 
 /****************************************************************************************\
@@ -252,7 +259,7 @@ TEST( Features2d_Detector_BRISK, regression )
     test.safe_run();
 }
 
-TEST( Features2d_Detector_FAST, regression )
+TEST( Features2d_Detector_FASTVX, regression )
 {
     CV_FeatureDetectorTest test( "detector-fast", FastFeatureDetector::create() );
     test.safe_run();

@@ -165,7 +165,7 @@ jpeg_set_quality (j_compress_ptr cinfo, int quality, boolean force_baseline)
  * Huffman table setup routines
  */
 
-LOCAL(void)
+LOCALVX(void)
 add_huff_table (j_compress_ptr cinfo,
                 JHUFF_TBL **htblptr, const UINT8 *bits, const UINT8 *val)
 /* Define a Huffman table */
@@ -195,7 +195,7 @@ add_huff_table (j_compress_ptr cinfo,
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 std_huff_tables (j_compress_ptr cinfo)
 /* Set up the standard Huffman tables (cf. JPEG standard section K.3) */
 /* IMPORTANT: these are only valid for 8-bit data precision! */
@@ -498,7 +498,7 @@ jpeg_set_colorspace (j_compress_ptr cinfo, J_COLOR_SPACE colorspace)
 
 #ifdef C_PROGRESSIVE_SUPPORTED
 
-LOCAL(jpeg_scan_info *)
+LOCALVX(jpeg_scan_info *)
 fill_a_scan (jpeg_scan_info * scanptr, int ci,
              int Ss, int Se, int Ah, int Al)
 /* Support routine: generate one scan for specified component */
@@ -513,7 +513,7 @@ fill_a_scan (jpeg_scan_info * scanptr, int ci,
   return scanptr;
 }
 
-LOCAL(jpeg_scan_info *)
+LOCALVX(jpeg_scan_info *)
 fill_scans (jpeg_scan_info * scanptr, int ncomps,
             int Ss, int Se, int Ah, int Al)
 /* Support routine: generate one scan for each component */
@@ -532,7 +532,7 @@ fill_scans (jpeg_scan_info * scanptr, int ncomps,
   return scanptr;
 }
 
-LOCAL(jpeg_scan_info *)
+LOCALVX(jpeg_scan_info *)
 fill_dc_scans (jpeg_scan_info * scanptr, int ncomps, int Ah, int Al)
 /* Support routine: generate interleaved DC scan if possible, else N scans */
 {

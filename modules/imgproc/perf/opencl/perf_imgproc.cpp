@@ -47,6 +47,8 @@
 #include "../perf_precomp.hpp"
 #include "opencv2/ts/ocl_perf.hpp"
 
+#ifdef INCLUDE_OPENCL
+
 namespace cvtest {
 namespace ocl {
 
@@ -324,3 +326,4 @@ OCL_PERF_TEST_P(CannyFixture, Canny, ::testing::Combine(OCL_TEST_SIZES, OCL_PERF
 }
 
 } } // namespace cvtest::ocl
+#endif

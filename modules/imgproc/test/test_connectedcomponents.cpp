@@ -134,7 +134,7 @@ void CV_ConnectedComponentsTest::run( int /* start_from */)
 
     }
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Imgproc_ConnectedComponents, regression) { CV_ConnectedComponentsTest test; test.safe_run(); }

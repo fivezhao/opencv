@@ -673,18 +673,22 @@ void dumpOpenCLDevice();
     return RUN_ALL_TESTS();
 
 // impls must be an array, not a pointer; "plain" should always be one of the implementations
+#ifndef ONVXWORKS
 #define CV_PERF_TEST_MAIN_WITH_IMPLS(modulename, impls, ...) \
 int main(int argc, char **argv)\
 {\
     CV_PERF_TEST_MAIN_INTERNALS(modulename, impls, __VA_ARGS__)\
 }
-
-#define CV_PERF_TEST_MAIN(modulename, ...) \
-int main(int argc, char **argv)\
-{\
-    const char * plain_only[] = { "plain" };\
-    CV_PERF_TEST_MAIN_INTERNALS(modulename, plain_only, __VA_ARGS__)\
-}
+#   define CV_PERF_TEST_MAIN(modulename, ...) \
+        int main(int argc, char **argv)\
+        {\
+             const char * plain_only[] = { "plain" };\
+             CV_PERF_TEST_MAIN_INTERNALS(modulename, plain_only, __VA_ARGS__)\
+        }
+#else
+#   define CV_PERF_TEST_MAIN(modulename, ...) 
+#   define CV_PERF_TEST_MAIN_WITH_IMPLS(modulename, impls, ...) 
+#endif
 
 //! deprecated
 #define TEST_CYCLE_N(n) for(declare.iterations(n); next() && startTimer(); stopTimer())

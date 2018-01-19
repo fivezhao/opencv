@@ -371,7 +371,7 @@ public:
     enum FailureCode
     {
         // everything is Ok
-        OK=0,
+        OKVX=0,
 
         // generic error: stub value to be used
         // temporarily if the error's cause is unknown
@@ -629,6 +629,7 @@ void parseCustomOptions(int argc, char **argv);
 
 #define CV_TEST_INIT0_NOOP (void)0
 
+#ifndef ONVXWORKS
 #define CV_TEST_MAIN(resourcesubdir, ...) CV_TEST_MAIN_EX(resourcesubdir, NOOP, __VA_ARGS__)
 
 #define CV_TEST_MAIN_EX(resourcesubdir, INIT0, ...) \
@@ -648,7 +649,9 @@ int main(int argc, char **argv) \
     } \
     return RUN_ALL_TESTS(); \
 }
-
+#else
+#define CV_TEST_MAIN(resourcesubdir, ...)
+#endif
 // This usually only makes sense in perf tests with several implementations,
 // some of which are not available.
 #define CV_TEST_FAIL_NO_IMPL() do { \

@@ -47,7 +47,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "../test_precomp.hpp"
 #include "cvconfig.h"
 #include "opencv2/ts/ocl_test.hpp"
@@ -211,3 +211,4 @@ OCL_INSTANTIATE_TEST_CASE_P(Matcher, BruteForceMatcher, Combine( Values((int)NOR
 }//cvtest
 
 #endif //HAVE_OPENCL
+#endif

@@ -268,7 +268,7 @@ void CV_CamShiftTest::run_func(void)
 
 int CV_CamShiftTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     double m = MAX(box0.size.width, box0.size.height), delta;
     double diff_angle;
@@ -435,7 +435,7 @@ void CV_MeanShiftTest::run_func(void)
 
 int CV_MeanShiftTest::validate_test_results( int /*test_case_idx*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     CvPoint2D32f c;
     double m = MAX(box0.size.width, box0.size.height), delta;
 

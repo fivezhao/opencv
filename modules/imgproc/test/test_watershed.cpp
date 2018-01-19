@@ -63,8 +63,11 @@ void CV_WatershedTest::run( int /* start_from */)
     string exp_path = string(ts->get_data_path()) + "watershed/wshed_exp.png";
     Mat exp = imread(exp_path, 0);
     Mat orig = imread(string(ts->get_data_path()) + "inpaint/orig.png");
+#ifndef ONVXWORKS
     FileStorage fs(string(ts->get_data_path()) + "watershed/comp.xml", FileStorage::READ);
-
+#else
+    FileStorage fs(string(ts->get_data_path()) + "watershed/comp.xml", FileStorage::CVREAD);
+#endif
     if (orig.empty() || !fs.isOpened())
     {
         ts->set_failed_test_info( cvtest::TS::FAIL_INVALID_TEST_DATA );
@@ -126,7 +129,7 @@ void CV_WatershedTest::run( int /* start_from */)
         ts->set_failed_test_info( cvtest::TS::FAIL_MISMATCH );
         return;
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Imgproc_Watershed, regression) { CV_WatershedTest test; test.safe_run(); }

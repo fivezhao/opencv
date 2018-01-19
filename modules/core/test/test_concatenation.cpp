@@ -121,14 +121,14 @@ int Core_ConcatenationTest::validate_test_results( int )
 
     if (areEqual(expected, result))
     {
-        return cvtest::TS::OK;
+        return cvtest::TS::OKVX;
     } else
     {
         ts->printf( cvtest::TS::LOG, "Concatenation failed");
         ts->set_failed_test_info( cvtest::TS::FAIL_MISMATCH );
     }
 
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 bool Core_ConcatenationTest::areEqual(const Mat &m1, const Mat &m2)

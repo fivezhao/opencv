@@ -244,7 +244,7 @@ enum { SOLVEPNP_ITERATIVE = 0,
 enum { CALIB_CB_ADAPTIVE_THRESH = 1,
        CALIB_CB_NORMALIZE_IMAGE = 2,
        CALIB_CB_FILTER_QUADS    = 4,
-       CALIB_CB_FAST_CHECK      = 8
+       CALIB_CB_FASTVX_CHECK      = 8
      };
 
 enum { CALIB_CB_SYMMETRIC_GRID  = 1,
@@ -702,7 +702,7 @@ and white, rather than a fixed threshold level (computed from the average image 
 applying fixed or adaptive thresholding.
 -   **CALIB_CB_FILTER_QUADS** Use additional criteria (like contour area, perimeter,
 square-like shape) to filter out false quads extracted at the contour retrieval stage.
--   **CALIB_CB_FAST_CHECK** Run a fast check on the image that looks for chessboard corners,
+-   **CALIB_CB_FASTVX_CHECK** Run a fast check on the image that looks for chessboard corners,
 and shortcut the call if none is found. This can drastically speed up the call in the
 degenerate condition when no chessboard is observed.
 
@@ -721,11 +721,11 @@ Sample usage of detecting and drawing chessboard corners: :
     Mat gray = ....; //source image
     vector<Point2f> corners; //this will be filled by the detected corners
 
-    //CALIB_CB_FAST_CHECK saves a lot of time on images
+    //CALIB_CB_FASTVX_CHECK saves a lot of time on images
     //that do not contain any chessboard corners
     bool patternfound = findChessboardCorners(gray, patternsize, corners,
             CALIB_CB_ADAPTIVE_THRESH + CALIB_CB_NORMALIZE_IMAGE
-            + CALIB_CB_FAST_CHECK);
+            + CALIB_CB_FASTVX_CHECK);
 
     if(patternfound)
       cornerSubPix(gray, corners, Size(11, 11), Size(-1, -1),

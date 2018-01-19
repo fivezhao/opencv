@@ -61,7 +61,7 @@ CV_POSITTest::CV_POSITTest()
 
 void CV_POSITTest::run( int start_from )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     /* fixed parameters output */
     /*float rot[3][3]={  0.49010f,  0.85057f, 0.19063f,

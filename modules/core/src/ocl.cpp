@@ -2030,7 +2030,7 @@ KernelArg::KernelArg()
 KernelArg::KernelArg(int _flags, UMat* _m, int _wscale, int _iwscale, const void* _obj, size_t _sz)
     : flags(_flags), m(_m), obj(_obj), sz(_sz), wscale(_wscale), iwscale(_iwscale)
 {
-    CV_Assert(_flags == LOCAL || _flags == CONSTANT || _m != NULL);
+    CV_Assert(_flags == LOCALVX || _flags == CONSTANT || _m != NULL);
 }
 
 KernelArg KernelArg::Constant(const Mat& m)
@@ -3436,7 +3436,7 @@ public:
             }
             else if (useSVM && (svmCaps.isSupportFineGrainBuffer() || svmCaps.isSupportCoarseGrainBuffer()))
             {
-                if (!(accessFlags & ACCESS_FAST)) // memcpy used
+                if (!(accessFlags & ACCESS_FASTVX)) // memcpy used
                 {
                     bool isFineGrainBuffer = svmCaps.isSupportFineGrainBuffer();
 
@@ -3483,7 +3483,7 @@ public:
                     handle = clCreateBuffer(ctx_handle, CL_MEM_USE_HOST_PTR|createFlags,
                                             u->size, u->origdata, &retval);
                 }
-                if((!handle || retval < 0) && !(accessFlags & ACCESS_FAST))
+                if((!handle || retval < 0) && !(accessFlags & ACCESS_FASTVX))
                 {
                     handle = clCreateBuffer(ctx_handle, CL_MEM_COPY_HOST_PTR|CL_MEM_READ_WRITE|createFlags,
                                                u->size, u->origdata, &retval);

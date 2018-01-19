@@ -102,7 +102,7 @@ start_pass_prep (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
  * by duplicating the bottom row.
  */
 
-LOCAL(void)
+LOCALVX(void)
 expand_bottom_edge (JSAMPARRAY image_data, JDIMENSION num_cols,
                     int input_rows, int output_rows)
 {
@@ -265,7 +265,7 @@ pre_process_context (j_compress_ptr cinfo,
  * Create the wrapped-around downsampling input buffer needed for context mode.
  */
 
-LOCAL(void)
+LOCALVX(void)
 create_context_buffer (j_compress_ptr cinfo)
 {
   my_prep_ptr prep = (my_prep_ptr) cinfo->prep;

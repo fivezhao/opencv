@@ -20,7 +20,7 @@
 
 
 /* Forward declarations */
-LOCAL(boolean) output_pass_setup JPP((j_decompress_ptr cinfo));
+LOCALVX(boolean) output_pass_setup JPP((j_decompress_ptr cinfo));
 
 
 /*
@@ -91,7 +91,7 @@ jpeg_start_decompress (j_decompress_ptr cinfo)
  *       If suspended, returns FALSE and sets global_state = DSTATE_PRESCAN.
  */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 output_pass_setup (j_decompress_ptr cinfo)
 {
   if (cinfo->global_state != DSTATE_PRESCAN) {

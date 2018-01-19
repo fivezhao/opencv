@@ -117,6 +117,7 @@ CvVideoWriter* cvCreateVideoWriter_VFW( const char* filename, int fourcc,
                                         double fps, CvSize frameSize, int is_color );
 CvCapture* cvCreateCameraCapture_DShow( int index );
 CvCapture* cvCreateCameraCapture_MSMF( int index );
+CvCapture* cvCreateCameraCapture_VX( int index );
 CvCapture* cvCreateFileCapture_MSMF (const char* filename);
 CvVideoWriter* cvCreateVideoWriter_MSMF( const char* filename, int fourcc,
                                         double fps, CvSize frameSize, int is_color );

@@ -57,7 +57,7 @@ CV_OptFlowPyrLKTest::CV_OptFlowPyrLKTest() {}
 
 void CV_OptFlowPyrLKTest::run( int )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     const double success_error_level = 0.3;
     const int bad_points_max = 8;

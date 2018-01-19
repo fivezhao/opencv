@@ -3133,7 +3133,11 @@ public:
      */
     template<typename _Tp> static Ptr<_Tp> load(const String& filename, const String& objname=String())
     {
+#ifndef ONVXWORKS
         FileStorage fs(filename, FileStorage::READ);
+#else
+        FileStorage fs(filename, FileStorage::CVREAD);
+#endif
         FileNode fn = objname.empty() ? fs.getFirstTopLevelNode() : fs[objname];
         if (fn.empty()) return Ptr<_Tp>();
         Ptr<_Tp> obj = _Tp::create();
@@ -3153,7 +3157,11 @@ public:
      */
     template<typename _Tp> static Ptr<_Tp> loadFromString(const String& strModel, const String& objname=String())
     {
+#ifndef ONVXWORKS
         FileStorage fs(strModel, FileStorage::READ + FileStorage::MEMORY);
+#else
+        FileStorage fs(strModel, FileStorage::CVREAD + FileStorage::CVMEMORY);
+#endif
         FileNode fn = objname.empty() ? fs.getFirstTopLevelNode() : fs[objname];
         Ptr<_Tp> obj = _Tp::create();
         obj->read(fn);

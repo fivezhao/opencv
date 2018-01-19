@@ -34,7 +34,7 @@ typedef struct {
 #ifdef DCT_FLOAT_SUPPORTED
   /* Same as above for the floating-point case. */
   float_DCT_method_ptr do_float_dct[MAX_COMPONENTS];
-  FAST_FLOAT * float_divisors[NUM_QUANT_TBLS];
+  FASTVX_FLOAT * float_divisors[NUM_QUANT_TBLS];
 #endif
 } my_fdct_controller;
 
@@ -99,9 +99,9 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
          * a comparison is enough cheaper than a divide to make a special test
          * a win.  Since both inputs will be nonnegative, we need only test
          * for a < b to discover whether a/b is 0.
-         * If your machine's division is fast enough, define FAST_DIVIDE.
+         * If your machine's division is fast enough, define FASTVX_DIVIDE.
          */
-#ifdef FAST_DIVIDE
+#ifdef FASTVX_DIVIDE
 #define DIVIDE_BY(a,b)	a /= b
 #else
 #define DIVIDE_BY(a,b)	if (a >= b) a /= b; else a = 0
@@ -134,8 +134,8 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
   /* This routine is heavily used, so it's worth coding it tightly. */
   my_fdct_ptr fdct = (my_fdct_ptr) cinfo->fdct;
   float_DCT_method_ptr do_dct = fdct->do_float_dct[compptr->component_index];
-  FAST_FLOAT * divisors = fdct->float_divisors[compptr->quant_tbl_no];
-  FAST_FLOAT workspace[DCTSIZE2]; /* work area for FDCT subroutine */
+  FASTVX_FLOAT * divisors = fdct->float_divisors[compptr->quant_tbl_no];
+  FASTVX_FLOAT workspace[DCTSIZE2]; /* work area for FDCT subroutine */
   JDIMENSION bi;
 
   sample_data += start_row;	/* fold in the vertical offset once */
@@ -145,7 +145,7 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
     (*do_dct) (workspace, sample_data, start_col);
 
     /* Quantize/descale the coefficients, and store into coef_blocks[] */
-    { register FAST_FLOAT temp;
+    { register FASTVX_FLOAT temp;
       register int i;
       register JCOEFPTR output_ptr = coef_blocks[bi];
 
@@ -158,7 +158,7 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
          * The maximum coefficient size is +-16K (for 12-bit data), so this
          * code should work for either 16-bit or 32-bit ints.
          */
-        output_ptr[i] = (JCOEF) ((int) (temp + (FAST_FLOAT) 16384.5) - 16384);
+        output_ptr[i] = (JCOEF) ((int) (temp + (FASTVX_FLOAT) 16384.5) - 16384);
       }
     }
   }
@@ -324,10 +324,10 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
         method = JDCT_ISLOW;
         break;
 #endif
-#ifdef DCT_IFAST_SUPPORTED
-      case JDCT_IFAST:
+#ifdef DCT_IFASTVX_SUPPORTED
+      case JDCT_IFASTVX:
         fdct->do_dct[ci] = jpeg_fdct_ifast;
-        method = JDCT_IFAST;
+        method = JDCT_IFASTVX;
         break;
 #endif
 #ifdef DCT_FLOAT_SUPPORTED
@@ -372,8 +372,8 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
       fdct->pub.forward_DCT[ci] = forward_DCT;
       break;
 #endif
-#ifdef DCT_IFAST_SUPPORTED
-    case JDCT_IFAST:
+#ifdef DCT_IFASTVX_SUPPORTED
+    case JDCT_IFASTVX:
       {
         /* For AA&N IDCT method, divisors are equal to quantization
          * coefficients scaled by scalefactor[row]*scalefactor[col], where
@@ -403,8 +403,8 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
         dtbl = fdct->divisors[qtblno];
         for (i = 0; i < DCTSIZE2; i++) {
           dtbl[i] = (DCTELEM)
-            DESCALE(MULTIPLY16V16((INT32) qtbl->quantval[i],
-                                  (INT32) aanscales[i]),
+            DESCALE(MULTIPLY16V16((CVINT32) qtbl->quantval[i],
+                                  (CVINT32) aanscales[i]),
                     CONST_BITS-3);
         }
       }
@@ -422,7 +422,7 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
          * What's actually stored is 1/divisor so that the inner loop can
          * use a multiplication rather than a division.
          */
-        FAST_FLOAT * fdtbl;
+        FASTVX_FLOAT * fdtbl;
         int row, col;
         static const double aanscalefactor[DCTSIZE] = {
           1.0, 1.387039845, 1.306562965, 1.175875602,
@@ -430,15 +430,15 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
         };
 
         if (fdct->float_divisors[qtblno] == NULL) {
-          fdct->float_divisors[qtblno] = (FAST_FLOAT *)
+          fdct->float_divisors[qtblno] = (FASTVX_FLOAT *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-                                        DCTSIZE2 * SIZEOF(FAST_FLOAT));
+                                        DCTSIZE2 * SIZEOF(FASTVX_FLOAT));
         }
         fdtbl = fdct->float_divisors[qtblno];
         i = 0;
         for (row = 0; row < DCTSIZE; row++) {
           for (col = 0; col < DCTSIZE; col++) {
-            fdtbl[i] = (FAST_FLOAT)
+            fdtbl[i] = (FASTVX_FLOAT)
               (1.0 / (((double) qtbl->quantval[i] *
                        aanscalefactor[row] * aanscalefactor[col] * 8.0)));
             i++;

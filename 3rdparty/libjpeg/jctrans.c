@@ -17,9 +17,9 @@
 
 
 /* Forward declarations */
-LOCAL(void) transencode_master_selection
+LOCALVX(void) transencode_master_selection
         JPP((j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays));
-LOCAL(void) transencode_coef_controller
+LOCALVX(void) transencode_coef_controller
         JPP((j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays));
 
 
@@ -162,7 +162,7 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
  * This substitutes for jcinit.c's initialization of the full compressor.
  */
 
-LOCAL(void)
+LOCALVX(void)
 transencode_master_selection (j_compress_ptr cinfo,
                               jvirt_barray_ptr * coef_arrays)
 {
@@ -220,7 +220,7 @@ typedef struct {
 typedef my_coef_controller * my_coef_ptr;
 
 
-LOCAL(void)
+LOCALVX(void)
 start_iMCU_row (j_compress_ptr cinfo)
 /* Reset within-iMCU-row counters for a new row */
 {
@@ -356,7 +356,7 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
  * with unitheight at least v_samp_factor.
  */
 
-LOCAL(void)
+LOCALVX(void)
 transencode_coef_controller (j_compress_ptr cinfo,
                              jvirt_barray_ptr * coef_arrays)
 {

@@ -40,7 +40,7 @@
 //M*/
 
 // 2008-04-27 Xavier Delacour <xavier.delacour@gmail.com>
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 #include <unistd.h>
 #include <unicap.h>
@@ -330,3 +330,4 @@ CvCapture * cvCreateCameraCapture_Unicap(const int index)
   delete cap;
   return 0;
 }
+#endif

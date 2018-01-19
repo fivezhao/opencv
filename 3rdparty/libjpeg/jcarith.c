@@ -23,10 +23,10 @@
 typedef struct {
   struct jpeg_entropy_encoder pub; /* public fields */
 
-  INT32 c; /* C register, base of coding interval, layout as in sec. D.1.3 */
-  INT32 a;               /* A register, normalized size of coding interval */
-  INT32 sc;        /* counter for stacked 0xFF values which might overflow */
-  INT32 zc;          /* counter for pending 0x00 output values which might *
+  CVINT32 c; /* C register, base of coding interval, layout as in sec. D.1.3 */
+  CVINT32 a;               /* A register, normalized size of coding interval */
+  CVINT32 sc;        /* counter for stacked 0xFF values which might overflow */
+  CVINT32 zc;          /* counter for pending 0x00 output values which might *
                           * be discarded at the end ("Pacman" termination) */
   int ct;  /* bit shift counter, determines when next byte will be written */
   int buffer;                /* buffer for most recent output byte != 0xFF */
@@ -95,8 +95,8 @@ typedef arith_entropy_encoder * arith_entropy_ptr;
 #define CALCULATE_SPECTRAL_CONDITIONING
  */
 
-/* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than INT32.
- * We assume that int right shift is unsigned if INT32 right shift is,
+/* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than CVINT32.
+ * We assume that int right shift is unsigned if CVINT32 right shift is,
  * which should be safe.
  */
 
@@ -112,7 +112,7 @@ typedef arith_entropy_encoder * arith_entropy_ptr;
 #endif
 
 
-LOCAL(void)
+LOCALVX(void)
 emit_byte (int val, j_compress_ptr cinfo)
 /* Write next output byte; we do not support suspension in this module. */
 {
@@ -133,7 +133,7 @@ METHODDEF(void)
 finish_pass (j_compress_ptr cinfo)
 {
   arith_entropy_ptr e = (arith_entropy_ptr) cinfo->entropy;
-  INT32 temp;
+  CVINT32 temp;
 
   /* Section D.1.8: Termination of encoding */
 
@@ -215,12 +215,12 @@ finish_pass (j_compress_ptr cinfo)
  * derived from Markus Kuhn's JBIG implementation.
  */
 
-LOCAL(void)
+LOCALVX(void)
 arith_encode (j_compress_ptr cinfo, unsigned char *st, int val)
 {
   register arith_entropy_ptr e = (arith_entropy_ptr) cinfo->entropy;
   register unsigned char nl, nm;
-  register INT32 qe, temp;
+  register CVINT32 qe, temp;
   register int sv;
 
   /* Fetch values from our compact representation of Table D.3(D.2):
@@ -315,7 +315,7 @@ arith_encode (j_compress_ptr cinfo, unsigned char *st, int val)
  * Emit a restart marker & resynchronize predictions.
  */
 
-LOCAL(void)
+LOCALVX(void)
 emit_restart (j_compress_ptr cinfo, int restart_num)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;

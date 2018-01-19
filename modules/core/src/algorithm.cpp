@@ -58,7 +58,11 @@ Algorithm::~Algorithm()
 void Algorithm::save(const String& filename) const
 {
     CV_TRACE_FUNCTION();
+#ifndef ONVXWORKS
     FileStorage fs(filename, FileStorage::WRITE);
+#else
+    FileStorage fs(filename, FileStorage::CVWRITE);
+#endif
     fs << getDefaultName() << "{";
     write(fs);
     fs << "}";

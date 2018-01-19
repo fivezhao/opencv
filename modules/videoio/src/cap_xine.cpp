@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 // Authors: Konstantin Dols <dols@ient.rwth-aachen.de>
 //          Mark Asbach <asbach@ient.rwth-aachen.de>
 //
@@ -844,3 +844,4 @@ CvCapture* cvCreateFileCapture_XINE(const char* filename)
 
 
 #undef NDEBUG
+#endif

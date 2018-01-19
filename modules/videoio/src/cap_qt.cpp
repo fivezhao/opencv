@@ -39,7 +39,7 @@
 //
 //M*/
 
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 // Original implementation by   Mark Asbach
@@ -1617,3 +1617,4 @@ CvVideoWriter* cvCreateVideoWriter_QT( const char* filename, int fourcc,
     delete writer;
     return 0;
 }
+#endif

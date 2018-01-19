@@ -264,7 +264,7 @@ int CV_MLBaseTest::read_params( CvFileStorage* __fs )
             }
         }
     }
-    return cvtest::TS::OK;;
+    return cvtest::TS::OKVX;;
 }
 
 void CV_MLBaseTest::run( int )
@@ -272,17 +272,21 @@ void CV_MLBaseTest::run( int )
     CV_TRACE_FUNCTION();
     string filename = ts->get_data_path();
     filename += get_validation_filename();
+#ifndef ONVXWORKS
     validationFS.open( filename, FileStorage::READ );
+#else
+    validationFS.open( filename, FileStorage::CVREAD );
+#endif
     read_params( *validationFS );
 
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     for (int i = 0; i < test_case_count; i++)
     {
         CV_TRACE_REGION("iteration");
         int temp_code = run_test_case( i );
-        if (temp_code == cvtest::TS::OK)
+        if (temp_code == cvtest::TS::OKVX)
             temp_code = validate_test_results( i );
-        if (temp_code != cvtest::TS::OK)
+        if (temp_code != cvtest::TS::OKVX)
             code = temp_code;
     }
     if ( test_case_count <= 0)
@@ -328,7 +332,7 @@ int CV_MLBaseTest::prepare_test_case( int test_case_idx )
     }
 
     data->setTrainTestSplit(trainSampleCount);
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 string& CV_MLBaseTest::get_validation_filename()
@@ -492,7 +496,7 @@ int CV_MLBaseTest::train( int testCaseIdx )
         ts->printf( cvtest::TS::LOG, "in test case %d model training was failed", testCaseIdx );
         return cvtest::TS::FAIL_INVALID_OUTPUT;
     }
-    return cvtest::TS::OK;
+    return cvtest::TS::OKVX;
 }
 
 float CV_MLBaseTest::get_test_error( int /*testCaseIdx*/, vector<float> *resp )

@@ -76,8 +76,8 @@ void CV_FastTest::run( int )
 
     vector<KeyPoint> keypoints1;
     vector<KeyPoint> keypoints2;
-    FAST(gray1, keypoints1, 30, true, type);
-    FAST(gray2, keypoints2, (type > 0 ? 30 : 20), true, type);
+    FASTVX(gray1, keypoints1, 30, true, type);
+    FASTVX(gray2, keypoints2, (type > 0 ? 30 : 20), true, type);
 
     for(size_t i = 0; i < keypoints1.size(); ++i)
     {
@@ -94,10 +94,18 @@ void CV_FastTest::run( int )
     Mat kps1(1, (int)(keypoints1.size() * sizeof(KeyPoint)), CV_8U, &keypoints1[0]);
     Mat kps2(1, (int)(keypoints2.size() * sizeof(KeyPoint)), CV_8U, &keypoints2[0]);
 
+#ifndef ONVXWORKS
     FileStorage fs(xml, FileStorage::READ);
+#else
+    FileStorage fs(xml, FileStorage::CVREAD);
+#endif
     if (!fs.isOpened())
     {
+#ifndef ONVXWORKS
         fs.open(xml, FileStorage::WRITE);
+#else
+        fs.open(xml, FileStorage::CVWRITE);
+#endif
         if (!fs.isOpened())
         {
             ts->set_failed_test_info(cvtest::TS::FAIL_INVALID_TEST_DATA);
@@ -106,7 +114,11 @@ void CV_FastTest::run( int )
         fs << "exp_kps1" << kps1;
         fs << "exp_kps2" << kps2;
         fs.release();
+#ifndef ONVXWORKS
         fs.open(xml, FileStorage::READ);
+#else
+        fs.open(xml, FileStorage::CVREAD);
+#endif
         if (!fs.isOpened())
         {
             ts->set_failed_test_info(cvtest::TS::FAIL_INVALID_TEST_DATA);
@@ -131,7 +143,7 @@ void CV_FastTest::run( int )
     cv::waitKey(0);*/
   }
 
-  ts->set_failed_test_info(cvtest::TS::OK);
+  ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
-TEST(Features2d_FAST, regression) { CV_FastTest test; test.safe_run(); }
+TEST(Features2d_FASTVX, regression) { CV_FastTest test; test.safe_run(); }

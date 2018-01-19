@@ -52,6 +52,7 @@
 #include <cstddef>
 #include <cstring>
 #include <cctype>
+#include <ctype.h>
 
 #include <string>
 

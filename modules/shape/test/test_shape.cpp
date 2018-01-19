@@ -185,7 +185,7 @@ protected:
         float porc = 100*float(corrects)/(NSN*distanceMat.rows);
         std::cout << "Test result: " << porc << "%" << std::endl;
         if (porc >= CURRENT_MAX_ACCUR)
-            ts->set_failed_test_info(cvtest::TS::OK);
+            ts->set_failed_test_info(cvtest::TS::OKVX);
         else
             ts->set_failed_test_info(cvtest::TS::FAIL_BAD_ACCURACY);
     }

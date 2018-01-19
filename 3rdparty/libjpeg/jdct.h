@@ -16,9 +16,9 @@
 /*
  * A forward DCT routine is given a pointer to an input sample array and
  * a pointer to a work area of type DCTELEM[]; the DCT is to be performed
- * in-place in that buffer.  Type DCTELEM is int for 8-bit samples, INT32
+ * in-place in that buffer.  Type DCTELEM is int for 8-bit samples, CVINT32
  * for 12-bit samples.  (NOTE: Floating-point DCT implementations use an
- * array of type FAST_FLOAT, instead.)
+ * array of type FASTVX_FLOAT, instead.)
  * The input data is to be fetched from the sample array starting at a
  * specified column.  (Any row offset needed will be applied to the array
  * pointer before it is passed to the FDCT code.)
@@ -34,13 +34,13 @@
 #if BITS_IN_JSAMPLE == 8
 typedef int DCTELEM;		/* 16 or 32 bits is fine */
 #else
-typedef INT32 DCTELEM;		/* must have 32 bits */
+typedef CVINT32 DCTELEM;		/* must have 32 bits */
 #endif
 
 typedef JMETHOD(void, forward_DCT_method_ptr, (DCTELEM * data,
                                                JSAMPARRAY sample_data,
                                                JDIMENSION start_col));
-typedef JMETHOD(void, float_DCT_method_ptr, (FAST_FLOAT * data,
+typedef JMETHOD(void, float_DCT_method_ptr, (FASTVX_FLOAT * data,
                                              JSAMPARRAY sample_data,
                                              JDIMENSION start_col));
 
@@ -64,13 +64,13 @@ typedef JMETHOD(void, float_DCT_method_ptr, (FAST_FLOAT * data,
 
 typedef MULTIPLIER ISLOW_MULT_TYPE; /* short or int, whichever is faster */
 #if BITS_IN_JSAMPLE == 8
-typedef MULTIPLIER IFAST_MULT_TYPE; /* 16 bits is OK, use short if faster */
-#define IFAST_SCALE_BITS  2	/* fractional bits in scale factors */
+typedef MULTIPLIER IFASTVX_MULT_TYPE; /* 16 bits is OK, use short if faster */
+#define IFASTVX_SCALE_BITS  2	/* fractional bits in scale factors */
 #else
-typedef INT32 IFAST_MULT_TYPE;	/* need 32 bits for scaled quantizers */
-#define IFAST_SCALE_BITS  13	/* fractional bits in scale factors */
+typedef CVINT32 IFASTVX_MULT_TYPE;	/* need 32 bits for scaled quantizers */
+#define IFASTVX_SCALE_BITS  13	/* fractional bits in scale factors */
 #endif
-typedef FAST_FLOAT FLOAT_MULT_TYPE; /* preferred floating type */
+typedef FASTVX_FLOAT FLOAT_MULT_TYPE; /* preferred floating type */
 
 
 /*
@@ -167,7 +167,7 @@ EXTERN(void) jpeg_fdct_islow
 EXTERN(void) jpeg_fdct_ifast
     JPP((DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col));
 EXTERN(void) jpeg_fdct_float
-    JPP((FAST_FLOAT * data, JSAMPARRAY sample_data, JDIMENSION start_col));
+    JPP((FASTVX_FLOAT * data, JSAMPARRAY sample_data, JDIMENSION start_col));
 EXTERN(void) jpeg_fdct_7x7
     JPP((DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col));
 EXTERN(void) jpeg_fdct_6x6
@@ -339,13 +339,13 @@ EXTERN(void) jpeg_idct_1x2
  * Macros for handling fixed-point arithmetic; these are used by many
  * but not all of the DCT/IDCT modules.
  *
- * All values are expected to be of type INT32.
+ * All values are expected to be of type CVINT32.
  * Fractional constants are scaled left by CONST_BITS bits.
  * CONST_BITS is defined within each module using these macros,
  * and may differ from one module to the next.
  */
 
-#define ONE	((INT32) 1)
+#define ONE	((CVINT32) 1)
 #define CONST_SCALE (ONE << CONST_BITS)
 
 /* Convert a positive real constant to an integer scaled by CONST_SCALE.
@@ -353,16 +353,16 @@ EXTERN(void) jpeg_idct_1x2
  * thus causing a lot of useless floating-point operations at run time.
  */
 
-#define FIX(x)	((INT32) ((x) * CONST_SCALE + 0.5))
+#define FIX(x)	((CVINT32) ((x) * CONST_SCALE + 0.5))
 
-/* Descale and correctly round an INT32 value that's scaled by N bits.
+/* Descale and correctly round an CVINT32 value that's scaled by N bits.
  * We assume RIGHT_SHIFT rounds towards minus infinity, so adding
  * the fudge factor is correct for either sign of X.
  */
 
 #define DESCALE(x,n)  RIGHT_SHIFT((x) + (ONE << ((n)-1)), n)
 
-/* Multiply an INT32 variable by an INT32 constant to yield an INT32 result.
+/* Multiply an CVINT32 variable by an CVINT32 constant to yield an CVINT32 result.
  * This macro is used only when the two inputs will actually be no more than
  * 16 bits wide, so that a 16x16->32 bit multiply can be used instead of a
  * full 32x32 multiply.  This provides a useful speedup on many machines.
@@ -375,7 +375,7 @@ EXTERN(void) jpeg_idct_1x2
 #define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((INT16) (const)))
 #endif
 #ifdef SHORTxLCONST_32		/* known to work with Microsoft C 6.0 */
-#define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((INT32) (const)))
+#define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((CVINT32) (const)))
 #endif
 
 #ifndef MULTIPLY16C16		/* default definition */

@@ -1140,7 +1140,7 @@ void CV_OperationsTest::run( int /* start_from */)
     if (!operations1())
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Core_Array, expressions) { CV_OperationsTest test; test.safe_run(); }

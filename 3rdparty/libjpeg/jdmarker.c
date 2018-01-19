@@ -153,7 +153,7 @@ typedef my_marker_reader * my_marker_ptr;
                   V = GETJOCTET(*next_input_byte++); )
 
 /* As above, but read two bytes interpreted as an unsigned 16-bit integer.
- * V should be declared unsigned int or perhaps INT32.
+ * V should be declared unsigned int or perhaps CVINT32.
  */
 #define INPUT_2BYTES(cinfo,V,action)  \
         MAKESTMT( MAKE_BYTE_AVAIL(cinfo,action); \
@@ -195,7 +195,7 @@ typedef my_marker_reader * my_marker_ptr;
  */
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_soi (j_decompress_ptr cinfo)
 /* Process an SOI marker */
 {
@@ -236,12 +236,12 @@ get_soi (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_sof (j_decompress_ptr cinfo, boolean is_baseline, boolean is_prog,
          boolean is_arith)
 /* Process a SOFn marker */
 {
-  INT32 length;
+  CVINT32 length;
   int c, ci, i;
   jpeg_component_info * compptr;
   INPUT_VARS(cinfo);
@@ -318,11 +318,11 @@ get_sof (j_decompress_ptr cinfo, boolean is_baseline, boolean is_prog,
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_sos (j_decompress_ptr cinfo)
 /* Process a SOS marker */
 {
-  INT32 length;
+  CVINT32 length;
   int c, ci, i, n;
   jpeg_component_info * compptr;
   INPUT_VARS(cinfo);
@@ -406,11 +406,11 @@ get_sos (j_decompress_ptr cinfo)
 
 #ifdef D_ARITH_CODING_SUPPORTED
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_dac (j_decompress_ptr cinfo)
 /* Process a DAC marker */
 {
-  INT32 length;
+  CVINT32 length;
   int index, val;
   INPUT_VARS(cinfo);
 
@@ -452,11 +452,11 @@ get_dac (j_decompress_ptr cinfo)
 #endif /* D_ARITH_CODING_SUPPORTED */
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_dht (j_decompress_ptr cinfo)
 /* Process a DHT marker */
 {
-  INT32 length;
+  CVINT32 length;
   UINT8 bits[17];
   UINT8 huffval[256];
   int i, index, count;
@@ -490,7 +490,7 @@ get_dht (j_decompress_ptr cinfo)
     /* Here we just do minimal validation of the counts to avoid walking
      * off the end of our table space.  jdhuff.c will check more carefully.
      */
-    if (count > 256 || ((INT32) count) > length)
+    if (count > 256 || ((CVINT32) count) > length)
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
 
     for (i = 0; i < count; i++)
@@ -523,11 +523,11 @@ get_dht (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_dqt (j_decompress_ptr cinfo)
 /* Process a DQT marker */
 {
-  INT32 length, count, i;
+  CVINT32 length, count, i;
   int n, prec;
   unsigned int tmp;
   JQUANT_TBL *quant_ptr;
@@ -613,11 +613,11 @@ get_dqt (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_dri (j_decompress_ptr cinfo)
 /* Process a DRI marker */
 {
-  INT32 length;
+  CVINT32 length;
   unsigned int tmp;
   INPUT_VARS(cinfo);
 
@@ -637,11 +637,11 @@ get_dri (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 get_lse (j_decompress_ptr cinfo)
 /* Process an LSE marker */
 {
-  INT32 length;
+  CVINT32 length;
   unsigned int tmp;
   int cid;
   INPUT_VARS(cinfo);
@@ -711,15 +711,15 @@ get_lse (j_decompress_ptr cinfo)
 #define APPN_DATA_LEN	14	/* Must be the largest of the above!! */
 
 
-LOCAL(void)
+LOCALVX(void)
 examine_app0 (j_decompress_ptr cinfo, JOCTET FAR * data,
-              unsigned int datalen, INT32 remaining)
+              unsigned int datalen, CVINT32 remaining)
 /* Examine first few bytes from an APP0.
  * Take appropriate action if it is a JFIF marker.
  * datalen is # of bytes at data[], remaining is length of rest of marker data.
  */
 {
-  INT32 totallen = (INT32) datalen + remaining;
+  CVINT32 totallen = (CVINT32) datalen + remaining;
 
   if (datalen >= APP0_DATA_LEN &&
       GETJOCTET(data[0]) == 0x4A &&
@@ -753,7 +753,7 @@ examine_app0 (j_decompress_ptr cinfo, JOCTET FAR * data,
                GETJOCTET(data[12]), GETJOCTET(data[13]));
     totallen -= APP0_DATA_LEN;
     if (totallen !=
-        ((INT32)GETJOCTET(data[12]) * (INT32)GETJOCTET(data[13]) * (INT32) 3))
+        ((CVINT32)GETJOCTET(data[12]) * (CVINT32)GETJOCTET(data[13]) * (CVINT32) 3))
       TRACEMS1(cinfo, 1, JTRC_JFIF_BADTHUMBNAILSIZE, (int) totallen);
   } else if (datalen >= 6 &&
       GETJOCTET(data[0]) == 0x4A &&
@@ -787,9 +787,9 @@ examine_app0 (j_decompress_ptr cinfo, JOCTET FAR * data,
 }
 
 
-LOCAL(void)
+LOCALVX(void)
 examine_app14 (j_decompress_ptr cinfo, JOCTET FAR * data,
-               unsigned int datalen, INT32 remaining)
+               unsigned int datalen, CVINT32 remaining)
 /* Examine first few bytes from an APP14.
  * Take appropriate action if it is an Adobe marker.
  * datalen is # of bytes at data[], remaining is length of rest of marker data.
@@ -822,7 +822,7 @@ METHODDEF(boolean)
 get_interesting_appn (j_decompress_ptr cinfo)
 /* Process an APP0 or APP14 marker without saving it */
 {
-  INT32 length;
+  CVINT32 length;
   JOCTET b[APPN_DATA_LEN];
   unsigned int i, numtoread;
   INPUT_VARS(cinfo);
@@ -874,7 +874,7 @@ save_marker (j_decompress_ptr cinfo)
   jpeg_saved_marker_ptr cur_marker = marker->cur_marker;
   unsigned int bytes_read, data_length;
   JOCTET FAR * data;
-  INT32 length = 0;
+  CVINT32 length = 0;
   INPUT_VARS(cinfo);
 
   if (cur_marker == NULL) {
@@ -976,7 +976,7 @@ METHODDEF(boolean)
 skip_variable (j_decompress_ptr cinfo)
 /* Skip over an unknown or uninteresting variable-length marker */
 {
-  INT32 length;
+  CVINT32 length;
   INPUT_VARS(cinfo);
 
   INPUT_2BYTES(cinfo, length, return FALSE);
@@ -1001,7 +1001,7 @@ skip_variable (j_decompress_ptr cinfo)
  * but it will never be 0 or FF.
  */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 next_marker (j_decompress_ptr cinfo)
 {
   int c;
@@ -1048,7 +1048,7 @@ next_marker (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCALVX(boolean)
 first_marker (j_decompress_ptr cinfo)
 /* Like next_marker, but used to obtain the initial SOI marker. */
 /* For this marker, we do not allow preceding garbage or fill; otherwise,

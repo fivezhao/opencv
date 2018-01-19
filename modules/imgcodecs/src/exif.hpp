@@ -102,7 +102,7 @@ enum Endianess_t
 {
     INTEL = 0x49,
     MOTO = 0x4D,
-    NONE = 0x00
+    NONEVX = 0x00
 };
 
 typedef std::pair<uint32_t, uint32_t> u_rational_t;

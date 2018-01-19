@@ -116,7 +116,7 @@ void CV_LRTest::run( int /*start_from*/ )
     p->predict(tdata->getSamples(), responses);
 
     // calculate error
-    int test_code = cvtest::TS::OK;
+    int test_code = cvtest::TS::OKVX;
     float error = 0.0f;
     if(!calculateError(responses, tdata->getResponses(), error))
     {
@@ -130,7 +130,11 @@ void CV_LRTest::run( int /*start_from*/ )
     }
 
     {
+#ifndef ONVXWORKS
         FileStorage s("debug.xml", FileStorage::WRITE);
+#else
+        FileStorage s("debug.xml", FileStorage::CVWRITE);
+#endif
         s << "original" << tdata->getResponses();
         s << "predicted1" << responses;
         s << "learnt" << p->get_learnt_thetas();
@@ -153,7 +157,7 @@ protected:
 void CV_LRTest_SaveLoad::run( int /*start_from*/ )
 {
     CV_TRACE_FUNCTION();
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
 
     // initialize varibles from the popular Iris Dataset
     string dataFileName = ts->get_data_path() + "iris.data";

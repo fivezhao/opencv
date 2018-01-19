@@ -175,7 +175,7 @@ void CV_RigidTransform_Test::run( int start_from )
     if (!testImage())
         return;
 
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Video_RigidFlow, accuracy) { CV_RigidTransform_Test test; test.safe_run(); }

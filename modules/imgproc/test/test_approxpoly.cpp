@@ -282,7 +282,7 @@ int CV_ApproxPolyTest::check( CvSeq* SrcSeq, CvSeq* DstSeq, float Eps )
 
 void CV_ApproxPolyTest::run( int /*start_from*/ )
 {
-    int code = cvtest::TS::OK;
+    int code = cvtest::TS::OKVX;
     CvMemStorage* storage = 0;
     ////////////// Variables ////////////////
     int IntervalsCount = 10;

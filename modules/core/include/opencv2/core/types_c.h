@@ -534,16 +534,16 @@ inline CvMat::CvMat(const cv::Mat& m)
 #endif
 
 
-#define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )  \
+#define CV_MAT_ELEM_PTR_FASTVX( mat, row, col, pix_size )  \
     (assert( (unsigned)(row) < (unsigned)(mat).rows &&   \
              (unsigned)(col) < (unsigned)(mat).cols ),   \
      (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
 
 #define CV_MAT_ELEM_PTR( mat, row, col )                 \
-    CV_MAT_ELEM_PTR_FAST( mat, row, col, CV_ELEM_SIZE((mat).type) )
+    CV_MAT_ELEM_PTR_FASTVX( mat, row, col, CV_ELEM_SIZE((mat).type) )
 
 #define CV_MAT_ELEM( mat, elemtype, row, col )           \
-    (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
+    (*(elemtype*)CV_MAT_ELEM_PTR_FASTVX( mat, row, col, sizeof(elemtype)))
 
 /** @brief Returns the particular element of single-channel floating-point matrix.
 

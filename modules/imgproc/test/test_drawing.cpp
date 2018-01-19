@@ -77,7 +77,7 @@ void CV_DrawingTest::run( int )
         ts->set_failed_test_info(cvtest::TS::FAIL_INVALID_TEST_DATA);
 #else
         ts->printf( ts->LOG, "PNG image support is not available");
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
 #endif
         return;
     }
@@ -96,7 +96,7 @@ void CV_DrawingTest::run( int )
             ts->set_failed_test_info(checkLineIterator( testImg ));
         }
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 class CV_DrawingTest_CPP : public CV_DrawingTest
@@ -244,7 +244,7 @@ int CV_DrawingTest_CPP::checkLineIterator( Mat& img )
             ts->set_failed_test_info(cvtest::TS::FAIL_INVALID_OUTPUT);
         }
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
     return 0;
 }
 
@@ -414,7 +414,7 @@ int CV_DrawingTest_C::checkLineIterator( Mat& _img )
         }
         CV_NEXT_LINE_POINT(it);
     }
-    ts->set_failed_test_info(cvtest::TS::OK);
+    ts->set_failed_test_info(cvtest::TS::OKVX);
     return 0;
 }
 

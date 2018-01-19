@@ -109,7 +109,7 @@ protected:
                 return;
             }
         }
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
     }
 
     Ptr<FeatureDetector> detector;
@@ -124,7 +124,7 @@ TEST(Features2d_Detector_Keypoints_BRISK, validation)
     test.safe_run();
 }
 
-TEST(Features2d_Detector_Keypoints_FAST, validation)
+TEST(Features2d_Detector_Keypoints_FASTVX, validation)
 {
     CV_FeatureDetectorKeypointsTest test(FastFeatureDetector::create());
     test.safe_run();

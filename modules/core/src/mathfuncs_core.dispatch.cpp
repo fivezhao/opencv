@@ -69,7 +69,7 @@ void invSqrt32f(const float* src, float* dst, int len)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(invSqrt32f, cv_hal_invSqrt32f, src, dst, len);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsInvSqrt_32f_A21, src, dst, len) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsInvSqrt_32f_A21, src, dst, len) >= 0);
 
     CV_CPU_DISPATCH(invSqrt32f, (src, dst, len),
         CV_CPU_DISPATCH_MODES_ALL);
@@ -81,7 +81,7 @@ void invSqrt64f(const double* src, double* dst, int len)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(invSqrt64f, cv_hal_invSqrt64f, src, dst, len);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsInvSqrt_64f_A50, src, dst, len) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsInvSqrt_64f_A50, src, dst, len) >= 0);
 
     CV_CPU_DISPATCH(invSqrt64f, (src, dst, len),
         CV_CPU_DISPATCH_MODES_ALL);
@@ -114,7 +114,7 @@ void exp32f(const float *src, float *dst, int n)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(exp32f, cv_hal_exp32f, src, dst, n);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsExp_32f_A21, src, dst, n) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsExp_32f_A21, src, dst, n) >= 0);
 
     CV_CPU_DISPATCH(exp32f, (src, dst, n),
         CV_CPU_DISPATCH_MODES_ALL);
@@ -125,7 +125,7 @@ void exp64f(const double *src, double *dst, int n)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(exp64f, cv_hal_exp64f, src, dst, n);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsExp_64f_A50, src, dst, n) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsExp_64f_A50, src, dst, n) >= 0);
 
     CV_CPU_DISPATCH(exp64f, (src, dst, n),
         CV_CPU_DISPATCH_MODES_ALL);
@@ -136,7 +136,7 @@ void log32f(const float *src, float *dst, int n)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(log32f, cv_hal_log32f, src, dst, n);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsLn_32f_A21, src, dst, n) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsLn_32f_A21, src, dst, n) >= 0);
 
     CV_CPU_DISPATCH(log32f, (src, dst, n),
         CV_CPU_DISPATCH_MODES_ALL);
@@ -147,7 +147,7 @@ void log64f(const double *src, double *dst, int n)
     CV_INSTRUMENT_REGION()
 
     CALL_HAL(log64f, cv_hal_log64f, src, dst, n);
-    CV_IPP_RUN_FAST(CV_INSTRUMENT_FUN_IPP(ippsLn_64f_A50, src, dst, n) >= 0);
+    CV_IPP_RUN_FASTVX(CV_INSTRUMENT_FUN_IPP(ippsLn_64f_A50, src, dst, n) >= 0);
 
     CV_CPU_DISPATCH(log64f, (src, dst, n),
         CV_CPU_DISPATCH_MODES_ALL);

@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "opencv2/ts/cuda_test.hpp"
 #include <stdexcept>
 
@@ -556,3 +556,4 @@ void cv::cuda::PrintTo(const DeviceInfo& info, std::ostream* os)
 {
     (*os) << info.name();
 }
+#endif

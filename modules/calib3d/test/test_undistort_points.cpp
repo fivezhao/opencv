@@ -87,7 +87,7 @@ void CV_UndistortTest::run(int /* start_from */)
             ts->set_failed_test_info(cvtest::TS::FAIL_BAD_ACCURACY);
             return;
         }
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
     }
 }
 

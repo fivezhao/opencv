@@ -85,7 +85,7 @@ void CV_LshTableBadArgTest::run( int /* start_from */ )
     if (errors != 0)
         ts->set_failed_test_info(cvtest::TS::FAIL_MISMATCH);
     else
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Flann_LshTable, badarg) { CV_LshTableBadArgTest test; test.safe_run(); }

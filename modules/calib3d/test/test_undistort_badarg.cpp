@@ -276,7 +276,7 @@ void CV_UndistortPointsBadArgTest::run(int)
 
 //------------
     cvReleaseImage(&temp_img);
-    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OK);
+    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OKVX);
 }
 
 
@@ -401,7 +401,7 @@ void CV_InitUndistortRectifyMapBadArgTest::run(int)
 //------------
     delete[] arr_mapx;
     delete[] arr_mapy;
-    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OK);
+    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OKVX);
 }
 
 
@@ -518,7 +518,7 @@ void CV_UndistortBadArgTest::run(int)
 //------------
     delete[] arr_src;
     delete[] arr_dst;
-    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OK);
+    ts->set_failed_test_info(errcount > 0 ? cvtest::TS::FAIL_BAD_ARG_CHECK : cvtest::TS::OKVX);
 }
 
 TEST(Calib3d_UndistortPoints, badarg) { CV_UndistortPointsBadArgTest test; test.safe_run(); }

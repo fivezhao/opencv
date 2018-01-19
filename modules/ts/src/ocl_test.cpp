@@ -38,7 +38,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #include "precomp.hpp"
 
 #include "opencv2/ts/ocl_test.hpp"
@@ -347,3 +347,4 @@ void TestUtils::showDiff(InputArray _src, InputArray _gold, InputArray _actual, 
 }
 
 } } // namespace cvtest::ocl
+#endif

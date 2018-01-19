@@ -310,11 +310,19 @@ public:
     //! file storage mode
     enum Mode
     {
+#ifndef ONVXWORKS
         READ        = 0, //!< value, open the file for reading
         WRITE       = 1, //!< value, open the file for writing
         APPEND      = 2, //!< value, open the file for appending
         MEMORY      = 4, //!< flag, read data from source or write data to the internal buffer (which is
                          //!< returned by FileStorage::release)
+#else
+        CVREAD        = 0, //!< value, open the file for reading
+        CVWRITE       = 1, //!< value, open the file for writing
+        CVAPPEND      = 2, //!< value, open the file for appending
+        CVMEMORY      = 4, //!< flag, read data from source or write data to the internal buffer (which is
+                         //!< returned by FileStorage::release)
+#endif
         FORMAT_MASK = (7<<3), //!< mask for format flags
         FORMAT_AUTO = 0,      //!< flag, auto format
         FORMAT_XML  = (1<<3), //!< flag, XML format
@@ -322,7 +330,11 @@ public:
         FORMAT_JSON = (3<<3), //!< flag, JSON format
 
         BASE64      = 64,     //!< flag, write rawdata in Base64 by default. (consider using WRITE_BASE64)
+#ifndef ONVXWORKS
         WRITE_BASE64 = BASE64 | WRITE, //!< flag, enable both WRITE and BASE64
+#else
+        WRITE_BASE64 = BASE64 | CVWRITE, //!< flag, enable both WRITE and BASE64
+#endif
     };
     enum
     {

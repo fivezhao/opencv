@@ -41,7 +41,7 @@ typedef my_decomp_master * my_master_ptr;
  * CRUCIAL: this must match the actual capabilities of jdmerge.c!
  */
 
-LOCAL(boolean)
+LOCALVX(boolean)
 use_merged_upsample (j_decompress_ptr cinfo)
 {
 #ifdef UPSAMPLE_MERGING_SUPPORTED
@@ -225,7 +225,7 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
  * enough and used often enough to justify this.
  */
 
-LOCAL(void)
+LOCALVX(void)
 prepare_range_limit_table (j_decompress_ptr cinfo)
 /* Allocate and fill in the sample_range_limit table */
 {
@@ -265,7 +265,7 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
  * settings.
  */
 
-LOCAL(void)
+LOCALVX(void)
 master_selection (j_decompress_ptr cinfo)
 {
   my_master_ptr master = (my_master_ptr) cinfo->master;

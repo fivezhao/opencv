@@ -792,10 +792,10 @@ void CV_RemapTest::prepare_to_validation( int /*test_case_idx*/ )
 
 ////////////////////////////// undistort /////////////////////////////////
 
-class CV_UndistortTest : public CV_ImgWarpBaseTest
+class CV_UndistortTest_Img_Warp : public CV_ImgWarpBaseTest
 {
 public:
-    CV_UndistortTest();
+    CV_UndistortTest_Img_Warp();
 
 protected:
     void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
@@ -818,7 +818,7 @@ private:
 };
 
 
-CV_UndistortTest::CV_UndistortTest() : CV_ImgWarpBaseTest( false )
+CV_UndistortTest_Img_Warp::CV_UndistortTest_Img_Warp() : CV_ImgWarpBaseTest( false )
 {
     //spatial_scale_zoom = spatial_scale_decimate;
     test_array[INPUT].push_back(NULL);
@@ -829,7 +829,7 @@ CV_UndistortTest::CV_UndistortTest() : CV_ImgWarpBaseTest( false )
 }
 
 
-void CV_UndistortTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_UndistortTest_Img_Warp::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
 {
     RNG& rng = ts->get_rng();
     CV_ImgWarpBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
@@ -846,14 +846,14 @@ void CV_UndistortTest::get_test_array_types_and_sizes( int test_case_idx, vector
 }
 
 
-void CV_UndistortTest::fill_array( int test_case_idx, int i, int j, Mat& arr )
+void CV_UndistortTest_Img_Warp::fill_array( int test_case_idx, int i, int j, Mat& arr )
 {
     if( i != INPUT )
         CV_ImgWarpBaseTest::fill_array( test_case_idx, i, j, arr );
 }
 
 
-void CV_UndistortTest::run_func()
+void CV_UndistortTest_Img_Warp::run_func()
 {
     if (!useCPlus)
     {
@@ -874,14 +874,14 @@ void CV_UndistortTest::run_func()
 }
 
 
-double CV_UndistortTest::get_success_error_level( int /*test_case_idx*/, int /*i*/, int /*j*/ )
+double CV_UndistortTest_Img_Warp::get_success_error_level( int /*test_case_idx*/, int /*i*/, int /*j*/ )
 {
     int depth = test_mat[INPUT][0].depth();
     return depth == CV_8U ? 16 : depth == CV_16U ? 1024 : 5e-2;
 }
 
 
-int CV_UndistortTest::prepare_test_case( int test_case_idx )
+int CV_UndistortTest_Img_Warp::prepare_test_case( int test_case_idx )
 {
     RNG& rng = ts->get_rng();
     int code = CV_ImgWarpBaseTest::prepare_test_case( test_case_idx );
@@ -945,7 +945,7 @@ int CV_UndistortTest::prepare_test_case( int test_case_idx )
 }
 
 
-void CV_UndistortTest::prepare_to_validation( int /*test_case_idx*/ )
+void CV_UndistortTest_Img_Warp::prepare_to_validation( int /*test_case_idx*/ )
 {
     if (useCPlus)
     {
@@ -1592,7 +1592,7 @@ TEST(Imgproc_Resize, accuracy) { CV_ResizeTest test; test.safe_run(); }
 TEST(Imgproc_WarpAffine, accuracy) { CV_WarpAffineTest test; test.safe_run(); }
 TEST(Imgproc_WarpPerspective, accuracy) { CV_WarpPerspectiveTest test; test.safe_run(); }
 TEST(Imgproc_Remap, accuracy) { CV_RemapTest test; test.safe_run(); }
-TEST(Imgproc_Undistort, accuracy) { CV_UndistortTest test; test.safe_run(); }
+TEST(Imgproc_Undistort, accuracy) { CV_UndistortTest_Img_Warp test; test.safe_run(); }
 TEST(Imgproc_InitUndistortMap, accuracy) { CV_UndistortMapTest test; test.safe_run(); }
 TEST(Imgproc_GetRectSubPix, accuracy) { CV_GetRectSubPixTest test; test.safe_run(); }
 TEST(Imgproc_GetQuadSubPix, accuracy) { CV_GetQuadSubPixTest test; test.safe_run(); }

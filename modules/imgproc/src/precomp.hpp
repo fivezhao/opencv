@@ -69,9 +69,9 @@
 
 /* helper tables */
 extern const uchar icvSaturate8u_cv[];
-#define CV_FAST_CAST_8U(t)  ( (-256 <= (t) && (t) <= 512) ? icvSaturate8u_cv[(t)+256] : 0 )
-#define CV_CALC_MIN_8U(a,b) (a) -= CV_FAST_CAST_8U((a) - (b))
-#define CV_CALC_MAX_8U(a,b) (a) += CV_FAST_CAST_8U((b) - (a))
+#define CV_FASTVX_CAST_8U(t)  ( (-256 <= (t) && (t) <= 512) ? icvSaturate8u_cv[(t)+256] : 0 )
+#define CV_CALC_MIN_8U(a,b) (a) -= CV_FASTVX_CAST_8U((a) - (b))
+#define CV_CALC_MAX_8U(a,b) (a) += CV_FASTVX_CAST_8U((b) - (a))
 
 // -256.f ... 511.f
 extern const float icv8x32fTab_cv[];

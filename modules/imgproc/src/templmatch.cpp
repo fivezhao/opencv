@@ -1123,7 +1123,7 @@ void cv::matchTemplate( InputArray _img, InputArray _templ, OutputArray _result,
         return;
 #endif
 
-    CV_IPP_RUN_FAST(ipp_matchTemplate(img, templ, result, method))
+    CV_IPP_RUN_FASTVX(ipp_matchTemplate(img, templ, result, method))
 
     crossCorr( img, templ, result, result.size(), result.type(), Point(0,0), 0, 0);
 

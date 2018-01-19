@@ -179,6 +179,11 @@ CV_IMPL CvCapture * cvCreateCameraCapture (int index)
         // bail out to let the user know that it is not available
         if (pref) break;
 
+#ifdef ONVXWORKS
+    case CV_CAP_ANY:
+        TRY_OPEN(capture, cvCreateCameraCapture_VX(index))
+        if (pref) break;
+#endif
 #ifdef HAVE_MSMF
     case CAP_MSMF:
         TRY_OPEN(capture, cvCreateCameraCapture_MSMF(index))
@@ -285,6 +290,8 @@ CV_IMPL CvCapture * cvCreateCameraCapture (int index)
     return capture;
 }
 
+CvCapture * cvCreateFileCaptureFallback(const char * filename);
+
 /**
  * Videoreader dispatching method: it tries to find the first
  * API that can access a given filename.
@@ -298,6 +305,10 @@ CV_IMPL CvCapture * cvCreateFileCaptureWithPreference (const char * filename, in
         // user specified an API we do not know
         // bail out to let the user know that it is not available
         if (apiPreference) break;
+
+#ifdef ONVXWORKS
+        TRY_OPEN(result, cvCreateFileCaptureFallback(filename))
+#endif
 
 #ifdef HAVE_FFMPEG
     case CAP_FFMPEG:
@@ -854,3 +865,102 @@ int VideoWriter::fourcc(char c1, char c2, char c3, char c4)
 }
 
 }
+
+
+#ifdef ONVXWORKS
+namespace cv {
+
+class CvCaptureFallback : public CvCapture
+{
+public:
+    CvCaptureFallback() {frame = NULL;}
+
+    virtual ~CvCaptureFallback() {}
+
+    virtual bool isOpened() const;
+    virtual bool open(const String& filename);
+    virtual void close();
+    virtual double getProperty(int) const;
+    virtual bool setProperty(int, double);
+    virtual bool grabFrame();
+    virtual bool retrieveFrame(int, OutputArray output_frame);
+    virtual IplImage* retrieveFrame(int);
+
+protected:
+    Ptr<IVideoCapture> icap;
+    IplImage m_iplHeader;
+    Mat frame;
+};
+
+
+bool CvCaptureFallback::isOpened() const {
+    return icap->isOpened();
+}
+
+bool CvCaptureFallback::open(const String& filename) {
+    icap = createMotionJpegCapture(filename);
+    if (icap->isOpened()) {
+        frame = Mat(icap->getProperty(CAP_PROP_FRAME_HEIGHT), icap->getProperty(CAP_PROP_FRAME_WIDTH), CV_8UC3);
+        return true;
+    }
+    return false;
+}
+
+void CvCaptureFallback::close()
+{
+}
+
+bool CvCaptureFallback::grabFrame() {
+    bool ret = false;
+
+    if (icap == NULL) {
+        return false;
+    }
+    ret = icap->grabFrame();
+    return ret;
+}
+
+bool CvCaptureFallback::retrieveFrame(int channel, OutputArray output_frame)
+{
+    return icap->retrieveFrame(channel, output_frame);
+}
+
+IplImage* CvCaptureFallback::retrieveFrame(int channel) {
+    Mat image;
+
+    if (retrieveFrame(channel, frame)) {
+        m_iplHeader = IplImage(frame);
+        return &m_iplHeader;
+    }
+
+    return NULL;
+}
+
+double CvCaptureFallback::getProperty(int property_id) const
+{
+    return icap->getProperty(property_id);
+}
+
+
+bool CvCaptureFallback::setProperty(int property_id, double value)
+{
+    return icap->setProperty(property_id, value);
+}
+
+}
+
+
+CvCapture * cvCreateFileCaptureFallback(const char *filename)
+{
+    cv::CvCaptureFallback* capture = new cv::CvCaptureFallback();
+
+    if(capture->open(filename)) {
+        return capture;
+    }
+
+    delete capture;
+    return 0;
+}
+
+#endif /* ONVXWORKS */
+

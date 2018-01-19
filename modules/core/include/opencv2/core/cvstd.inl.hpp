@@ -44,9 +44,10 @@
 #ifndef OPENCV_CORE_CVSTDINL_HPP
 #define OPENCV_CORE_CVSTDINL_HPP
 
+#define _ALT_NS  2
 #include <complex>
 #include <ostream>
-
+#undef _ALT_NS
 //! @cond IGNORED
 
 #ifdef _MSC_VER

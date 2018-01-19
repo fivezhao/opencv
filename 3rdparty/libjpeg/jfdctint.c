@@ -85,7 +85,7 @@
  * they are represented to better-than-integral precision.  These outputs
  * require BITS_IN_JSAMPLE + PASS1_BITS + 3 bits; this fits in a 16-bit word
  * with the recommended scaling.  (For 12-bit sample data, the intermediate
- * array is INT32 anyway.)
+ * array is CVINT32 anyway.)
  *
  * To avoid overflow of the 32-bit intermediate results in pass 2, we must
  * have BITS_IN_JSAMPLE + CONST_BITS + PASS1_BITS <= 26.  Error analysis
@@ -108,18 +108,18 @@
  */
 
 #if CONST_BITS == 13
-#define FIX_0_298631336  ((INT32)  2446)	/* FIX(0.298631336) */
-#define FIX_0_390180644  ((INT32)  3196)	/* FIX(0.390180644) */
-#define FIX_0_541196100  ((INT32)  4433)	/* FIX(0.541196100) */
-#define FIX_0_765366865  ((INT32)  6270)	/* FIX(0.765366865) */
-#define FIX_0_899976223  ((INT32)  7373)	/* FIX(0.899976223) */
-#define FIX_1_175875602  ((INT32)  9633)	/* FIX(1.175875602) */
-#define FIX_1_501321110  ((INT32)  12299)	/* FIX(1.501321110) */
-#define FIX_1_847759065  ((INT32)  15137)	/* FIX(1.847759065) */
-#define FIX_1_961570560  ((INT32)  16069)	/* FIX(1.961570560) */
-#define FIX_2_053119869  ((INT32)  16819)	/* FIX(2.053119869) */
-#define FIX_2_562915447  ((INT32)  20995)	/* FIX(2.562915447) */
-#define FIX_3_072711026  ((INT32)  25172)	/* FIX(3.072711026) */
+#define FIX_0_298631336  ((CVINT32)  2446)	/* FIX(0.298631336) */
+#define FIX_0_390180644  ((CVINT32)  3196)	/* FIX(0.390180644) */
+#define FIX_0_541196100  ((CVINT32)  4433)	/* FIX(0.541196100) */
+#define FIX_0_765366865  ((CVINT32)  6270)	/* FIX(0.765366865) */
+#define FIX_0_899976223  ((CVINT32)  7373)	/* FIX(0.899976223) */
+#define FIX_1_175875602  ((CVINT32)  9633)	/* FIX(1.175875602) */
+#define FIX_1_501321110  ((CVINT32)  12299)	/* FIX(1.501321110) */
+#define FIX_1_847759065  ((CVINT32)  15137)	/* FIX(1.847759065) */
+#define FIX_1_961570560  ((CVINT32)  16069)	/* FIX(1.961570560) */
+#define FIX_2_053119869  ((CVINT32)  16819)	/* FIX(2.053119869) */
+#define FIX_2_562915447  ((CVINT32)  20995)	/* FIX(2.562915447) */
+#define FIX_3_072711026  ((CVINT32)  25172)	/* FIX(3.072711026) */
 #else
 #define FIX_0_298631336  FIX(0.298631336)
 #define FIX_0_390180644  FIX(0.390180644)
@@ -136,7 +136,7 @@
 #endif
 
 
-/* Multiply an INT32 variable by an INT32 constant to yield an INT32 result.
+/* Multiply an CVINT32 variable by an CVINT32 constant to yield an CVINT32 result.
  * For 8-bit samples with the recommended scaling, all the variable
  * and constant values involved are no more than 16 bits wide, so a
  * 16x16->32 bit multiply can be used instead of a full 32x32 multiply.
@@ -157,9 +157,9 @@
 GLOBAL(void)
 jpeg_fdct_islow (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3;
-  INT32 tmp10, tmp11, tmp12, tmp13;
-  INT32 z1;
+  CVINT32 tmp0, tmp1, tmp2, tmp3;
+  CVINT32 tmp10, tmp11, tmp12, tmp13;
+  CVINT32 z1;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -327,9 +327,9 @@ jpeg_fdct_islow (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_7x7 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3;
-  INT32 tmp10, tmp11, tmp12;
-  INT32 z1, z2, z3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3;
+  CVINT32 tmp10, tmp11, tmp12;
+  CVINT32 z1, z2, z3;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -462,8 +462,8 @@ jpeg_fdct_7x7 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_6x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2;
-  INT32 tmp10, tmp11, tmp12;
+  CVINT32 tmp0, tmp1, tmp2;
+  CVINT32 tmp10, tmp11, tmp12;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -575,8 +575,8 @@ jpeg_fdct_6x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_5x5 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2;
-  INT32 tmp10, tmp11;
+  CVINT32 tmp0, tmp1, tmp2;
+  CVINT32 tmp10, tmp11;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -685,8 +685,8 @@ jpeg_fdct_5x5 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_4x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1;
-  INT32 tmp10, tmp11;
+  CVINT32 tmp0, tmp1;
+  CVINT32 tmp10, tmp11;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -778,7 +778,7 @@ jpeg_fdct_4x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_3x3 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2;
+  CVINT32 tmp0, tmp1, tmp2;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -863,7 +863,7 @@ jpeg_fdct_3x3 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_2x2 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3;
   JSAMPROW elemptr;
 
   /* Pre-zero output coefficient block. */
@@ -925,9 +925,9 @@ jpeg_fdct_1x1 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_9x9 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4;
-  INT32 tmp10, tmp11, tmp12, tmp13;
-  INT32 z1, z2;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4;
+  CVINT32 tmp10, tmp11, tmp12, tmp13;
+  CVINT32 z1, z2;
   DCTELEM workspace[8];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1075,8 +1075,8 @@ jpeg_fdct_9x9 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_10x10 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14;
   DCTELEM workspace[8*2];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1238,9 +1238,9 @@ jpeg_fdct_10x10 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_11x11 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14;
-  INT32 z1, z2, z3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14;
+  CVINT32 z1, z2, z3;
   DCTELEM workspace[8*3];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1421,8 +1421,8 @@ jpeg_fdct_11x11 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_12x12 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
   DCTELEM workspace[8*4];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1586,9 +1586,9 @@ jpeg_fdct_12x12 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_13x13 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
-  INT32 z1, z2;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
+  CVINT32 z1, z2;
   DCTELEM workspace[8*5];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1785,8 +1785,8 @@ jpeg_fdct_13x13 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_14x14 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
   DCTELEM workspace[8*6];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -1985,9 +1985,9 @@ jpeg_fdct_14x14 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_15x15 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
-  INT32 z1, z2, z3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
+  CVINT32 z1, z2, z3;
   DCTELEM workspace[8*7];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -2164,8 +2164,8 @@ jpeg_fdct_15x15 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_16x16 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
   DCTELEM workspace[DCTSIZE2];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -2372,9 +2372,9 @@ jpeg_fdct_16x16 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_16x8 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
-  INT32 z1;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
+  CVINT32 z1;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -2553,9 +2553,9 @@ jpeg_fdct_16x8 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_14x7 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
-  INT32 z1, z2, z3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
+  CVINT32 z1, z2, z3;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -2717,8 +2717,8 @@ jpeg_fdct_14x7 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_12x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -2856,8 +2856,8 @@ jpeg_fdct_12x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_10x5 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -2988,9 +2988,9 @@ jpeg_fdct_10x5 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_8x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3;
-  INT32 tmp10, tmp11, tmp12, tmp13;
-  INT32 z1;
+  CVINT32 tmp0, tmp1, tmp2, tmp3;
+  CVINT32 tmp10, tmp11, tmp12, tmp13;
+  CVINT32 z1;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -3124,8 +3124,8 @@ jpeg_fdct_8x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_6x3 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2;
-  INT32 tmp10, tmp11, tmp12;
+  CVINT32 tmp0, tmp1, tmp2;
+  CVINT32 tmp10, tmp11, tmp12;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -3224,8 +3224,8 @@ jpeg_fdct_6x3 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_4x2 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1;
-  INT32 tmp10, tmp11;
+  CVINT32 tmp0, tmp1;
+  CVINT32 tmp10, tmp11;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -3307,7 +3307,7 @@ jpeg_fdct_4x2 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_2x1 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1;
+  CVINT32 tmp0, tmp1;
   JSAMPROW elemptr;
 
   /* Pre-zero output coefficient block. */
@@ -3340,9 +3340,9 @@ jpeg_fdct_2x1 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_8x16 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
-  INT32 z1;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16, tmp17;
+  CVINT32 z1;
   DCTELEM workspace[DCTSIZE2];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -3528,9 +3528,9 @@ jpeg_fdct_8x16 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_7x14 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
-  INT32 z1, z2, z3;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp16;
+  CVINT32 z1, z2, z3;
   DCTELEM workspace[8*6];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -3709,8 +3709,8 @@ jpeg_fdct_7x14 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_6x12 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14, tmp15;
   DCTELEM workspace[8*4];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -3858,8 +3858,8 @@ jpeg_fdct_6x12 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_5x10 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3, tmp4;
-  INT32 tmp10, tmp11, tmp12, tmp13, tmp14;
+  CVINT32 tmp0, tmp1, tmp2, tmp3, tmp4;
+  CVINT32 tmp10, tmp11, tmp12, tmp13, tmp14;
   DCTELEM workspace[8*2];
   DCTELEM *dataptr;
   DCTELEM *wsptr;
@@ -4004,9 +4004,9 @@ jpeg_fdct_5x10 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_4x8 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2, tmp3;
-  INT32 tmp10, tmp11, tmp12, tmp13;
-  INT32 z1;
+  CVINT32 tmp0, tmp1, tmp2, tmp3;
+  CVINT32 tmp10, tmp11, tmp12, tmp13;
+  CVINT32 z1;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -4140,8 +4140,8 @@ jpeg_fdct_4x8 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_3x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1, tmp2;
-  INT32 tmp10, tmp11, tmp12;
+  CVINT32 tmp0, tmp1, tmp2;
+  CVINT32 tmp10, tmp11, tmp12;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -4245,8 +4245,8 @@ jpeg_fdct_3x6 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_2x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1;
-  INT32 tmp10, tmp11;
+  CVINT32 tmp0, tmp1;
+  CVINT32 tmp10, tmp11;
   DCTELEM *dataptr;
   JSAMPROW elemptr;
   int ctr;
@@ -4324,7 +4324,7 @@ jpeg_fdct_2x4 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 GLOBAL(void)
 jpeg_fdct_1x2 (DCTELEM * data, JSAMPARRAY sample_data, JDIMENSION start_col)
 {
-  INT32 tmp0, tmp1;
+  CVINT32 tmp0, tmp1;
 
   /* Pre-zero output coefficient block. */
   MEMZERO(data, SIZEOF(DCTELEM) * DCTSIZE2);

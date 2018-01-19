@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-
+#ifndef ONVXWORKS
 #ifndef OPENCV_CUDA_TEST_UTILITY_HPP
 #define OPENCV_CUDA_TEST_UTILITY_HPP
 
@@ -367,3 +367,4 @@ namespace cv { namespace cuda
 
 
 #endif // OPENCV_CUDA_TEST_UTILITY_HPP
+#endif

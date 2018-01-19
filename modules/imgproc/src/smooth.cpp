@@ -1557,7 +1557,7 @@ void cv::boxFilter( InputArray _src, OutputArray _dst, int ddepth,
         return;
 #endif
 
-    CV_IPP_RUN_FAST(ipp_boxfilter(src, dst, ksize, anchor, normalize, borderType));
+    CV_IPP_RUN_FASTVX(ipp_boxfilter(src, dst, ksize, anchor, normalize, borderType));
 
     Point ofs;
     Size wsz(src.cols, src.rows);
@@ -2543,7 +2543,7 @@ struct MinMax8u
     void store(uchar* ptr, arg_type val) { *ptr = (uchar)val; }
     void operator()(arg_type& a, arg_type& b) const
     {
-        int t = CV_FAST_CAST_8U(a - b);
+        int t = CV_FASTVX_CAST_8U(a - b);
         b += t; a -= t;
     }
 };
@@ -3126,7 +3126,7 @@ void cv::medianBlur( InputArray _src0, OutputArray _dst, int ksize )
     CV_OVX_RUN(true,
                openvx_medianFilter(_src0, _dst, ksize))
 
-    CV_IPP_RUN_FAST(ipp_medianFilter(src0, dst, ksize));
+    CV_IPP_RUN_FASTVX(ipp_medianFilter(src0, dst, ksize));
 
 #ifdef HAVE_TEGRA_OPTIMIZATION
     if (tegra::useTegra() && tegra::medianBlur(src0, dst, ksize))
@@ -3901,7 +3901,7 @@ void cv::bilateralFilter( InputArray _src, OutputArray _dst, int d,
 
     Mat src = _src.getMat(), dst = _dst.getMat();
 
-    CV_IPP_RUN_FAST(ipp_bilateralFilter(src, dst, d, sigmaColor, sigmaSpace, borderType));
+    CV_IPP_RUN_FASTVX(ipp_bilateralFilter(src, dst, d, sigmaColor, sigmaSpace, borderType));
 
     if( src.depth() == CV_8U )
         bilateralFilter_8u( src, dst, d, sigmaColor, sigmaSpace, borderType );

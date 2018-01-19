@@ -146,7 +146,7 @@ void CV_ChessboardDetectorBadArgTest::run( int /*start_from */)
     if (errors)
         ts->set_failed_test_info(cvtest::TS::FAIL_MISMATCH);
     else
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
 }
 
 TEST(Calib3d_ChessboardDetector, badarg) { CV_ChessboardDetectorBadArgTest test; test.safe_run(); }

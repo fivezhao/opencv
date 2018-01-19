@@ -678,6 +678,13 @@ bool useOptimized(void)
     return useOptimizedFlag;
 }
 
+#ifdef ONVXWORKS
+struct timezone {
+  int tz_minuteswest;
+  int tz_dsttime;
+};
+#endif
+
 int64 getTickCount(void)
 {
 #if defined _WIN32 || defined WINCE

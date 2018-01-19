@@ -2500,7 +2500,7 @@ protected:
             ts->set_failed_test_info(cvtest::TS::FAIL_INVALID_OUTPUT);
         }
 
-        ts->set_failed_test_info(cvtest::TS::OK);
+        ts->set_failed_test_info(cvtest::TS::OKVX);
     }
 };
 

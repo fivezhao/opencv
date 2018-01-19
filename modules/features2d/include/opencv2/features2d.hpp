@@ -281,15 +281,15 @@ public:
 
 /** @brief Class implementing the ORB (*oriented BRIEF*) keypoint detector and descriptor extractor
 
-described in @cite RRKB11 . The algorithm uses FAST in pyramids to detect stable keypoints, selects
-the strongest features using FAST or Harris response, finds their orientation using first-order
+described in @cite RRKB11 . The algorithm uses FASTVX in pyramids to detect stable keypoints, selects
+the strongest features using FASTVX or Harris response, finds their orientation using first-order
 moments and computes the descriptors using BRIEF (where the coordinates of random point pairs (or
 k-tuples) are rotated according to the measured orientation).
  */
 class CV_EXPORTS_W ORB : public Feature2D
 {
 public:
-    enum { kBytes = 32, HARRIS_SCORE=0, FAST_SCORE=1 };
+    enum { kBytes = 32, HARRIS_SCORE=0, FASTVX_SCORE=1 };
 
     /** @brief The ORB constructor
 
@@ -315,7 +315,7 @@ public:
     bin (that will also occupy 2 bits with possible values 0, 1, 2 or 3).
     @param scoreType The default HARRIS_SCORE means that Harris algorithm is used to rank features
     (the score is written to KeyPoint::score and is used to retain best nfeatures features);
-    FAST_SCORE is alternative value of the parameter that produces slightly less stable keypoints,
+    FASTVX_SCORE is alternative value of the parameter that produces slightly less stable keypoints,
     but it is a little faster to compute.
     @param patchSize size of the patch used by the oriented BRIEF descriptor. Of course, on smaller
     pyramid layers the perceived image area covered by a feature will be larger.
@@ -414,10 +414,10 @@ public:
 };
 
 /** @overload */
-CV_EXPORTS void FAST( InputArray image, CV_OUT std::vector<KeyPoint>& keypoints,
+CV_EXPORTS void FASTVX( InputArray image, CV_OUT std::vector<KeyPoint>& keypoints,
                       int threshold, bool nonmaxSuppression=true );
 
-/** @brief Detects corners using the FAST algorithm
+/** @brief Detects corners using the FASTVX algorithm
 
 @param image grayscale image where keypoints (corners) are detected.
 @param keypoints keypoints detected on the image.
@@ -429,13 +429,13 @@ circle around this pixel.
 FastFeatureDetector::TYPE_9_16, FastFeatureDetector::TYPE_7_12,
 FastFeatureDetector::TYPE_5_8
 
-Detects corners using the FAST algorithm by @cite Rosten06 .
+Detects corners using the FASTVX algorithm by @cite Rosten06 .
 
-@note In Python API, types are given as cv2.FAST_FEATURE_DETECTOR_TYPE_5_8,
-cv2.FAST_FEATURE_DETECTOR_TYPE_7_12 and cv2.FAST_FEATURE_DETECTOR_TYPE_9_16. For corner
-detection, use cv2.FAST.detect() method.
+@note In Python API, types are given as cv2.FASTVX_FEATURE_DETECTOR_TYPE_5_8,
+cv2.FASTVX_FEATURE_DETECTOR_TYPE_7_12 and cv2.FASTVX_FEATURE_DETECTOR_TYPE_9_16. For corner
+detection, use cv2.FASTVX.detect() method.
  */
-CV_EXPORTS void FAST( InputArray image, CV_OUT std::vector<KeyPoint>& keypoints,
+CV_EXPORTS void FASTVX( InputArray image, CV_OUT std::vector<KeyPoint>& keypoints,
                       int threshold, bool nonmaxSuppression, int type );
 
 //! @} features2d_main
@@ -443,7 +443,7 @@ CV_EXPORTS void FAST( InputArray image, CV_OUT std::vector<KeyPoint>& keypoints,
 //! @addtogroup features2d_main
 //! @{
 
-/** @brief Wrapping class for feature detection using the FAST method. :
+/** @brief Wrapping class for feature detection using the FASTVX method. :
  */
 class CV_EXPORTS_W FastFeatureDetector : public Feature2D
 {
@@ -451,7 +451,7 @@ public:
     enum
     {
         TYPE_5_8 = 0, TYPE_7_12 = 1, TYPE_9_16 = 2,
-        THRESHOLD = 10000, NONMAX_SUPPRESSION=10001, FAST_N=10002,
+        THRESHOLD = 10000, NONMAX_SUPPRESSION=10001, FASTVX_N=10002,
     };
 
     CV_WRAP static Ptr<FastFeatureDetector> create( int threshold=10,
@@ -975,13 +975,21 @@ public:
 
     CV_WRAP void write( const String& fileName ) const
     {
+#ifndef ONVXWORKS
         FileStorage fs(fileName, FileStorage::WRITE);
+#else
+        FileStorage fs(fileName, FileStorage::CVWRITE);
+#endif
         write(fs);
     }
 
     CV_WRAP void read( const String& fileName )
     {
+#ifndef ONVXWORKS
         FileStorage fs(fileName, FileStorage::READ);
+#else
+        FileStorage fs(fileName, FileStorage::CVREAD);
+#endif
         read(fs.root());
     }
     // Reads matcher object from a file node
