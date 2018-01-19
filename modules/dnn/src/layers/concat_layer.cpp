@@ -43,8 +43,9 @@
 #include "../precomp.hpp"
 #include "layers_common.hpp"
 #include "op_halide.hpp"
+#ifdef HAVE_OPENCL
 #include "opencl_kernels_dnn.hpp"
-
+#endif
 namespace cv
 {
 namespace dnn

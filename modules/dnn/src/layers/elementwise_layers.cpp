@@ -45,7 +45,9 @@
 #include "op_halide.hpp"
 #include "opencv2/imgproc.hpp"
 #include <opencv2/dnn/shape_utils.hpp>
+#ifdef HAVE_OPENCL
 #include "opencl_kernels_dnn.hpp"
+#endif
 #include <iostream>
 
 namespace cv

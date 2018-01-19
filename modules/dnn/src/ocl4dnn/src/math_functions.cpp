@@ -41,7 +41,9 @@
 //M*/
 
 #include "../../precomp.hpp"
+#ifdef HAVE_OPENCL
 #include "common.hpp"
+#endif
 #include "math_functions.hpp"
 #include <vector>
 #include "opencl_kernels_dnn.hpp"

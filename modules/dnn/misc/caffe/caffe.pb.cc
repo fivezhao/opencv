@@ -9644,7 +9644,11 @@ bool SolverParameter_SolverMode_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+#ifdef __VXWORKS__
+const SolverParameter_SolverMode SolverParameter::SM_CPU;
+#else
 const SolverParameter_SolverMode SolverParameter::CPU;
+#endif
 const SolverParameter_SolverMode SolverParameter::GPU;
 const SolverParameter_SolverMode SolverParameter::SolverMode_MIN;
 const SolverParameter_SolverMode SolverParameter::SolverMode_MAX;

@@ -2449,7 +2449,11 @@ class SolverParameter : public ::google::protobuf::Message /* @@protoc_insertion
   }
 
   typedef SolverParameter_SolverMode SolverMode;
+#ifdef __VXWORKS__
+  static const SolverMode SM_CPU =
+#else
   static const SolverMode CPU =
+#endif
     SolverParameter_SolverMode_CPU;
   static const SolverMode GPU =
     SolverParameter_SolverMode_GPU;
@@ -4650,6 +4654,9 @@ class LossParameter : public ::google::protobuf::Message /* @@protoc_insertion_p
     LossParameter_NormalizationMode_VALID;
   static const NormalizationMode BATCH_SIZE =
     LossParameter_NormalizationMode_BATCH_SIZE;
+#ifdef __VXWORKS__
+#undef NONE
+#endif
   static const NormalizationMode NONE =
     LossParameter_NormalizationMode_NONE;
   static inline bool NormalizationMode_IsValid(int value) {

@@ -219,7 +219,11 @@ static std::string Deunique(std::string str)
 HalideScheduler::HalideScheduler(const std::string& configFile)
 {
     if (!configFile.empty())
+#ifdef ONVXWORKS
+        fs = FileStorage(configFile, FileStorage::CVREAD);
+#else
         fs = FileStorage(configFile, FileStorage::READ);
+#endif
 }
 
 HalideScheduler::~HalideScheduler()

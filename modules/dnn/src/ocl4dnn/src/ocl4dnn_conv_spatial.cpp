@@ -39,6 +39,9 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
+#ifdef __VXWORKS__
+#include <vxWorks.h>
+#endif
 
 #include "../../precomp.hpp"
 
