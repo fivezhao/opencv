@@ -11,8 +11,8 @@ extern const uchar popCountTable[256];
 CV_CPU_OPTIMIZATION_NAMESPACE_BEGIN
 
 // forward declarations
-int normHamming(const uchar* a, int n);
-int normHamming(const uchar* a, const uchar* b, int n);
+inline int normHamming(const uchar* a, int n);
+inline int normHamming(const uchar* a, const uchar* b, int n);
 
 #ifndef CV_CPU_OPTIMIZATION_DECLARATIONS_ONLY
 
@@ -26,7 +26,7 @@ static inline int _mm256_extract_epi32_(__m256i reg, const int i)
 }
 #endif
 
-int normHamming(const uchar* a, int n)
+inline int normHamming(const uchar* a, int n)
 {
     CV_AVX_GUARD;
 
@@ -94,7 +94,7 @@ int normHamming(const uchar* a, int n)
     return result;
 }
 
-int normHamming(const uchar* a, const uchar* b, int n)
+inline int normHamming(const uchar* a, const uchar* b, int n)
 {
     CV_AVX_GUARD;
 
