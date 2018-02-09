@@ -152,12 +152,12 @@ Note: Only the differences from the build configurations previously mentioned ar
 
 OpenCV static library filters:
 - opencv-3.3.1 sources: exclude all, files and folders, all children (recursive), name matches regular expression
- - (cmake)|(apps)|(samples)|(cud.*)|(viz)|(superres)|(java)|(python)|(.*winrt.*)|(vxworks.*)|(platforms)|(data)|(doc)
+ - ```(cmake)|(apps)|(samples)|(cud.*)|(viz)|(superres)|(java)|(python)|(.*winrt.*)|(vxworks.*)|(platforms)|(data)|(doc)```
 - 3rdparty: include only, files and folders, not recursive, name matches regular expression
- - libjpeg|protobuf
+ - ```libjpeg|protobuf```
 
 - modules: include only, files and folders, not recursive, name matches regular expression
-    - (calib3d)|(core)|(features2d)|(flann)|(highgui)|(imgcodecs)|(imgproc)|(java)|(ml)|(objdetect)|(photo)|(shape)|(stitching)|(ts)|(video)|(videoio)|(videostab)|(world)|(dnn)
+    - ```(calib3d)|(core)|(features2d)|(flann)|(highgui)|(imgcodecs)|(imgproc)|(java)|(ml)|(objdetect)|(photo)|(shape)|(stitching)|(ts)|(video)|(videoio)|(videostab)|(world)|(dnn)```
 
 Compilation flags:
 - C++-Compiler
