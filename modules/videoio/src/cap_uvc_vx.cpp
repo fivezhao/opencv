@@ -8,7 +8,7 @@
 
 #include "precomp.hpp"
 
-#ifdef ONVXWORKS
+#ifdef __VXWORKS__
 
 #include <stdio.h>
 #include <vxWorks.h>
@@ -35,6 +35,7 @@ public:
     {
         m_index = -1;
         m_bsize = 0;
+        m_vbuf = NULL;
     }
 
     virtual ~CvCaptureCAM_VX()
@@ -60,6 +61,7 @@ protected:
     uint32_t m_bsize;
     cv::Mat  m_frame;
     IplImage m_iplHeader;
+    char *m_vbuf;
 
     bool grabbedInOpen;
     
@@ -83,7 +85,7 @@ bool CvCaptureCAM_VX::open(int index) {
 	}
 
 	/* set initial format */
-	if (setFormat(2048, 2048, VIDEO_FMT_YUY2) == false) {
+	if (setFormat(1280, 720, VIDEO_FMT_YUY2) == false) {
 		::close(m_fd);
 		m_fd = -1;
 		return false;
@@ -114,6 +116,10 @@ void CvCaptureCAM_VX::close()
 {
 	::close(m_fd);
 	m_fd = -1;
+	if (m_vbuf) {
+		free(m_vbuf);
+		m_vbuf = NULL;
+	}
 }
 
 bool CvCaptureCAM_VX::grabFrame()
@@ -121,13 +127,13 @@ bool CvCaptureCAM_VX::grabFrame()
 	bool ret = false;
 	int r = -1;
 	fd_set rfdset;
-	char *vbuf = NULL;
-	int size = 0;
+
+	size_t size = 0;
 
 	if (m_fd == -1)
 		return false;
 	
-	if ((vbuf = (char *)calloc(1, m_bsize)) == NULL)
+	if (m_vbuf == NULL)
 		return false;
 	
 	FD_ZERO(&rfdset);
@@ -138,8 +144,8 @@ bool CvCaptureCAM_VX::grabFrame()
 		return false;
 	
 	if (FD_ISSET(m_fd, &rfdset)) {
-		if ((size = ::read(m_fd, vbuf, m_bsize)) > 1) {
-			cv::Mat f1(m_height, m_width, CV_8UC2, vbuf);
+		if ((size = ::read(m_fd, m_vbuf, m_bsize)) > 1) {
+			cv::Mat f1(m_height, m_width, CV_8UC2, m_vbuf);
 			f1.copyTo(m_frame);
 		    m_iplHeader = IplImage(m_frame);
 		    ret = true;
@@ -188,9 +194,25 @@ bool CvCaptureCAM_VX::setFormat(uint16_t width, uint16_t height, uint32_t format
     	m_width = pData->width;
     	m_height = pData->heigth;
     }
-    
     free(pData);
-    return ret;
+    uint32_t bsize = 0;
+	if (ret) {
+		if (0 != ioctl(m_fd, USB2_VIDEO_IOCTL_GET_BUFFER_SIZE, &bsize)) {
+			return false;
+		}
+		if (m_vbuf == NULL) {
+			if ((m_vbuf = (char *)calloc(1, bsize)) == NULL) {
+				return false;
+			}
+		} else {
+			if ((realloc(m_vbuf, bsize)) == NULL) {
+				return false;
+			}
+		}
+	}
+	m_bsize = bsize;
+
+	return true;
 }
 bool CvCaptureCAM_VX::setFrameRate(int fps) {
 	bool ret = false;
@@ -253,4 +275,4 @@ CvCapture * cvCreateCameraCapture_VX (int index)
     return 0;
 }
 
-#endif /* ONVXWORKS */
+#endif /* __VXWORKS__ */
