@@ -8,8 +8,6 @@
 #include <math.h>
 #include "fboutput.h"
 
-#define DEFAULT_FBDEV "/dev/fb2"  /* This is the FBDEV for HDMI */
-
 LOCAL STATUS displayBlankScreen(struct displayInfoStruct* pDisplayInfo);
 LOCAL STATUS displayBlankBuffer(struct displayInfoStruct* pDisplayInfo, int bufIndex);
 

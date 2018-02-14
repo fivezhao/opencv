@@ -1,3 +1,5 @@
+#ifndef __FBOUTPUT_H
+#define __FBOUTPUT_H
 
 void startFbWrite(char* fbDevNameArg, unsigned char* pSrc, unsigned int srcStride, unsigned int srcWidth, unsigned int srcHeight) ;
 struct displayInfoStruct {
@@ -25,4 +27,6 @@ STATUS displayWrite(struct displayInfoStruct* pDisplayHandle, unsigned char* pSr
 void displayClose(struct displayInfoStruct* pDisplayInfo);
 STATUS displayCenterImage(struct displayInfoStruct* pDisplayInfo, unsigned int imgWidth, unsigned int imgHeight);
 STATUS displayDrawImg(struct displayInfoStruct* pDisplayInfo, unsigned char* pSrc, unsigned int srcStride);
+
+#endif /* __FBOUTPUT_H */
 
