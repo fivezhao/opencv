@@ -115,7 +115,7 @@ CV_IMPL int cvWaitKey(int delay) {
 	int evdevFd = ERROR;
 	int key = -1;
 	int res = -1;
-	unsigned int msgCount;
+	unsigned int msgCount = 0;
 	EV_DEV_MSG evdevMsg;
 
 	evdevFd = open(EV_DEV_NAME, 0, 0);
@@ -124,8 +124,7 @@ CV_IMPL int cvWaitKey(int delay) {
 
 	/* clear messages */
 	if (ERROR == ioctl(evdevFd, FIONREAD, (char *) &msgCount)) {
-		close(evdevFd);
-		return ERROR;
+		msgCount = 0;
 	}
 
 	while (msgCount >= sizeof(EV_DEV_MSG)) {
@@ -195,6 +194,9 @@ CV_IMPL int cvWaitKey(int delay) {
 							}
 						}
 					}
+				}
+				if (ioctl(evdevFd, FIONREAD, (char *) &msgCount) == ERROR) {
+					break;
 				}
 			}
 		}
