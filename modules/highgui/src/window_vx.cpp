@@ -5,6 +5,8 @@
 #include <sys/select.h>
 #include <evdevLib.h>
 
+#undef CLEAR_EVMSGQ
+
 /* place-holders */
 
 void cv::setWindowTitle(const String&, const String&)
@@ -121,7 +123,7 @@ CV_IMPL int cvWaitKey(int delay) {
 	evdevFd = open(EV_DEV_NAME, 0, 0);
 	if (ERROR == evdevFd)
 		return ERROR;
-
+#ifdef CLEAR_EVMSGQ
 	/* clear messages */
 	if (ERROR == ioctl(evdevFd, FIONREAD, (char *) &msgCount)) {
 		msgCount = 0;
@@ -137,13 +139,12 @@ CV_IMPL int cvWaitKey(int delay) {
 			break;
 		}
 	}
-	
+#endif /* CLEAR_EVMSGQ */
 	fd_set readfds;
 	FD_ZERO(&readfds);
 	struct timeval wt = {0};
 	struct timeval *pwt = NULL;
 	int readBytes = 0;
-	int n = 0;
 	if (delay > 0) {
 		wt.tv_sec = delay / 1000;
 		wt.tv_usec = (delay % 1000) * 1000;
@@ -164,7 +165,6 @@ CV_IMPL int cvWaitKey(int delay) {
 				readBytes = (int) read(evdevFd, (char *) &evdevMsg,
 						sizeof(EV_DEV_MSG));
 				if (readBytes == sizeof(EV_DEV_MSG)) {
-
 					switch (evdevMsg.msgType) {
 					case EV_DEV_MSG_KBD:
 						if (evdevMsg.msgData.kbdData.value >= ' '
@@ -175,7 +175,10 @@ CV_IMPL int cvWaitKey(int delay) {
 #endif
 								key = evdevMsg.msgData.kbdData.value;
 								/* cleanup */
-								//goto __FUNCTION__end;
+#ifndef CLEAR_EVMSGQ
+								goto __FUNCTION__end;
+#else
+								int n = 0;
 								if (ERROR == ioctl(evdevFd, FIONREAD, (char *) &n)) {
 									goto __FUNCTION__end;
 								}
@@ -191,6 +194,7 @@ CV_IMPL int cvWaitKey(int delay) {
 									}
 								}
 								msgCount = 0;
+#endif /* CLEAR_EVMSGQ */
 							}
 						}
 					}
