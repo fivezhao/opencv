@@ -56,6 +56,17 @@
 #include <ostream>
 #include <vector>
 
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <unistd.h>
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 // Copyright 2005, Google Inc.
 // All rights reserved.
 //
@@ -782,10 +793,13 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 // won't compile otherwise.  We can #include it here as we already
 // included <stdlib.h>, which is guaranteed to define size_t through
 // <stddef.h>.
-# include <regex.h>  // NOLINT
 
 # define GTEST_USES_POSIX_RE 1
 # define GTEST_USES_SIMPLE_RE 0
+
+#ifdef __VXWORKS__
+#undef GTEST_USES_POSIX_RE
+#endif
 
 #elif GTEST_OS_WINDOWS
 
@@ -3877,10 +3891,18 @@ inline FILE* FDOpen(int fd, const char* mode) { return fdopen(fd, mode); }
 inline int FClose(FILE* fp) { return fclose(fp); }
 #if !GTEST_OS_WINDOWS_MOBILE
 inline int Read(int fd, void* buf, unsigned int count) {
+#if defined(__VXWORKS__) && defined(__cplusplus)
+  return static_cast<int>(::read(fd, (char *)buf, count));
+#else
   return static_cast<int>(read(fd, buf, count));
+#endif
 }
 inline int Write(int fd, const void* buf, unsigned int count) {
-  return static_cast<int>(write(fd, buf, count));
+#if defined(__VXWORKS__) && defined(__cplusplus)
+  return static_cast<int>(::write(fd, (char *)buf, count));
+#else
+  return static_cast<int>(write(fd, (char *)buf, count));
+#endif
 }
 inline int Close(int fd) { return close(fd); }
 inline const char* StrError(int errnum) { return strerror(errnum); }
