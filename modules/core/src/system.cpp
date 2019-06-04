@@ -50,6 +50,39 @@
 
 #include <opencv2/core/utils/logger.hpp>
 
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <unistd.h>
+#ifdef __cplusplus
+}
+#endif
+#endif
+
+#ifdef __VXWORKS__
+#include <fcntl.h>
+namespace cv {
+static unsigned int seed = 0;
+char *(mktemp)(char *name)
+{	/* make unique file name */
+    char *p = name + strlen(name);
+    int i = 6;
+    unsigned int val = seed++;
+
+    for (; 0 <= --i && name <= --p && *p == 'X'; val >>= 3)
+        *p = (char)('0' + (val & 0x7));	/* insert an octal digit */
+    return (name);
+}
+
+}
+int mkstemp (char *tmplate)
+{
+	return open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL);
+}
+#endif
+
 namespace cv {
 
 static Mutex* __initialization_mutex = NULL;
@@ -740,6 +773,13 @@ bool useOptimized(void)
 {
     return useOptimizedFlag;
 }
+
+#ifdef __VXWORKS__
+struct timezone {
+  int tz_minuteswest;
+  int tz_dsttime;
+};
+#endif
 
 int64 getTickCount(void)
 {

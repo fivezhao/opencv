@@ -90,6 +90,12 @@
 
 #define GET_OPTIMIZED(func) (func)
 
+#ifdef __VXWORKS__
+char *(mktemp)(char *name);
+int mkstemp (char *tmplate);
+#endif
+
+
 namespace cv
 {
 

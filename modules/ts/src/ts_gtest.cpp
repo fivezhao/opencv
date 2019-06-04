@@ -117,6 +117,29 @@
 #define GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 
 
+#ifdef __VXWORKS__
+#include <fcntl.h>
+namespace cv {
+static unsigned int seed = 0;
+char *(mktemp)(char *name)
+{	/* make unique file name */
+    char *p = name + strlen(name);
+    int i = 6;
+    unsigned int val = seed++;
+
+    for (; 0 <= --i && name <= --p && *p == 'X'; val >>= 3)
+        *p = (char)('0' + (val & 0x7));	/* insert an octal digit */
+    return (name);
+}
+
+}
+int mkstemp (char *tmplate)
+{
+	return open (cv::mktemp(tmplate), O_RDWR|O_CREAT|O_EXCL);
+}
+#endif
+
+
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
 
@@ -5100,6 +5123,11 @@ std::string FormatTimeInMillisAsSeconds(TimeInMillis ms) {
   return ss.str();
 }
 
+#ifdef __VXWORKS__
+extern "C" struct tm * localtime_r (const time_t *_tod, struct tm *_result);
+#endif
+
+
 static bool PortableLocaltime(time_t seconds, struct tm* out) {
 #if defined(_MSC_VER)
   return localtime_s(out, &seconds) == 0;
@@ -9525,7 +9553,7 @@ void FilePath::Normalize() {
 namespace testing {
 namespace internal {
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__VXWORKS__)
 // MSVC and C++Builder do not provide a definition of STDERR_FILENO.
 const int kStdOutFileno = 1;
 const int kStdErrFileno = 2;
@@ -10435,7 +10463,16 @@ GTestLog::~GTestLog() {
 GTEST_DISABLE_MSC_DEPRECATED_PUSH_()
 
 #if GTEST_HAS_STREAM_REDIRECTION
-
+#ifdef __VXWORKS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <ioLib.h>
+#ifdef __cplusplus
+}
+#endif
+#endif /* __VXWORKS__ */
 // Object that captures an output stream (stdout/stderr).
 class CapturedStream {
  public:
