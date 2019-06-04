@@ -5,8 +5,10 @@
  * @author OpenCV team
  */
 
+#ifndef __VXWORKS__
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
+
 
 // we're NOT "using namespace std;" here, to avoid collisions between the beta variable and std::beta in c++17
 using namespace cv;
@@ -71,3 +73,4 @@ int main( int argc, char** argv )
    waitKey();
    return 0;
 }
+#endif

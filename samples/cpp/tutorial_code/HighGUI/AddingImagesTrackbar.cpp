@@ -4,6 +4,7 @@
  * @author OpenCV team
  */
 
+#ifndef __VXWORKS__
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
@@ -71,3 +72,4 @@ int main( void )
    waitKey(0);
    return 0;
 }
+#endif

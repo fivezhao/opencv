@@ -30,6 +30,8 @@
 * Result: The cloned image will be displayed.
 */
 
+#ifndef __VXWORKS__
+
 #include <signal.h>
 #include "opencv2/photo.hpp"
 #include "opencv2/imgproc.hpp"
@@ -548,3 +550,5 @@ int main()
             exit(0);
     }
 }
+
+#endif
