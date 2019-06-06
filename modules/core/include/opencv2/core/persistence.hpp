@@ -100,6 +100,18 @@ JSON.
 #include "opencv2/core/types.hpp"
 #include "opencv2/core/mat.hpp"
 
+#ifdef __VXWORKS__
+#undef READ
+#undef WRITE
+#undef MEMORY
+#undef APPEND
+#endif
+
+
+#ifdef __VXWORKS__
+#define  strnlen strnlen_s
+#endif
+
 namespace cv {
 
 /** @addtogroup core_xml
