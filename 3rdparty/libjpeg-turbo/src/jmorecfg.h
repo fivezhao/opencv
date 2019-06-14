@@ -46,6 +46,11 @@
  * You can use a signed char by having GETJSAMPLE mask it with 0xFF.
  */
 
+#ifdef __VXWORKS__
+#define  HAVE_UNSIGNED_CHAR
+#endif
+
+
 #ifdef HAVE_UNSIGNED_CHAR
 
 typedef unsigned char JSAMPLE;
