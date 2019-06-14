@@ -28,6 +28,10 @@
  * ``Library-private'' definitions.
  */
 
+#ifdef __VXWORKS__
+#define _ALLOW_KEYWORD_MACROS
+#endif
+
 #include "tif_config.h"
 
 #ifdef HAVE_FCNTL_H

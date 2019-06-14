@@ -29,6 +29,10 @@
 
 #include "tif_config.h"
 
+#ifdef __VXWORKS__
+#define _ALLOW_KEYWORD_MACROS
+#endif 
+
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
