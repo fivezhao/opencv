@@ -11,6 +11,10 @@
 #include "cap_librealsense.hpp"
 #include "cap_dshow.hpp"
 
+#ifdef __VXWORKS__
+#include "cap_uvc_vx.hpp"
+#endif
+
 #ifdef HAVE_MFX
 #include "cap_mfx_reader.hpp"
 #include "cap_mfx_writer.hpp"
@@ -134,6 +138,9 @@ static const struct VideoBackendInfo builtin_backends[] =
 #endif
 #ifdef HAVE_ANDROID_MEDIANDK
     DECLARE_STATIC_BACKEND(CAP_ANDROID, "ANDROID_MEDIANDK", MODE_CAPTURE_BY_FILENAME, createAndroidCapture_file, 0, 0),
+#endif
+#ifdef __VXWORKS__
+    DECLARE_STATIC_BACKEND(CAP_UVCVX, "VXWORKS_UVC", MODE_CAPTURE_BY_INDEX, 0, create_UVCVX_capture, 0),
 #endif
     // dropped backends: MIL, TYZX
 };

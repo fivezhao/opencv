@@ -208,6 +208,10 @@ Ptr<IVideoCapture> createXINECapture(const std::string &filename);
 
 Ptr<IVideoCapture> createAndroidCapture_file(const std::string &filename);
 
+#ifdef __VXWORKS__
+Ptr<IVideoCapture> create_UVCVX_capture(int index);
+#endif
+
 } // cv::
 
 #endif // CAP_INTERFACE_HPP
