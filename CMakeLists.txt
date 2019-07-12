@@ -856,6 +856,11 @@ if(WITH_QUIRC)
   add_subdirectory(3rdparty/quirc)
   set(HAVE_QUIRC TRUE)
 endif()
+
+if(WITH_UVCVX)
+  SET(HAVE_UVCVX TRUE)
+endif()
+
 # ----------------------------------------------------------------------------
 # OpenCV HAL
 # ----------------------------------------------------------------------------
