@@ -2,8 +2,11 @@ OPENCV FOR VXWORKS
 -------------------
 
 There are two ways to build OpenCV
- I. With the VxWorks SDK for non-commercial https://labs.windriver.com/downloads/wrsdk.html
+
+ I. With the VxWorks SDK for non-commercial https://labs.windriver.com/downloads/wrsdk.html 
+
 II. With  Wind River Workbench and Wind River VxWorks products 
+
 
 ------------
 I. Using The VxWorks SDK
