@@ -80,32 +80,6 @@ static void setCurrentThreadAffinityMask(int mask)
 
 static double perf_stability_criteria = 0.03; // 3%
 
-#ifdef __VXWORKS__
-#include "clockLib.h"
-#include <timerLib.h>
-static int usleep 
-        (
-        unsigned long useconds
-        )
-{
-
-#if 0 /* is not diab compatible */
-        struct timespec ts = { .tv_sec = (long int) (useconds / 1000000),
-        .tv_nsec = (long int) (useconds % 1000000) * 1000ul };
-#endif
-        struct timespec ts;
-        ts.tv_sec = (long int) (useconds / 1000000);
-        ts.tv_nsec = (long int) (useconds % 1000000) * 1000ul;
-        /* 
-         * Note the usleep() is a cancellation point. But since we call
-         * nanosleep() which itself is a cancellation point we do not have
-         * to do anything here. 
-         */
-
-        return nanosleep (&ts, NULL);
-}
-#endif
-
 namespace {
 
 class PerfEnvironment: public ::testing::Environment
