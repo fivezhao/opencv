@@ -1,2 +1,2 @@
-export WIND_SDK_TARGET=`grep -s "\-\-target" $WIND_SDK/bin/*-wrs-vxworks-cc |sed -E 's%.*--target=([^ ]+).*%\1%'|head -n1`
-export WIND_TARGET_PROC=`ls $WIND_SDK/bin/ | grep  "\-wrs\-vxworks" |head -n1 |cut -d '-' -f 1`
+export WIND_SDK_TARGET=`grep -s "\-\-target" $WIND_SDK_BIN/*-wrs-vxworks-cc |sed -E 's%.*--target=([^ ]+).*%\1%'|head -n1`
+export WIND_TARGET_PROC=`ls $WIND_SDK_BIN/ | grep  "\-wrs\-vxworks" |head -n1 |cut -d '-' -f 1`
