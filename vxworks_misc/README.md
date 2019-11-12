@@ -36,25 +36,19 @@ NOTE: assuming vxsdk environment is set up
  b. Run cmake-gui and make sure to set the following options as such:
 
 
-
--DCMAKE_CROSSCOMPILING=TRUE
-
--DCMAKE_SYSTEM_NAME=vxworks
-
-CMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY
-CMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY
-CMAKE_FIND_ROOT_PATH_MODE_PROGRAM=ONLY
-
-CMAKE_FIND_ROOT_PATH=\<path-to-sdk>
-
-CMAKE_INSTALL_PREFIX=\<path-of-your-choosing\>/sysroot/usr
-CMAKE_C_COMPILER=\<path-to-sdk\>/bin/x86-wrs-vxworks-cc
-CMAKE_CXX_COMPILER=\<path-to-sdk\>/bin/x86-wrs-vxworks-cxx
-CMAKE_LINKER=\<path-to-sdk\>/bin/x86-wrs-vxworks-ld
-CMAKE_STRIP=\<path-to-sdk\>/bin/x86-wrs-vxworks-strip
-CMAKE_NM=\<path-to-sdk\>/bin/x86-wrs-vxworks-nm
-
-CMAKE_MAKE_PROGRAM=/usr/bin/make
+    -DCMAKE_CROSSCOMPILING=TRUE
+    -DCMAKE_SYSTEM_NAME=vxworks
+    CMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY
+    CMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY
+    CMAKE_FIND_ROOT_PATH_MODE_PROGRAM=ONLY
+    CMAKE_FIND_ROOT_PATH=\<path-to-sdk>
+    CMAKE_INSTALL_PREFIX=\<path-of-your-choosing\>/sysroot/usr
+    CMAKE_C_COMPILER=\<path-to-sdk\>/toolkit/bin/x86-wrs-vxworks-cc
+    CMAKE_CXX_COMPILER=\<path-to-sdk\>/toolkit/bin/x86-wrs-vxworks-cxx
+    CMAKE_LINKER=\<path-to-sdk\>/toolkit/bin/x86-wrs-vxworks-ld
+    CMAKE_STRIP=\<path-to-sdk\>/toolkit/bin/x86-wrs-vxworks-strip
+    CMAKE_NM=\<path-to-sdk\>/toolkit/bin/x86-wrs-vxworks-nm
+    CMAKE_MAKE_PROGRAM=/usr/bin/make
 
  
 
@@ -130,16 +124,7 @@ RTP build setup
 -  Go to the sdk directory and run:
 
     $ x86-wrs-vxworks-cxx canny_image_sample.cpp -o canny.vxe -I<path-to-your-sysroot\>/sysroot/usr/include/opencv4 -L<path-to-your-sysroot\>/sysroot/usr/lib -lopencv_imgproc -lopencv_imgcodecs -lopencv_core
-
-**Displaying the result on screen**
-
-     cd opencv-vx/vxworks-misc/fboutput
-     Note: depending on what on the hardware used and the initialized framebuffer the value of DEFAULT_FBDEV (inc cvvxdisplay.hpp) may need to change 
-    $ cmake -DCMAKE_TOOLCHAIN_FILE=\<path-to-toolchain-file\>/vxsdk.toolchain.cmake   -DCMAKE_CXX_FLAGS=-I<path-to-opencv-install-dirt\>/usr/include/opencv4  .
-    $ make 
-    $ cd opencv-vx/vxworks-misc/
-    $ x86-wrs-vxworks-cxx canny_video_sample.cpp -o canny.vxe -I<path-to-your-sysroo>/sysroot/usr/include/opencv4  -L<path-to-your-sysroot>/sysroot/usr/lib  -lopencv_imgcodecs -lopencv_imgproc  -lopencv_core -lopencv_videoio -lopencv_highgui -lopencv_photo -lopencv_video -lopencv_imgcodecs -L<path-to-opencv-vx>/opencv-vx/vxworks_misc/fboutput/ -lcvvxdisplay
-
+    
 2. Workbench:
 
 - Create a rtp project
@@ -147,6 +132,15 @@ RTP build setup
 - Add the fboutput directory located in vxworks_misc to the project
 - Add the desired opencv code to the project
 
+**Displaying the result on screen**
+Note: Will not work in quemu, this will only work on machines that have support for graphics support on VxWorks
+
+     cd opencv-vx/vxworks-misc/fboutput
+     Note: depending on what on the hardware used and the initialized framebuffer the value of DEFAULT_FBDEV (inc cvvxdisplay.hpp) may need to change 
+    $ cmake -DCMAKE_TOOLCHAIN_FILE=\<path-to-toolchain-file\>/vxsdk.toolchain.cmake   -DCMAKE_CXX_FLAGS=-I<path-to-opencv-install-dirt\>/usr/include/opencv4  .
+    $ make 
+    $ cd opencv-vx/vxworks-misc/
+    $ x86-wrs-vxworks-cxx canny_video_sample.cpp -o canny.vxe -I<path-to-your-sysroo>/sysroot/usr/include/opencv4  -L<path-to-your-sysroot>/sysroot/usr/lib  -lopencv_imgcodecs -lopencv_imgproc  -lopencv_core -lopencv_videoio -lopencv_highgui -lopencv_photo -lopencv_video -lopencv_imgcodecs -L<path-to-opencv-vx>/opencv-vx/vxworks_misc/fboutput/ -lcvvxdisplay
 
  **IMPORTANT:** There are a few differences in the vxWorks port:
 
@@ -168,10 +162,15 @@ RTP build setup
 Using vxworks integrated TBB 
 
 - Build the VSB with UTILS_TBB
-- Add the following settings to the opencv cmake command line, and rebuild opencv:
 
-    -DCMAKE_CXX_FLAGS="-ltbb" 
-    -DTBB_ENV_INCLUDE=\<path-to-sdk\>/include/usr/h/public 
-    -DTBB_VER_FILE=\<path-to-sdk\>/include/usr/h/public/tbb/tbb_stddef.h 
-    -DTBB_ENV_LIB=\<path-to-sdk\>/usr/lib/common/libtbb.so 
+- The following options apply if TBB is present in the SDK
+    - Add the following settings to the opencv cmake command line, and rebuild opencv:
+
+        -DCMAKE_CXX_FLAGS="-ltbb" 
+
+        -DTBB_ENV_INCLUDE=\<path-to-sdk\>/toolkit/include/usr/h/public 
+
+        -DTBB_VER_FILE=\<path-to-sdk\>/toolkit/include/usr/h/publictbb/tbb_stddef.h 
+
+        -DTBB_ENV_LIB=\<path-to-sdk\>/toolkit/include/usr/lib/common/libtbb.so 
 
